@@ -1,0 +1,226 @@
+{
+  "status": "PASS",
+  "at": "2026-09-21T21:32:19.963Z",
+  "browser": "153.0.8010.50",
+  "source": "Live localhost API; no demo runs initiated by this check",
+  "http_status": 200,
+  "observed_run_id": "8641bfd85d3443e9",
+  "observed_summary": {
+    "events": 16,
+    "total_events": 226,
+    "findings": 16,
+    "confirmed": 5,
+    "review": 1,
+    "subjects": 3,
+    "allowed": 8,
+    "blocked": 2
+  },
+  "selected_backend": "ollama",
+  "selected_model": "qwen3:4b-q4_K_M",
+  "checks": [
+    {
+      "name": "overview_loaded",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "five_actual_counters",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "desktop_no_page_overflow",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "findings_tab_visible",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "findings_no_page_overflow",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "events_tab_visible",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "events_no_page_overflow",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "mapping_tab_visible",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "mapping_no_page_overflow",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "model_tab_visible",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "model_no_page_overflow",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "three_benchmark_cards",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "direct_below_baseline_visible",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "alternative_model_identity_visible",
+      "passed": true,
+      "detail": "qwen3:4b-q4_K_M"
+    },
+    {
+      "name": "alternative_actual_correct_count",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "classify-backend_three_options",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "classify-backend_direct_selectable",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "classify-backend_ollama_selectable",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "classify-backend_default_omits_override",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "mapping-backend_three_options",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "mapping-backend_direct_selectable",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "mapping-backend_ollama_selectable",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "mapping-backend_default_omits_override",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "finding_detail_opens",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "finding_links_to_event",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "mobile_overview_no_page_overflow",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "mobile_findings_no_page_overflow",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "mobile_events_no_page_overflow",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "mobile_mapping_no_page_overflow",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "mobile_model_no_page_overflow",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "representative_run_unchanged",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "stored_event_count_unchanged",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "empty_contract_zero_count",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "empty_contract_explains_next_action",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "no_uncaught_javascript_errors",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "no_browser_console_errors",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "no_failed_network_requests",
+      "passed": true,
+      "detail": []
+    }
+  ],
+  "screenshots": [
+    "desktop-overview.png",
+    "desktop-findings.png",
+    "desktop-events.png",
+    "desktop-mapping.png",
+    "desktop-model.png",
+    "desktop-model-comparison.png",
+    "desktop-evidence.png",
+    "mobile-overview.png",
+    "mobile-findings.png",
+    "mobile-events.png",
+    "mobile-mapping.png",
+    "mobile-model.png",
+    "mobile-model-comparison.png"
+  ],
+  "final_run_id": "8641bfd85d3443e9",
+  "console_errors": [],
+  "failed_requests": [],
+  "page_errors": []
+}

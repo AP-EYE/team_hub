@@ -1,0 +1,67 @@
+{
+  "recorded_at_utc": "2026-09-22T04:39:50.020900+00:00",
+  "scope": "Provenance sidecar only. No raw predictions or aggregate evaluation were changed by this record.",
+  "orchestration_session_id": 22144,
+  "observed_process": {
+    "pid": 19964,
+    "parent_pid": 2212,
+    "command_line": "\"C:\\Users\\andyw\\AppData\\Local\\Programs\\Python\\Python312\\python.exe\" -X utf8 -m ml_jev.evaluate --method all",
+    "executable_path": "C:\\Users\\andyw\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+    "verification": "Win32_Process read for PID named in the active evaluation lock; process and lock agreed when recorded.",
+    "lock_started_at": "2026-09-22T04:13:21.738846+00:00"
+  },
+  "loaded_evaluator": {
+    "path": "evidence/jev/evaluator-running-version.py",
+    "sha256": "240d533696855a2a4c2682f90ade3e3b49e0ea8fe2a95cf76bcb2baa3198d2bb",
+    "bytes": 15494,
+    "evidence": "Exact pre-edit bytes reconstructed by reversing the bounded evaluator guard patch; SHA-256 exactly matched evaluation run metadata recorded before the on-disk edit. The active process had already imported that source."
+  },
+  "current_evaluator": {
+    "path": "ml_jev/evaluate.py",
+    "sha256": "66a820cfcd27a6c226d99ff9a28e007ed4d1a2563f699a310e798f9116ffd947",
+    "startup_hash_capture": "STARTUP_EVALUATOR_SHA256 and STARTUP_METRICS_SHA256 are captured once during module import for future processes. This source change does not alter already imported code in PID 19964.",
+    "updated_at_utc": "2026-09-22T04:47:48.033951+00:00",
+    "reproduction_option": "--run-name validates a simple safe name and writes only to evidence/jev/reproductions/NAME. Canonical frozen manifests remain the source of truth; canonical predictions and UI defaults are not replaced."
+  },
+  "change_during_run": {
+    "kind": "Evaluator evidence-integrity guards, response provenance fields, process-start source hashing, and isolated named reproduction output only. The already-running imported evaluator code is unchanged.",
+    "engine_source_unchanged": true,
+    "engine_sha256": "938ec8358f3d02f2d9f4240ea67d2c839bc327d652606c35359bf9af78e0a213",
+    "adapter_version": "korean-cached-contract-v2",
+    "dataset_unchanged": true,
+    "dataset_sha256": "78250014809fc55d67b8e73347531841b794a4f2f88be0011df22c5d459fb0ce",
+    "semantic_label_contract_unchanged": true,
+    "contract_sha256": "736151161d423dfd1f67576c33f73ef92d0e00459eaaa5956723f289d100bbd0",
+    "prompt_unchanged_during_this_change": true
+  },
+  "metadata_limitation": "The running evaluator version recomputes evaluator_sha256 from the on-disk file at each method boundary. JSON or rules run metadata created after the edit may therefore name the updated disk file, although the process executes the previously imported 240d5336... source. Such a late evaluator_sha256 is a disk snapshot, not proof of loaded evaluator code. Consult loaded_evaluator in this sidecar.",
+  "observed_run_headers": [
+    {
+      "id": "20260922T040834.863297Z-semif",
+      "method": "semif",
+      "evaluator_sha256": "240d533696855a2a4c2682f90ade3e3b49e0ea8fe2a95cf76bcb2baa3198d2bb"
+    },
+    {
+      "id": "20260922T041323.309117Z-semif",
+      "method": "semif",
+      "evaluator_sha256": "240d533696855a2a4c2682f90ade3e3b49e0ea8fe2a95cf76bcb2baa3198d2bb"
+    }
+  ],
+  "evaluation_was_not_restarted_for_guard_change": true,
+  "raw_and_aggregate_mutation": "NONE by the provenance/guard task; the original running evaluator continues its normal append and snapshot operations.",
+  "prior_current_evaluator_versions": [
+    {
+      "path": "ml_jev/evaluate.py",
+      "sha256": "169fd05dc0aea298a1e8c6d3018f0e94e90d9af88b33f5386d5bce330804220f",
+      "startup_hash_capture": "STARTUP_EVALUATOR_SHA256 and STARTUP_METRICS_SHA256 are captured once during module import for future processes. This source change does not alter already imported code in PID 19964."
+    }
+  ],
+  "future_reproduction": {
+    "cli_example": "python -X utf8 -m ml_jev.evaluate --run-name replay --method semif --limit 3",
+    "results_directory": "evidence/jev/reproductions/replay",
+    "starts_with_zero_prior_predictions": true,
+    "same_name_resumes_its_own_attempts": true,
+    "canonical_result_and_ui_default_changed": false,
+    "validation": "29 local fabricated-structure/path tests passed; no model request or reproduction benchmark was executed for this change."
+  }
+}

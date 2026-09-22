@@ -1,0 +1,17 @@
+{
+  "runtime_exe_sha256": "7a777be95617a38798a9942a7fce7ec65f972ccc10ec061007b5a4dd5329741b",
+  "models": [
+    {
+      "model": "qwen3:1.7b-q4_K_M",
+      "manifest_sha256": "8f68893c685c3ddff2aa3fffce2aa60a30bb2da65ca488b61fff134a4d1730e7",
+      "blob_digest_verified": true
+    },
+    {
+      "model": "qwen3:4b-q4_K_M",
+      "manifest_sha256": "2bfd38a7daaf4b1037efe517ccb73d1a3bbd4822cf89f1a82be1569050a114e0",
+      "blob_digest_verified": true
+    }
+  ],
+  "original_files_modified": false,
+  "location": "C:\\Users\\andyw\\Desktop\\api-privacy-gateway-demo\\.runtime"
+}

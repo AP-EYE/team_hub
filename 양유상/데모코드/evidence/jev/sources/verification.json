@@ -1,0 +1,77 @@
+{
+  "checked_at_utc": "2026-09-22T03:46:02.0200870Z",
+  "method": "Official web documentation and public GitHub raw/API; Firecrawl executable unavailable",
+  "official_jev": {
+    "executed": false,
+    "endpoint": "https://api.typesafe.ai/v1/systemone",
+    "documented_model": "jev-1.13.0",
+    "downloadable_weights_or_public_self_host_procedure": "NOT_FOUND_IN_REVIEWED_PUBLIC_SOURCES",
+    "private_enterprise_availability": "NOT_VERIFIED",
+    "korean_claim": "Official models page says English is strongest and CJK needs workload evaluation",
+    "sources": [
+      "https://docs.typesafe.ai/introduction/quickstart",
+      "https://docs.typesafe.ai/models",
+      "https://docs.typesafe.ai/sdk/python/api/constants",
+      "https://docs.typesafe.ai/model-jaggedness/jev-1.13"
+    ]
+  },
+  "semif": {
+    "repository": "https://github.com/TheoLeeCJ/SemIf",
+    "revision": "1f2dea3e25379f9dfc98cb83c324f00ab5deda37",
+    "commit_date_utc": "2026-09-21T20:07:09Z",
+    "package": "semif-phase1",
+    "package_version": "0.1.0",
+    "code_license": "MIT",
+    "relationship": "Independent project, formerly OpenJev, not affiliated with TypeSafe; does not reproduce Jev model/training",
+    "upstream_cpu_backend": "llamacpp",
+    "upstream_cpu_dependency": "llama-cpp-python==0.3.35",
+    "torch_cli_devices": [
+      "auto",
+      "cuda",
+      "mps"
+    ],
+    "proposed_demo": "Call pinned unmodified semif_phase1.llamacpp_backend.load_model/score with project-local Qwen3-4B GGUF; execution evidence separate"
+  },
+  "saved_files": [
+    {
+      "name": "semif-current-commit.json",
+      "sha256": "0fa0561e8aed64cae08bb349497c714c7cc41662f6de6e3e35511bbcc1419102",
+      "bytes": 39693
+    },
+    {
+      "name": "semif-pinned-cli.py",
+      "sha256": "a14fcdc2bccabe5731a5a2dc8b6ed89ad3c8e7cf7cee12fd7e772fc0fb42d4a1",
+      "bytes": 5709
+    },
+    {
+      "name": "semif-pinned-core.py",
+      "sha256": "f1b484ca36a4327f4316cb97357c77185e131b90e3e91e943d564fd5b08ceadf",
+      "bytes": 5443
+    },
+    {
+      "name": "semif-pinned-direct.py",
+      "sha256": "e42b91281b6fa16de3cabaf98b452dc026c0ee77869e5c1b10f44b962f3222cc",
+      "bytes": 3165
+    },
+    {
+      "name": "semif-pinned-LICENSE.txt",
+      "sha256": "f765f2140f8507a8f0d81ec0fd2c4bd72fe6a066841ef27883ff876a76bf61be",
+      "bytes": 1066
+    },
+    {
+      "name": "semif-pinned-llamacpp_backend.py",
+      "sha256": "2c0c5ae3ca0f28e994083fee5774b6dc7af661aab579ab1cae147ea099565781",
+      "bytes": 17518
+    },
+    {
+      "name": "semif-pinned-pyproject.toml",
+      "sha256": "d67f3f226028da3274f8da70c643473ddc88c0402287aad291bf434a4fb146d9",
+      "bytes": 1026
+    },
+    {
+      "name": "typesafe-docs-index.txt",
+      "sha256": "e20ac51dbf82595de96e7fcd504723ef7e3eb18253ddef26b388ca685a462229",
+      "bytes": 16525
+    }
+  ]
+}

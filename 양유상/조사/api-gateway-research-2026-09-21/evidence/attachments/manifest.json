@@ -1,0 +1,37 @@
+[
+  {
+    "id": "proposal",
+    "source": "C:\\Users\\andyw\\OneDrive - 중부대학교\\문서\\카카오톡 받은 파일\\BOLABFLA 자동 탐지와 개인정보보호법 기반 노출 영향도 산정 (1).html",
+    "bytes": 15314,
+    "sha256": "55e05cb27726b3bdb8974ff344cb101766580e635e0a8a832feff09948a6060d",
+    "links": [
+      "https://www.boannews.com/news/articleView.html?idxno=145537",
+      "https://www.boannews.com/news/articleView.html?idxno=145683",
+      "https://www.boannews.com/news/articleView.html?idxno=145704",
+      "https://www.boannews.com/news/articleView.html?idxno=145832",
+      "https://owasp.org/Top10/2021/A01_2021-Broken_Access_Control/"
+    ],
+    "text_chars": 2459
+  },
+  {
+    "id": "briefing",
+    "source": "C:\\Users\\andyw\\OneDrive - 중부대학교\\문서\\카카오톡 받은 파일\\게이트웨이 브리핑.html",
+    "bytes": 14831,
+    "sha256": "c05349c9713792b8d35aa97281d6ae66f61d0cdb27239b21821fd6f5156613d5",
+    "links": [
+      "https://www.zaproxy.org/docs/desktop/addons/access-control-testing/",
+      "https://github.com/akto-api-security/akto/tree/master/pii-types",
+      "https://github.com/openappsec/openappsec",
+      "https://owasp.org/Top10/2021/A01_2021-Broken_Access_Control/"
+    ],
+    "text_chars": 2570
+  },
+  {
+    "id": "slides",
+    "source": "C:\\Users\\andyw\\OneDrive - 중부대학교\\문서\\카카오톡 받은 파일\\API 인가 취약점 진단 및 개인정보 노출 영향도 산정.pdf",
+    "bytes": 141374,
+    "sha256": "dbf321b442afd7db88a0d7d22c505306900e21d23e7283ffe8bd6d8adf31056e",
+    "pages": 7,
+    "text_chars": 2448
+  }
+]

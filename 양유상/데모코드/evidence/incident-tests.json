@@ -1,0 +1,429 @@
+{
+  "generated_at": "2026-09-22T03:08:34.545093+00:00",
+  "scope": "Synthetic saved-log incident analysis, distinct from predicting total breach scope or production certification",
+  "run_id": "incident-4bf3904446c9",
+  "target": "http://127.0.0.1:8810",
+  "backend_offline_requested": true,
+  "status": "PASS",
+  "total": 35,
+  "passed": 35,
+  "failed": 0,
+  "cases": [
+    {
+      "id": "FIXTURE-EXISTS",
+      "description": "prepared synthetic run has exactly 14 original request records",
+      "status": "PASS",
+      "observed": {
+        "runs": 1,
+        "events": 14
+      }
+    },
+    {
+      "id": "MOCK-BACKEND-OFFLINE",
+      "description": "mock backend port 8811 is unavailable during analysis",
+      "status": "PASS"
+    },
+    {
+      "id": "LIST-HISTORY",
+      "description": "incident history includes selected persisted run",
+      "status": "PASS"
+    },
+    {
+      "id": "ANALYZE-HTTP",
+      "description": "stored-log analysis responds successfully",
+      "status": "PASS"
+    },
+    {
+      "id": "SUMMARY-logged_requests",
+      "description": "Bob incident logged_requests matches independent expected outcome",
+      "status": "PASS",
+      "observed": {
+        "expected": 13,
+        "actual": 13
+      }
+    },
+    {
+      "id": "SUMMARY-api_count",
+      "description": "Bob incident api_count matches independent expected outcome",
+      "status": "PASS",
+      "observed": {
+        "expected": 8,
+        "actual": 8
+      }
+    },
+    {
+      "id": "SUMMARY-http_success",
+      "description": "Bob incident http_success matches independent expected outcome",
+      "status": "PASS",
+      "observed": {
+        "expected": 11,
+        "actual": 11
+      }
+    },
+    {
+      "id": "SUMMARY-denied",
+      "description": "Bob incident denied matches independent expected outcome",
+      "status": "PASS",
+      "observed": {
+        "expected": 1,
+        "actual": 1
+      }
+    },
+    {
+      "id": "SUMMARY-other",
+      "description": "Bob incident other matches independent expected outcome",
+      "status": "PASS",
+      "observed": {
+        "expected": 1,
+        "actual": 1
+      }
+    },
+    {
+      "id": "SUMMARY-confirmed_policy_requests",
+      "description": "Bob incident confirmed_policy_requests matches independent expected outcome",
+      "status": "PASS",
+      "observed": {
+        "expected": 7,
+        "actual": 7
+      }
+    },
+    {
+      "id": "SUMMARY-returned_subjects",
+      "description": "Bob incident returned_subjects matches independent expected outcome",
+      "status": "PASS",
+      "observed": {
+        "expected": 3,
+        "actual": 3
+      }
+    },
+    {
+      "id": "SUMMARY-confirmed_exposure_subjects",
+      "description": "Bob incident confirmed_exposure_subjects matches independent expected outcome",
+      "status": "PASS",
+      "observed": {
+        "expected": 3,
+        "actual": 3
+      }
+    },
+    {
+      "id": "API-RETRIES-AND-404",
+      "description": "registered private API groups retries, self lookup, and missing target",
+      "status": "PASS",
+      "observed": [
+        {
+          "method": "GET",
+          "endpoint": "profile/private/{member_id}",
+          "requests": 4,
+          "http_success": 3,
+          "denied": 0,
+          "other": 1,
+          "confirmed_policy_requests": 2,
+          "evidence_ids": [
+            243,
+            244,
+            245,
+            246
+          ],
+          "paths": [
+            "profile/private/U100",
+            "profile/private/U200",
+            "profile/private/U999"
+          ],
+          "requested_targets": [
+            "alpha:synthetic-member-v1:U100",
+            "alpha:synthetic-member-v1:U200",
+            "alpha:synthetic-member-v1:U999"
+          ],
+          "returned_subject_keys": [
+            "alpha:synthetic-member-v1:U100",
+            "alpha:synthetic-member-v1:U200"
+          ],
+          "fields": [
+            "data_subject.id",
+            "person.address",
+            "person.email",
+            "person.name",
+            "person.phone"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ATTEMPT-IS-NOT-RETURN",
+      "description": "missing U999 is an attempted target and absent from returned subjects",
+      "status": "PASS"
+    },
+    {
+      "id": "CROSS-TENANT-IDENTITY",
+      "description": "alpha and beta member U100 retain separate namespace-qualified identities",
+      "status": "PASS",
+      "observed": [
+        "alpha:synthetic-member-v1:U100",
+        "alpha:synthetic-member-v1:U200",
+        "beta:synthetic-member-v1:U100"
+      ]
+    },
+    {
+      "id": "TIME-INCLUSIVE",
+      "description": "same start/end timestamp includes precisely matching stored calls",
+      "status": "PASS"
+    },
+    {
+      "id": "ACTOR-SEPARATION",
+      "description": "administrator's one permitted export is separate and unconfirmed",
+      "status": "PASS"
+    },
+    {
+      "id": "EMPTY-SELECTION",
+      "description": "no caller match returns zero observed logs without invented exposure",
+      "status": "PASS"
+    },
+    {
+      "id": "METADATA-REQUEST-COUNTS",
+      "description": "metadata-only view retains request and status observations",
+      "status": "PASS"
+    },
+    {
+      "id": "METADATA-UNKNOWN-NOT-ZERO",
+      "description": "missing response evidence returns null subject and confirmed counts",
+      "status": "PASS"
+    },
+    {
+      "id": "METADATA-NO-RESPONSE-FACTS",
+      "description": "metadata-only endpoint groups omit subject and field evidence",
+      "status": "PASS"
+    },
+    {
+      "id": "MARKDOWN-EXPORT",
+      "description": "read-only Markdown export names its run and caller",
+      "status": "PASS"
+    },
+    {
+      "id": "BAD-CAPTURE",
+      "description": "invalid analysis filters are rejected",
+      "status": "PASS",
+      "observed": {
+        "status_code": 400
+      }
+    },
+    {
+      "id": "NAIVE-TIME",
+      "description": "invalid analysis filters are rejected",
+      "status": "PASS",
+      "observed": {
+        "status_code": 400
+      }
+    },
+    {
+      "id": "BAD-TIME",
+      "description": "invalid analysis filters are rejected",
+      "status": "PASS",
+      "observed": {
+        "status_code": 400
+      }
+    },
+    {
+      "id": "REVERSED-TIME",
+      "description": "invalid analysis filters are rejected",
+      "status": "PASS",
+      "observed": {
+        "status_code": 400
+      }
+    },
+    {
+      "id": "UNKNOWN-RUN",
+      "description": "unknown run reports not found",
+      "status": "PASS"
+    },
+    {
+      "id": "INCIDENT-UNIT-SUITE",
+      "description": "independent evidence, filtering, and normalization edge cases pass",
+      "status": "PASS",
+      "observed": {
+        "tests_run": 28,
+        "failures": 0,
+        "errors": 0
+      }
+    },
+    {
+      "id": "READONLY-runs",
+      "description": "GET analysis/export preserves every original runs row",
+      "status": "PASS"
+    },
+    {
+      "id": "READONLY-events",
+      "description": "GET analysis/export preserves every original events row",
+      "status": "PASS"
+    },
+    {
+      "id": "READONLY-findings",
+      "description": "GET analysis/export preserves every original findings row",
+      "status": "PASS"
+    },
+    {
+      "id": "READONLY-observations",
+      "description": "GET analysis/export preserves every original observations row",
+      "status": "PASS"
+    },
+    {
+      "id": "READONLY-model_results",
+      "description": "GET analysis/export preserves every original model_results row",
+      "status": "PASS"
+    },
+    {
+      "id": "READONLY-GLOBAL-COUNTS",
+      "description": "analysis creates no run, event, finding, observation, or model result",
+      "status": "PASS",
+      "observed": {
+        "before": {
+          "runs": 66,
+          "events": 256,
+          "findings": 256,
+          "observations": 783,
+          "model_results": 34
+        },
+        "after": {
+          "runs": 66,
+          "events": 256,
+          "findings": 256,
+          "observations": 783,
+          "model_results": 34
+        }
+      }
+    },
+    {
+      "id": "NO-REPLAY-ROUTES",
+      "description": "evaluator called only read-only incident GET endpoints",
+      "status": "PASS"
+    }
+  ],
+  "unit_tests": {
+    "status": "PASS",
+    "tests_run": 28,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "output": "test_absent_response_cannot_use_subject_hints_as_body_evidence (test_incidents.IncidentEvidenceTests.test_absent_response_cannot_use_subject_hints_as_body_evidence) ... ok\ntest_analysis_does_not_mutate_input_records (test_incidents.IncidentEvidenceTests.test_analysis_does_not_mutate_input_records) ... ok\ntest_denial_error_and_success_are_separate_request_counts (test_incidents.IncidentEvidenceTests.test_denial_error_and_success_are_separate_request_counts) ... ok\ntest_duplicate_observations_do_not_inflate_people (test_incidents.IncidentEvidenceTests.test_duplicate_observations_do_not_inflate_people) ... ok\ntest_empty_200_does_not_prove_a_person_was_returned (test_incidents.IncidentEvidenceTests.test_empty_200_does_not_prove_a_person_was_returned) ... ok\ntest_export_multiple_records_count_distinct_subjects (test_incidents.IncidentEvidenceTests.test_export_multiple_records_count_distinct_subjects) ... ok\ntest_forged_observation_subject_not_in_response_is_excluded (test_incidents.IncidentEvidenceTests.test_forged_observation_subject_not_in_response_is_excluded) ... ok\ntest_legitimate_only_field_is_not_attributed_to_confirmed_exposure (test_incidents.IncidentEvidenceTests.test_legitimate_only_field_is_not_attributed_to_confirmed_exposure) ... ok\ntest_metadata_only_does_not_claim_zero_while_response_is_unavailable (test_incidents.IncidentEvidenceTests.test_metadata_only_does_not_claim_zero_while_response_is_unavailable) ... ok\ntest_models_cannot_change_authorization_or_confirmed_count (test_incidents.IncidentEvidenceTests.test_models_cannot_change_authorization_or_confirmed_count) ... ok\ntest_no_matching_finding_is_not_a_confirmed_policy_violation (test_incidents.IncidentEvidenceTests.test_no_matching_finding_is_not_a_confirmed_policy_violation) ... ok\ntest_observation_field_absent_from_body_is_not_reported_as_returned (test_incidents.IncidentEvidenceTests.test_observation_field_absent_from_body_is_not_reported_as_returned) ... ok\ntest_payload_tamper_excludes_response_and_confirmation_facts (test_incidents.IncidentEvidenceTests.test_payload_tamper_excludes_response_and_confirmation_facts) ... ok\ntest_public_other_person_stays_allowed (test_incidents.IncidentEvidenceTests.test_public_other_person_stays_allowed) ... ok\ntest_retry_is_another_request_but_not_another_person (test_incidents.IncidentEvidenceTests.test_retry_is_another_request_but_not_another_person) ... ok\ntest_review_finding_is_not_promoted_from_response_identity (test_incidents.IncidentEvidenceTests.test_review_finding_is_not_promoted_from_response_identity) ... ok\ntest_same_number_in_two_tenants_is_two_people (test_incidents.IncidentEvidenceTests.test_same_number_in_two_tenants_is_two_people) ... ok\ntest_tampered_or_unselected_event_models_do_not_become_evidence (test_incidents.IncidentEvidenceTests.test_tampered_or_unselected_event_models_do_not_become_evidence) ... ok\ntest_unknown_policy_cannot_confirm_despite_finding_claim (test_incidents.IncidentEvidenceTests.test_unknown_policy_cannot_confirm_despite_finding_claim) ... ok\ntest_actor_selection_excludes_other_callers (test_incidents.IncidentSelectionTests.test_actor_selection_excludes_other_callers) ... ok\ntest_all_actor_view_is_explicit_and_retains_both_callers (test_incidents.IncidentSelectionTests.test_all_actor_view_is_explicit_and_retains_both_callers) ... ok\ntest_equivalent_non_utc_timezone_filters_match (test_incidents.IncidentSelectionTests.test_equivalent_non_utc_timezone_filters_match) ... ok\ntest_invalid_time_and_capture_filters_are_rejected (test_incidents.IncidentSelectionTests.test_invalid_time_and_capture_filters_are_rejected) ... ok\ntest_no_matching_actor_is_zero_logs_with_no_invented_person (test_incidents.IncidentSelectionTests.test_no_matching_actor_is_zero_logs_with_no_invented_person) ... ok\ntest_only_registered_dynamic_paths_share_an_endpoint (test_incidents.IncidentSelectionTests.test_only_registered_dynamic_paths_share_an_endpoint) ... ok\ntest_other_run_records_are_not_mixed_in (test_incidents.IncidentSelectionTests.test_other_run_records_are_not_mixed_in) ... ok\ntest_requested_nonexistent_id_does_not_inflate_returned_people (test_incidents.IncidentSelectionTests.test_requested_nonexistent_id_does_not_inflate_returned_people) ... ok\ntest_time_range_includes_both_endpoints_and_excludes_outside (test_incidents.IncidentSelectionTests.test_time_range_includes_both_endpoints_and_excludes_outside) ... ok\n\n----------------------------------------------------------------------\nRan 28 tests in 0.004s\n\nOK\n"
+  },
+  "database_snapshots": {
+    "before": {
+      "table_rows": {
+        "runs": 1,
+        "events": 14,
+        "findings": 14,
+        "observations": 56,
+        "model_results": 3
+      },
+      "table_sha256": {
+        "runs": "160588d429d608355b905dad06c118f34a7fd556b2cfb6643930f6ffe9175d43",
+        "events": "164fe65fb2a5c38837928a6ad865e1c9d873e010aba449fee588ee2efb7d7346",
+        "findings": "a501456789198709d42f591ba3743d29c3105f67270b029c649b21219f9b57b6",
+        "observations": "bb9a01aa59e99042f87b81ee91f7097d14ea6443b73829a5d0825a7c56e55b99",
+        "model_results": "0516bb7189b9954ebf601d3dce849bb43ced08e9fdd58db31237730e3f16341a"
+      },
+      "global_row_counts": {
+        "runs": 66,
+        "events": 256,
+        "findings": 256,
+        "observations": 783,
+        "model_results": 34
+      }
+    },
+    "after": {
+      "table_rows": {
+        "runs": 1,
+        "events": 14,
+        "findings": 14,
+        "observations": 56,
+        "model_results": 3
+      },
+      "table_sha256": {
+        "runs": "160588d429d608355b905dad06c118f34a7fd556b2cfb6643930f6ffe9175d43",
+        "events": "164fe65fb2a5c38837928a6ad865e1c9d873e010aba449fee588ee2efb7d7346",
+        "findings": "a501456789198709d42f591ba3743d29c3105f67270b029c649b21219f9b57b6",
+        "observations": "bb9a01aa59e99042f87b81ee91f7097d14ea6443b73829a5d0825a7c56e55b99",
+        "model_results": "0516bb7189b9954ebf601d3dce849bb43ced08e9fdd58db31237730e3f16341a"
+      },
+      "global_row_counts": {
+        "runs": 66,
+        "events": 256,
+        "findings": 256,
+        "observations": 783,
+        "model_results": 34
+      }
+    }
+  },
+  "http_requests": [
+    {
+      "method": "GET",
+      "path": "/api/incidents/runs",
+      "status_code": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/incidents/analyze?run_id=incident-4bf3904446c9&actor=bob&capture=full",
+      "status_code": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/incidents/analyze?run_id=incident-4bf3904446c9&actor=bob&capture=full&start=2026-09-22T03%3A04%3A03.094944%2B00%3A00&end=2026-09-22T03%3A04%3A03.094944%2B00%3A00",
+      "status_code": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/incidents/analyze?run_id=incident-4bf3904446c9&actor=admin&capture=full",
+      "status_code": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/incidents/analyze?run_id=incident-4bf3904446c9&actor=absent-actor&capture=full",
+      "status_code": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/incidents/analyze?run_id=incident-4bf3904446c9&actor=bob&capture=metadata_only",
+      "status_code": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/incidents/report?run_id=incident-4bf3904446c9&actor=bob&capture=full",
+      "status_code": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/incidents/analyze?run_id=incident-4bf3904446c9&actor=bob&capture=all-data-invented",
+      "status_code": 400
+    },
+    {
+      "method": "GET",
+      "path": "/api/incidents/analyze?run_id=incident-4bf3904446c9&actor=bob&start=2026-09-22T00%3A00%3A00",
+      "status_code": 400
+    },
+    {
+      "method": "GET",
+      "path": "/api/incidents/analyze?run_id=incident-4bf3904446c9&actor=bob&start=invalid",
+      "status_code": 400
+    },
+    {
+      "method": "GET",
+      "path": "/api/incidents/analyze?run_id=incident-4bf3904446c9&actor=bob&start=2026-09-23T00%3A00%3A00Z&end=2026-09-22T00%3A00%3A00Z",
+      "status_code": 400
+    },
+    {
+      "method": "GET",
+      "path": "/api/incidents/analyze?run_id=incident-run-that-does-not-exist&actor=bob",
+      "status_code": 404
+    }
+  ],
+  "source_sha256": {
+    "gateway/incident.py": "a8919c853126b047cc77e891486ae7a74eefc29d9308ab8f5c918d6db287afbf",
+    "tests/evaluate_incident.py": "fc6596b8331bac7856bc52d160735b8d65726732fbdc913a3b5ce9bbd6776ea3",
+    "tests/test_incidents.py": "4172aa20d29e1e14aa73f03c956071d4f4511d33d17b5c2ffa58b48fa1a02537"
+  },
+  "limitations": [
+    "Only observed saved synthetic logs are analyzed; missing or bypassed traffic is unknown.",
+    "Stored response checksums detect changes relative to a stored digest, not tamper-proof signatures.",
+    "Explicitly supplied authorization policies determine confirmation, never a classifier label.",
+    "Unit suite is included as one acceptance check; its count must not be added to acceptance totals."
+  ]
+}

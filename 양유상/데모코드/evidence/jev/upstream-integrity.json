@@ -1,0 +1,99 @@
+{
+  "checked_at_utc": "2026-09-22T04:03:03.7452730Z",
+  "revision": "1f2dea3e25379f9dfc98cb83c324f00ab5deda37",
+  "all_checked_sources_match": false,
+  "files": [
+    {
+      "file": "cli.py",
+      "actual_path": "C:\\Users\\andyw\\Desktop\\api-privacy-gateway-demo\\.vendor\\SemIf\\src\\semif_phase1\\cli.py",
+      "reference_path": "C:\\Users\\andyw\\Desktop\\api-privacy-gateway-demo\\evidence\\jev\\sources\\semif-pinned-cli.py",
+      "actual_sha256": "df68ed155f89483a7d167c87e062b44867f9a0aac2fbd87af1594327d5a3b6b5",
+      "pinned_source_sha256": "a14fcdc2bccabe5731a5a2dc8b6ed89ad3c8e7cf7cee12fd7e772fc0fb42d4a1",
+      "matches": false,
+      "actual_crlf_count": 107,
+      "actual_lf_normalized_sha256": "a14fcdc2bccabe5731a5a2dc8b6ed89ad3c8e7cf7cee12fd7e772fc0fb42d4a1",
+      "git_commit_blob_sha256": "a14fcdc2bccabe5731a5a2dc8b6ed89ad3c8e7cf7cee12fd7e772fc0fb42d4a1",
+      "git_commit_blob_matches_reference": true,
+      "lf_normalized_matches_pinned_source": true
+    },
+    {
+      "file": "core.py",
+      "actual_path": "C:\\Users\\andyw\\Desktop\\api-privacy-gateway-demo\\.vendor\\SemIf\\src\\semif_phase1\\core.py",
+      "reference_path": "C:\\Users\\andyw\\Desktop\\api-privacy-gateway-demo\\evidence\\jev\\sources\\semif-pinned-core.py",
+      "actual_sha256": "24710cb19bbb6e1b3ee148c3c28fd83a0250dacda6a914676865bf5e5ed92e47",
+      "pinned_source_sha256": "f1b484ca36a4327f4316cb97357c77185e131b90e3e91e943d564fd5b08ceadf",
+      "matches": false,
+      "actual_crlf_count": 139,
+      "actual_lf_normalized_sha256": "f1b484ca36a4327f4316cb97357c77185e131b90e3e91e943d564fd5b08ceadf",
+      "git_commit_blob_sha256": "f1b484ca36a4327f4316cb97357c77185e131b90e3e91e943d564fd5b08ceadf",
+      "git_commit_blob_matches_reference": true,
+      "lf_normalized_matches_pinned_source": true
+    },
+    {
+      "file": "direct.py",
+      "actual_path": "C:\\Users\\andyw\\Desktop\\api-privacy-gateway-demo\\.vendor\\SemIf\\src\\semif_phase1\\direct.py",
+      "reference_path": "C:\\Users\\andyw\\Desktop\\api-privacy-gateway-demo\\evidence\\jev\\sources\\semif-pinned-direct.py",
+      "actual_sha256": "fe80b2dcf547cadb5112e994dbdaa39028a380250824a8e4ed06cf2e9b358435",
+      "pinned_source_sha256": "e42b91281b6fa16de3cabaf98b452dc026c0ee77869e5c1b10f44b962f3222cc",
+      "matches": false,
+      "actual_crlf_count": 77,
+      "actual_lf_normalized_sha256": "e42b91281b6fa16de3cabaf98b452dc026c0ee77869e5c1b10f44b962f3222cc",
+      "git_commit_blob_sha256": "e42b91281b6fa16de3cabaf98b452dc026c0ee77869e5c1b10f44b962f3222cc",
+      "git_commit_blob_matches_reference": true,
+      "lf_normalized_matches_pinned_source": true
+    },
+    {
+      "file": "llamacpp_backend.py",
+      "actual_path": "C:\\Users\\andyw\\Desktop\\api-privacy-gateway-demo\\.vendor\\SemIf\\src\\semif_phase1\\llamacpp_backend.py",
+      "reference_path": "C:\\Users\\andyw\\Desktop\\api-privacy-gateway-demo\\evidence\\jev\\sources\\semif-pinned-llamacpp_backend.py",
+      "actual_sha256": "408e5812e9f2fc219e829b0e217bb528ff34eda59b962ff564f83fa337cdfd64",
+      "pinned_source_sha256": "2c0c5ae3ca0f28e994083fee5774b6dc7af661aab579ab1cae147ea099565781",
+      "matches": false,
+      "actual_crlf_count": 405,
+      "actual_lf_normalized_sha256": "2c0c5ae3ca0f28e994083fee5774b6dc7af661aab579ab1cae147ea099565781",
+      "git_commit_blob_sha256": "2c0c5ae3ca0f28e994083fee5774b6dc7af661aab579ab1cae147ea099565781",
+      "git_commit_blob_matches_reference": true,
+      "lf_normalized_matches_pinned_source": true
+    }
+  ],
+  "wrapper_override": {
+    "path": "ml_jev/engine.py",
+    "sha256": "938ec8358f3d02f2d9f4240ea67d2c839bc327d652606c35359bf9af78e0a213",
+    "line_start": 49,
+    "line_end": 62,
+    "source_excerpt": [
+      "49:         original_params = self.backend._cpu_model_params",
+      "50:         def memory_bounded_params(library):",
+      "51:             params = original_params(library)",
+      "52:             params.use_extra_bufts = self.config.get('use_extra_bufts', True)",
+      "53:             return params",
+      "54:         # Keep upstream source and scoring untouched. Override only the native",
+      "55:         # allocation option: a repacked duplicate exhausted this PC's RAM.",
+      "56:         self.backend._cpu_model_params = memory_bounded_params",
+      "57:         try:",
+      "58:             self.model, self.tokenizer, self.metadata = self.backend.load_model(",
+      "59:                 self.config['tokenizer_directory'], self.config['tokenizer_revision'], self.config['gguf'],",
+      "60:                 threads=self.config['threads'], context_tokens=self.config['max_tokens'])",
+      "61:         finally:",
+      "62:             self.backend._cpu_model_params = original_params"
+    ],
+    "meaning": "Temporary native allocation parameter override during model load; original upstream function restored in finally; upstream score and files untouched",
+    "reason_source": "evidence/jev/runtime-profile-selection.json"
+  },
+  "model_license": {
+    "model": "Qwen/Qwen3-4B",
+    "revision": "1cfa9a7208912126459214e8b04321603b3df60c",
+    "license": "Apache-2.0",
+    "card": "evidence/jev/sources/Qwen3-4B-README.md",
+    "license_file": "evidence/jev/sources/Qwen3-4B-LICENSE"
+  },
+  "vendor_worktree_clean": true,
+  "vendor_status_porcelain": "",
+  "all_lf_normalized_sources_match": true,
+  "all_git_commit_blobs_match_reference": true,
+  "bytewise_difference_explanation": "Git checkout uses CRLF; public raw files and commit blobs use LF. All four decoded source files are identical after CRLF-to-LF normalization. Bytewise match remains false rather than concealed.",
+  "active_call_path": "semif_phase1.llamacpp_backend.SerialPrefixScorer.score",
+  "adapter_version": "korean-cached-contract-v2",
+  "adapter_change": "Common classification contract is state, input field JSON is question; exact upstream serial-prefix scorer is called. Earlier direct-pilot evidence remains separate.",
+  "upstream_source_unchanged_since_verified": true
+}

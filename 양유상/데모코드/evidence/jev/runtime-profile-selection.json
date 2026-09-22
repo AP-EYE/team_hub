@@ -1,0 +1,26 @@
+{
+  "initial": {
+    "model_id": "Qwen/Qwen3-4B",
+    "tokenizer_revision": "1cfa9a7208912126459214e8b04321603b3df60c",
+    "tokenizer_directory": "C:\\Users\\andyw\\Desktop\\api-privacy-gateway-demo\\.runtime\\jev-tokenizer\\Qwen3-4B",
+    "gguf": "C:\\Users\\andyw\\Desktop\\api-privacy-gateway-demo\\.runtime\\ollama-models\\blobs\\sha256-163553aea1b1de62de7c5eb2ef5afb756b4b3133308d9ae7e42e951d8d696ef5",
+    "gguf_sha256": "163553aea1b1de62de7c5eb2ef5afb756b4b3133308d9ae7e42e951d8d696ef5",
+    "gguf_bytes": 2620774592,
+    "semif_commit": "1f2dea3e25379f9dfc98cb83c324f00ab5deda37",
+    "threads": 4,
+    "max_tokens": 2048
+  },
+  "evaluation_profile": {
+    "model_id": "Qwen/Qwen3-4B",
+    "tokenizer_revision": "1cfa9a7208912126459214e8b04321603b3df60c",
+    "tokenizer_directory": "C:\\Users\\andyw\\Desktop\\api-privacy-gateway-demo\\.runtime\\jev-tokenizer\\Qwen3-4B",
+    "gguf": "C:\\Users\\andyw\\Desktop\\api-privacy-gateway-demo\\.runtime\\ollama-models\\blobs\\sha256-163553aea1b1de62de7c5eb2ef5afb756b4b3133308d9ae7e42e951d8d696ef5",
+    "gguf_sha256": "163553aea1b1de62de7c5eb2ef5afb756b4b3133308d9ae7e42e951d8d696ef5",
+    "gguf_bytes": 2620774592,
+    "semif_commit": "1f2dea3e25379f9dfc98cb83c324f00ab5deda37",
+    "threads": 8,
+    "max_tokens": 2048,
+    "use_extra_bufts": false
+  },
+  "reason": "Initial CPU_REPACK allocated additional1657.97MiB; less than1GiB free RAM observed. Disable duplicate weight repack before KO96 and use8threads. Labelcontract and datasetunchanged. Initialsmokeerrors preserved."
+}

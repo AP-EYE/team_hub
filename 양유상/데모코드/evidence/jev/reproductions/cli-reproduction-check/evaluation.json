@@ -1,0 +1,1374 @@
+{
+  "status": "running",
+  "updated_at": "2026-09-22T05:29:38.230911+00:00",
+  "active_method": null,
+  "output_directory": "evidence/jev/reproductions/cli-reproduction-check",
+  "ui_default_result_replaced": false,
+  "dataset": {
+    "count": 96,
+    "sha256": "78250014809fc55d67b8e73347531841b794a4f2f88be0011df22c5d459fb0ce",
+    "scope": "Authored development set; no independent heldout or human expert validation.",
+    "name": "KO96 authored Korean technical-type development set"
+  },
+  "contract_sha256": "736151161d423dfd1f67576c33f73ef92d0e00459eaaa5956723f289d100bbd0",
+  "adapter_version": "korean-cached-contract-v2",
+  "engine_sha256": "938ec8358f3d02f2d9f4240ea67d2c839bc327d652606c35359bf9af78e0a213",
+  "methods": {
+    "semif": {
+      "status": "not_run",
+      "count": 0,
+      "correct": 0,
+      "accuracy": null,
+      "macro_f1": null,
+      "macro_f1_scope": "All eight labels; zero division is zero. Partial runs may have unobserved label supports.",
+      "failed": 0,
+      "confusion_matrix": {
+        "HEALTH": {
+          "HEALTH": 0,
+          "RELIGION": 0,
+          "CONTACT": 0,
+          "GOVERNMENT_ID": 0,
+          "PERSON_NAME": 0,
+          "ACCOUNT_ID": 0,
+          "OTHER": 0,
+          "UNKNOWN": 0,
+          "ERROR": 0
+        },
+        "RELIGION": {
+          "HEALTH": 0,
+          "RELIGION": 0,
+          "CONTACT": 0,
+          "GOVERNMENT_ID": 0,
+          "PERSON_NAME": 0,
+          "ACCOUNT_ID": 0,
+          "OTHER": 0,
+          "UNKNOWN": 0,
+          "ERROR": 0
+        },
+        "CONTACT": {
+          "HEALTH": 0,
+          "RELIGION": 0,
+          "CONTACT": 0,
+          "GOVERNMENT_ID": 0,
+          "PERSON_NAME": 0,
+          "ACCOUNT_ID": 0,
+          "OTHER": 0,
+          "UNKNOWN": 0,
+          "ERROR": 0
+        },
+        "GOVERNMENT_ID": {
+          "HEALTH": 0,
+          "RELIGION": 0,
+          "CONTACT": 0,
+          "GOVERNMENT_ID": 0,
+          "PERSON_NAME": 0,
+          "ACCOUNT_ID": 0,
+          "OTHER": 0,
+          "UNKNOWN": 0,
+          "ERROR": 0
+        },
+        "PERSON_NAME": {
+          "HEALTH": 0,
+          "RELIGION": 0,
+          "CONTACT": 0,
+          "GOVERNMENT_ID": 0,
+          "PERSON_NAME": 0,
+          "ACCOUNT_ID": 0,
+          "OTHER": 0,
+          "UNKNOWN": 0,
+          "ERROR": 0
+        },
+        "ACCOUNT_ID": {
+          "HEALTH": 0,
+          "RELIGION": 0,
+          "CONTACT": 0,
+          "GOVERNMENT_ID": 0,
+          "PERSON_NAME": 0,
+          "ACCOUNT_ID": 0,
+          "OTHER": 0,
+          "UNKNOWN": 0,
+          "ERROR": 0
+        },
+        "OTHER": {
+          "HEALTH": 0,
+          "RELIGION": 0,
+          "CONTACT": 0,
+          "GOVERNMENT_ID": 0,
+          "PERSON_NAME": 0,
+          "ACCOUNT_ID": 0,
+          "OTHER": 0,
+          "UNKNOWN": 0,
+          "ERROR": 0
+        },
+        "UNKNOWN": {
+          "HEALTH": 0,
+          "RELIGION": 0,
+          "CONTACT": 0,
+          "GOVERNMENT_ID": 0,
+          "PERSON_NAME": 0,
+          "ACCOUNT_ID": 0,
+          "OTHER": 0,
+          "UNKNOWN": 0,
+          "ERROR": 0
+        }
+      },
+      "per_label": [
+        {
+          "label": "HEALTH",
+          "support": 0,
+          "predicted": 0,
+          "precision": null,
+          "recall": null,
+          "f1": null
+        },
+        {
+          "label": "RELIGION",
+          "support": 0,
+          "predicted": 0,
+          "precision": null,
+          "recall": null,
+          "f1": null
+        },
+        {
+          "label": "CONTACT",
+          "support": 0,
+          "predicted": 0,
+          "precision": null,
+          "recall": null,
+          "f1": null
+        },
+        {
+          "label": "GOVERNMENT_ID",
+          "support": 0,
+          "predicted": 0,
+          "precision": null,
+          "recall": null,
+          "f1": null
+        },
+        {
+          "label": "PERSON_NAME",
+          "support": 0,
+          "predicted": 0,
+          "precision": null,
+          "recall": null,
+          "f1": null
+        },
+        {
+          "label": "ACCOUNT_ID",
+          "support": 0,
+          "predicted": 0,
+          "precision": null,
+          "recall": null,
+          "f1": null
+        },
+        {
+          "label": "OTHER",
+          "support": 0,
+          "predicted": 0,
+          "precision": null,
+          "recall": null,
+          "f1": null
+        },
+        {
+          "label": "UNKNOWN",
+          "support": 0,
+          "predicted": 0,
+          "precision": null,
+          "recall": null,
+          "f1": null
+        }
+      ],
+      "latency_ms": {
+        "count": 0,
+        "median": null,
+        "p95": null,
+        "p95_method": "linear interpolation at (n - 1) * 0.95"
+      },
+      "slices": [],
+      "high_confidence_errors": [],
+      "high_confidence_error_threshold": 0.9,
+      "thresholds": [
+        {
+          "threshold": 0.6,
+          "coverage": null,
+          "selective_accuracy": null,
+          "accepted": 0,
+          "correct": 0,
+          "review": 0
+        },
+        {
+          "threshold": 0.8,
+          "coverage": null,
+          "selective_accuracy": null,
+          "accepted": 0,
+          "correct": 0,
+          "review": 0
+        },
+        {
+          "threshold": 0.9,
+          "coverage": null,
+          "selective_accuracy": null,
+          "accepted": 0,
+          "correct": 0,
+          "review": 0
+        }
+      ],
+      "review_definition": "Predicted UNKNOWN, failed output, or SemIf score below the chosen threshold. UNKNOWN remains a real gold category in raw accuracy.",
+      "diagnostics": {
+        "health_false_alarms": [],
+        "health_misses": [],
+        "sensitive_type_misses": [],
+        "sensitive_underflags": [],
+        "personal_type_false_alarms_on_other": [],
+        "unsupported_assertions_on_unknown": [],
+        "sensitive_definition": "Technical HEALTH, RELIGION, GOVERNMENT_ID categories; not a legal sensitivity determination.",
+        "health_false_alarm_definition": "Predicted HEALTH on known non-HEALTH gold; excludes UNKNOWN gold, which is counted as unsupported assertion.",
+        "sensitive_type_miss_definition": "Any incorrect type on a technical sensitive gold, including confusion between two sensitive types.",
+        "sensitive_underflag_definition": "Technical sensitive gold predicted OTHER or UNKNOWN, or failed output."
+      },
+      "contrast_pairs": {
+        "evaluated_pairs": 0,
+        "both_correct": 0,
+        "pairs": []
+      }
+    },
+    "json": {
+      "status": "not_run",
+      "count": 0,
+      "correct": 0,
+      "accuracy": null,
+      "macro_f1": null,
+      "macro_f1_scope": "All eight labels; zero division is zero. Partial runs may have unobserved label supports.",
+      "failed": 0,
+      "confusion_matrix": {
+        "HEALTH": {
+          "HEALTH": 0,
+          "RELIGION": 0,
+          "CONTACT": 0,
+          "GOVERNMENT_ID": 0,
+          "PERSON_NAME": 0,
+          "ACCOUNT_ID": 0,
+          "OTHER": 0,
+          "UNKNOWN": 0,
+          "ERROR": 0
+        },
+        "RELIGION": {
+          "HEALTH": 0,
+          "RELIGION": 0,
+          "CONTACT": 0,
+          "GOVERNMENT_ID": 0,
+          "PERSON_NAME": 0,
+          "ACCOUNT_ID": 0,
+          "OTHER": 0,
+          "UNKNOWN": 0,
+          "ERROR": 0
+        },
+        "CONTACT": {
+          "HEALTH": 0,
+          "RELIGION": 0,
+          "CONTACT": 0,
+          "GOVERNMENT_ID": 0,
+          "PERSON_NAME": 0,
+          "ACCOUNT_ID": 0,
+          "OTHER": 0,
+          "UNKNOWN": 0,
+          "ERROR": 0
+        },
+        "GOVERNMENT_ID": {
+          "HEALTH": 0,
+          "RELIGION": 0,
+          "CONTACT": 0,
+          "GOVERNMENT_ID": 0,
+          "PERSON_NAME": 0,
+          "ACCOUNT_ID": 0,
+          "OTHER": 0,
+          "UNKNOWN": 0,
+          "ERROR": 0
+        },
+        "PERSON_NAME": {
+          "HEALTH": 0,
+          "RELIGION": 0,
+          "CONTACT": 0,
+          "GOVERNMENT_ID": 0,
+          "PERSON_NAME": 0,
+          "ACCOUNT_ID": 0,
+          "OTHER": 0,
+          "UNKNOWN": 0,
+          "ERROR": 0
+        },
+        "ACCOUNT_ID": {
+          "HEALTH": 0,
+          "RELIGION": 0,
+          "CONTACT": 0,
+          "GOVERNMENT_ID": 0,
+          "PERSON_NAME": 0,
+          "ACCOUNT_ID": 0,
+          "OTHER": 0,
+          "UNKNOWN": 0,
+          "ERROR": 0
+        },
+        "OTHER": {
+          "HEALTH": 0,
+          "RELIGION": 0,
+          "CONTACT": 0,
+          "GOVERNMENT_ID": 0,
+          "PERSON_NAME": 0,
+          "ACCOUNT_ID": 0,
+          "OTHER": 0,
+          "UNKNOWN": 0,
+          "ERROR": 0
+        },
+        "UNKNOWN": {
+          "HEALTH": 0,
+          "RELIGION": 0,
+          "CONTACT": 0,
+          "GOVERNMENT_ID": 0,
+          "PERSON_NAME": 0,
+          "ACCOUNT_ID": 0,
+          "OTHER": 0,
+          "UNKNOWN": 0,
+          "ERROR": 0
+        }
+      },
+      "per_label": [
+        {
+          "label": "HEALTH",
+          "support": 0,
+          "predicted": 0,
+          "precision": null,
+          "recall": null,
+          "f1": null
+        },
+        {
+          "label": "RELIGION",
+          "support": 0,
+          "predicted": 0,
+          "precision": null,
+          "recall": null,
+          "f1": null
+        },
+        {
+          "label": "CONTACT",
+          "support": 0,
+          "predicted": 0,
+          "precision": null,
+          "recall": null,
+          "f1": null
+        },
+        {
+          "label": "GOVERNMENT_ID",
+          "support": 0,
+          "predicted": 0,
+          "precision": null,
+          "recall": null,
+          "f1": null
+        },
+        {
+          "label": "PERSON_NAME",
+          "support": 0,
+          "predicted": 0,
+          "precision": null,
+          "recall": null,
+          "f1": null
+        },
+        {
+          "label": "ACCOUNT_ID",
+          "support": 0,
+          "predicted": 0,
+          "precision": null,
+          "recall": null,
+          "f1": null
+        },
+        {
+          "label": "OTHER",
+          "support": 0,
+          "predicted": 0,
+          "precision": null,
+          "recall": null,
+          "f1": null
+        },
+        {
+          "label": "UNKNOWN",
+          "support": 0,
+          "predicted": 0,
+          "precision": null,
+          "recall": null,
+          "f1": null
+        }
+      ],
+      "latency_ms": {
+        "count": 0,
+        "median": null,
+        "p95": null,
+        "p95_method": "linear interpolation at (n - 1) * 0.95"
+      },
+      "slices": [],
+      "high_confidence_errors": [],
+      "high_confidence_error_threshold": null,
+      "thresholds": [],
+      "review_definition": "Predicted UNKNOWN, failed output, or SemIf score below the chosen threshold. UNKNOWN remains a real gold category in raw accuracy.",
+      "diagnostics": {
+        "health_false_alarms": [],
+        "health_misses": [],
+        "sensitive_type_misses": [],
+        "sensitive_underflags": [],
+        "personal_type_false_alarms_on_other": [],
+        "unsupported_assertions_on_unknown": [],
+        "sensitive_definition": "Technical HEALTH, RELIGION, GOVERNMENT_ID categories; not a legal sensitivity determination.",
+        "health_false_alarm_definition": "Predicted HEALTH on known non-HEALTH gold; excludes UNKNOWN gold, which is counted as unsupported assertion.",
+        "sensitive_type_miss_definition": "Any incorrect type on a technical sensitive gold, including confusion between two sensitive types.",
+        "sensitive_underflag_definition": "Technical sensitive gold predicted OTHER or UNKNOWN, or failed output."
+      },
+      "contrast_pairs": {
+        "evaluated_pairs": 0,
+        "both_correct": 0,
+        "pairs": []
+      }
+    },
+    "rules": {
+      "status": "partial",
+      "count": 3,
+      "correct": 3,
+      "accuracy": 1.0,
+      "macro_f1": 0.125,
+      "macro_f1_scope": "All eight labels; zero division is zero. Partial runs may have unobserved label supports.",
+      "failed": 0,
+      "confusion_matrix": {
+        "HEALTH": {
+          "HEALTH": 3,
+          "RELIGION": 0,
+          "CONTACT": 0,
+          "GOVERNMENT_ID": 0,
+          "PERSON_NAME": 0,
+          "ACCOUNT_ID": 0,
+          "OTHER": 0,
+          "UNKNOWN": 0,
+          "ERROR": 0
+        },
+        "RELIGION": {
+          "HEALTH": 0,
+          "RELIGION": 0,
+          "CONTACT": 0,
+          "GOVERNMENT_ID": 0,
+          "PERSON_NAME": 0,
+          "ACCOUNT_ID": 0,
+          "OTHER": 0,
+          "UNKNOWN": 0,
+          "ERROR": 0
+        },
+        "CONTACT": {
+          "HEALTH": 0,
+          "RELIGION": 0,
+          "CONTACT": 0,
+          "GOVERNMENT_ID": 0,
+          "PERSON_NAME": 0,
+          "ACCOUNT_ID": 0,
+          "OTHER": 0,
+          "UNKNOWN": 0,
+          "ERROR": 0
+        },
+        "GOVERNMENT_ID": {
+          "HEALTH": 0,
+          "RELIGION": 0,
+          "CONTACT": 0,
+          "GOVERNMENT_ID": 0,
+          "PERSON_NAME": 0,
+          "ACCOUNT_ID": 0,
+          "OTHER": 0,
+          "UNKNOWN": 0,
+          "ERROR": 0
+        },
+        "PERSON_NAME": {
+          "HEALTH": 0,
+          "RELIGION": 0,
+          "CONTACT": 0,
+          "GOVERNMENT_ID": 0,
+          "PERSON_NAME": 0,
+          "ACCOUNT_ID": 0,
+          "OTHER": 0,
+          "UNKNOWN": 0,
+          "ERROR": 0
+        },
+        "ACCOUNT_ID": {
+          "HEALTH": 0,
+          "RELIGION": 0,
+          "CONTACT": 0,
+          "GOVERNMENT_ID": 0,
+          "PERSON_NAME": 0,
+          "ACCOUNT_ID": 0,
+          "OTHER": 0,
+          "UNKNOWN": 0,
+          "ERROR": 0
+        },
+        "OTHER": {
+          "HEALTH": 0,
+          "RELIGION": 0,
+          "CONTACT": 0,
+          "GOVERNMENT_ID": 0,
+          "PERSON_NAME": 0,
+          "ACCOUNT_ID": 0,
+          "OTHER": 0,
+          "UNKNOWN": 0,
+          "ERROR": 0
+        },
+        "UNKNOWN": {
+          "HEALTH": 0,
+          "RELIGION": 0,
+          "CONTACT": 0,
+          "GOVERNMENT_ID": 0,
+          "PERSON_NAME": 0,
+          "ACCOUNT_ID": 0,
+          "OTHER": 0,
+          "UNKNOWN": 0,
+          "ERROR": 0
+        }
+      },
+      "per_label": [
+        {
+          "label": "HEALTH",
+          "support": 3,
+          "predicted": 3,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        {
+          "label": "RELIGION",
+          "support": 0,
+          "predicted": 0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0
+        },
+        {
+          "label": "CONTACT",
+          "support": 0,
+          "predicted": 0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0
+        },
+        {
+          "label": "GOVERNMENT_ID",
+          "support": 0,
+          "predicted": 0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0
+        },
+        {
+          "label": "PERSON_NAME",
+          "support": 0,
+          "predicted": 0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0
+        },
+        {
+          "label": "ACCOUNT_ID",
+          "support": 0,
+          "predicted": 0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0
+        },
+        {
+          "label": "OTHER",
+          "support": 0,
+          "predicted": 0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0
+        },
+        {
+          "label": "UNKNOWN",
+          "support": 0,
+          "predicted": 0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0
+        }
+      ],
+      "latency_ms": {
+        "count": 3,
+        "median": 0.035,
+        "p95": 1.168,
+        "p95_method": "linear interpolation at (n - 1) * 0.95"
+      },
+      "slices": [
+        {
+          "slice": "context_contrast",
+          "count": 1,
+          "correct": 1,
+          "accuracy": 1.0
+        },
+        {
+          "slice": "negation",
+          "count": 1,
+          "correct": 1,
+          "accuracy": 1.0
+        },
+        {
+          "slice": "third_party",
+          "count": 1,
+          "correct": 1,
+          "accuracy": 1.0
+        }
+      ],
+      "high_confidence_errors": [],
+      "high_confidence_error_threshold": null,
+      "thresholds": [],
+      "review_definition": "Predicted UNKNOWN, failed output, or SemIf score below the chosen threshold. UNKNOWN remains a real gold category in raw accuracy.",
+      "diagnostics": {
+        "health_false_alarms": [],
+        "health_misses": [],
+        "sensitive_type_misses": [],
+        "sensitive_underflags": [],
+        "personal_type_false_alarms_on_other": [],
+        "unsupported_assertions_on_unknown": [],
+        "sensitive_definition": "Technical HEALTH, RELIGION, GOVERNMENT_ID categories; not a legal sensitivity determination.",
+        "health_false_alarm_definition": "Predicted HEALTH on known non-HEALTH gold; excludes UNKNOWN gold, which is counted as unsupported assertion.",
+        "sensitive_type_miss_definition": "Any incorrect type on a technical sensitive gold, including confusion between two sensitive types.",
+        "sensitive_underflag_definition": "Technical sensitive gold predicted OTHER or UNKNOWN, or failed output."
+      },
+      "contrast_pairs": {
+        "evaluated_pairs": 0,
+        "both_correct": 0,
+        "pairs": []
+      }
+    }
+  },
+  "rows": [
+    {
+      "id": "ko96-h01",
+      "expected": "HEALTH",
+      "slice": "context_contrast",
+      "pair_id": "pair-health-advice",
+      "methods": {
+        "rules": {
+          "label": "HEALTH",
+          "correct": true,
+          "status": "completed",
+          "execution_status": "completed",
+          "latency_ms": 1.2939,
+          "source": "ml.engine.rule_baseline"
+        }
+      }
+    },
+    {
+      "id": "ko96-h02",
+      "expected": "HEALTH",
+      "slice": "negation",
+      "pair_id": null,
+      "methods": {
+        "rules": {
+          "label": "HEALTH",
+          "correct": true,
+          "status": "completed",
+          "execution_status": "completed",
+          "latency_ms": 0.035,
+          "source": "ml.engine.rule_baseline"
+        }
+      }
+    },
+    {
+      "id": "ko96-h03",
+      "expected": "HEALTH",
+      "slice": "third_party",
+      "pair_id": null,
+      "methods": {
+        "rules": {
+          "label": "HEALTH",
+          "correct": true,
+          "status": "completed",
+          "execution_status": "completed",
+          "latency_ms": 0.0249,
+          "source": "ml.engine.rule_baseline"
+        }
+      }
+    },
+    {
+      "id": "ko96-h04",
+      "expected": "HEALTH",
+      "slice": "field_only",
+      "pair_id": null,
+      "methods": {}
+    },
+    {
+      "id": "ko96-h05",
+      "expected": "HEALTH",
+      "slice": "alias",
+      "pair_id": null,
+      "methods": {}
+    },
+    {
+      "id": "ko96-h06",
+      "expected": "HEALTH",
+      "slice": "noisy_korean",
+      "pair_id": null,
+      "methods": {}
+    },
+    {
+      "id": "ko96-h07",
+      "expected": "HEALTH",
+      "slice": "medication",
+      "pair_id": null,
+      "methods": {}
+    },
+    {
+      "id": "ko96-h08",
+      "expected": "HEALTH",
+      "slice": "prompt_injection",
+      "pair_id": null,
+      "methods": {}
+    },
+    {
+      "id": "ko96-h09",
+      "expected": "HEALTH",
+      "slice": "context_contrast",
+      "pair_id": "pair-health-fiction",
+      "methods": {}
+    },
+    {
+      "id": "ko96-h10",
+      "expected": "HEALTH",
+      "slice": "negation",
+      "pair_id": null,
+      "methods": {}
+    },
+    {
+      "id": "ko96-h11",
+      "expected": "HEALTH",
+      "slice": "clinical_result",
+      "pair_id": null,
+      "methods": {}
+    },
+    {
+      "id": "ko96-h12",
+      "expected": "HEALTH",
+      "slice": "context_contrast",
+      "pair_id": "pair-health-insufficient",
+      "methods": {}
+    },
+    {
+      "id": "ko96-r01",
+      "expected": "RELIGION",
+      "slice": "context_contrast",
+      "pair_id": "pair-religion-tourism",
+      "methods": {}
+    },
+    {
+      "id": "ko96-r02",
+      "expected": "RELIGION",
+      "slice": "negation",
+      "pair_id": null,
+      "methods": {}
+    },
+    {
+      "id": "ko96-r03",
+      "expected": "RELIGION",
+      "slice": "field_only",
+      "pair_id": null,
+      "methods": {}
+    },
+    {
+      "id": "ko96-r04",
+      "expected": "RELIGION",
+      "slice": "alias",
+      "pair_id": null,
+      "methods": {}
+    },
+    {
+      "id": "ko96-r05",
+      "expected": "RELIGION",
+      "slice": "context_contrast",
+      "pair_id": "pair-religion-literature",
+      "methods": {}
+    },
+    {
+      "id": "ko96-r06",
+      "expected": "RELIGION",
+      "slice": "noisy_korean",
+      "pair_id": null,
+      "methods": {}
+    },
+    {
+      "id": "ko96-r07",
+      "expected": "RELIGION",
+      "slice": "prompt_injection",
+      "pair_id": null,
+      "methods": {}
+    },
+    {
+      "id": "ko96-r08",
+      "expected": "RELIGION",
+      "slice": "third_party",
+      "pair_id": null,
+      "methods": {}
+    },
+    {
+      "id": "ko96-r09",
+      "expected": "RELIGION",
+      "slice": "explicit_schema",
+      "pair_id": null,
+      "methods": {}
+    },
+    {
+      "id": "ko96-r10",
+      "expected": "RELIGION",
+      "slice": "negation",
+      "pair_id": null,
+      "methods": {}
+    },
+    {
+      "id": "ko96-r11",
+      "expected": "RELIGION",
+      "slice": "opaque_alias",
+      "pair_id": null,
+      "methods": {}
+    },
+    {
+      "id": "ko96-r12",
+      "expected": "RELIGION",
+      "slice": "context_contrast",
+      "pair_id": "pair-religion-insufficient",
+      "methods": {}
+    },
+    {
+      "id": "ko96-c01",
+      "expected": "CONTACT",
+      "slice": "context_contrast",
+      "pair_id": "pair-contact-product",
+      "methods": {}
+    },
+    {
+      "id": "ko96-c02",
+      "expected": "CONTACT",
+      "slice": "field_only",
+      "pair_id": null,
+      "methods": {}
+    },
+    {
+      "id": "ko96-c03",
+      "expected": "CONTACT",
+      "slice": "alias",
+      "pair_id": null,
+      "methods": {}
+    },
+    {
+      "id": "ko96-c04",
+      "expected": "CONTACT",
+      "slice": "alias",
+      "pair_id": null,
+      "methods": {}
+    },
+    {
+      "id": "ko96-c05",
+      "expected": "CONTACT",
+      "slice": "home_address",
+      "pair_id": null,
+      "methods": {}
+    },
+    {
+      "id": "ko96-c06",
+      "expected": "CONTACT",
+      "slice": "third_party",
+      "pair_id": null,
+      "methods": {}
+    },
+    {
+      "id": "ko96-c07",
+      "expected": "CONTACT",
+      "slice": "noisy_korean",
+      "pair_id": null,
+      "methods": {}
+    },
+    {
+      "id": "ko96-c08",
+      "expected": "CONTACT",
+      "slice": "prompt_injection",
+      "pair_id": null,
+      "methods": {}
+    },
+    {
+      "id": "ko96-c09",
+      "expected": "CONTACT",
+      "slice": "alias",
+      "pair_id": null,
+      "methods": {}
+    },
+    {
+      "id": "ko96-c10",
+      "expected": "CONTACT",
+      "slice": "home_address",
+      "pair_id": null,
+      "methods": {}
+    },
+    {
+      "id": "ko96-c11",
+      "expected": "CONTACT",
+      "slice": "opaque_alias",
+      "pair_id": null,
+      "methods": {}
+    },
+    {
+      "id": "ko96-c12",
+      "expected": "CONTACT",
+      "slice": "context_contrast",
+      "pair_id": "pair-contact-insufficient",
+      "methods": {}
+    },
+    {
+      "id": "ko96-g01",
+      "expected": "GOVERNMENT_ID",
+      "slice": "alias",
+      "pair_id": null,
+      "methods": {}
+    },
+    {
+      "id": "ko96-g02",
+      "expected": "GOVERNMENT_ID",
+      "slice": "field_only",
+      "pair_id": null,
+      "methods": {}
+    },
+    {
+      "id": "ko96-g03",
+      "expected": "GOVERNMENT_ID",
+      "slice": "explicit_schema",
+      "pair_id": null,
+      "methods": {}
+    },
+    {
+      "id": "ko96-g04",
+      "expected": "GOVERNMENT_ID",
+      "slice": "explicit_schema",
+      "pair_id": null,
+      "methods": {}
+    },
+    {
+      "id": "ko96-g05",
+      "expected": "GOVERNMENT_ID",
+      "slice": "context_contrast",
+      "pair_id": "pair-government-account",
+      "methods": {}
+    },
+    {
+      "id": "ko96-g06",
+      "expected": "GOVERNMENT_ID",
+      "slice": "alias",
+      "pair_id": null,
+      "methods": {}
+    },
+    {
+      "id": "ko96-g07",
+      "expected": "GOVERNMENT_ID",
+      "slice": "alias",
+      "pair_id": null,
+      "methods": {}
+    },
+    {
+      "id": "ko96-g08",
+      "expected": "GOVERNMENT_ID",
+      "slice": "prompt_injection",
+      "pair_id": null,
+      "methods": {}
+    },
+    {
+      "id": "ko96-g09",
+      "expected": "GOVERNMENT_ID",
+      "slice": "noisy_korean",
+      "pair_id": null,
+      "methods": {}
+    },
+    {
+      "id": "ko96-g10",
+      "expected": "GOVERNMENT_ID",
+      "slice": "field_only",
+      "pair_id": null,
+      "methods": {}
+    },
+    {
+      "id": "ko96-g11",
+      "expected": "GOVERNMENT_ID",
+      "slice": "opaque_alias",
+      "pair_id": null,
+      "methods": {}
+    },
+    {
+      "id": "ko96-g12",
+      "expected": "GOVERNMENT_ID",
+      "slice": "context_contrast",
+      "pair_id": "pair-government-insufficient",
+      "methods": {}
+    },
+    {
+      "id": "ko96-n01",
+      "expected": "PERSON_NAME",
+      "slice": "context_contrast",
+      "pair_id": "pair-name-product",
+      "methods": {}
+    },
+    {
+      "id": "ko96-n02",
+      "expected": "PERSON_NAME",
+      "slice": "field_only",
+      "pair_id": null,
+      "methods": {}
+    },
+    {
+      "id": "ko96-n03",
+      "expected": "PERSON_NAME",
+      "slice": "alias",
+      "pair_id": null,
+      "methods": {}
+    },
+    {
+      "id": "ko96-n04",
+      "expected": "PERSON_NAME",
+      "slice": "field_semantics",
+      "pair_id": null,
+      "methods": {}
+    },
+    {
+      "id": "ko96-n05",
+      "expected": "PERSON_NAME",
+      "slice": "third_party",
+      "pair_id": null,
+      "methods": {}
+    },
+    {
+      "id": "ko96-n06",
+      "expected": "PERSON_NAME",
+      "slice": "noisy_korean",
+      "pair_id": null,
+      "methods": {}
+    },
+    {
+      "id": "ko96-n07",
+      "expected": "PERSON_NAME",
+      "slice": "prompt_injection",
+      "pair_id": null,
+      "methods": {}
+    },
+    {
+      "id": "ko96-n08",
+      "expected": "PERSON_NAME",
+      "slice": "name_component",
+      "pair_id": null,
+      "methods": {}
+    },
+    {
+      "id": "ko96-n09",
+      "expected": "PERSON_NAME",
+      "slice": "name_component",
+      "pair_id": null,
+      "methods": {}
+    },
+    {
+      "id": "ko96-n10",
+      "expected": "PERSON_NAME",
+      "slice": "opaque_alias",
+      "pair_id": null,
+      "methods": {}
+    },
+    {
+      "id": "ko96-n11",
+      "expected": "PERSON_NAME",
+      "slice": "field_only",
+      "pair_id": null,
+      "methods": {}
+    },
+    {
+      "id": "ko96-n12",
+      "expected": "PERSON_NAME",
+      "slice": "context_contrast",
+      "pair_id": "pair-name-insufficient",
+      "methods": {}
+    },
+    {
+      "id": "ko96-a01",
+      "expected": "ACCOUNT_ID",
+      "slice": "context_contrast",
+      "pair_id": "pair-account-order",
+      "methods": {}
+    },
+    {
+      "id": "ko96-a02",
+      "expected": "ACCOUNT_ID",
+      "slice": "field_only",
+      "pair_id": null,
+      "methods": {}
+    },
+    {
+      "id": "ko96-a03",
+      "expected": "ACCOUNT_ID",
+      "slice": "alias",
+      "pair_id": null,
+      "methods": {}
+    },
+    {
+      "id": "ko96-a04",
+      "expected": "ACCOUNT_ID",
+      "slice": "alias",
+      "pair_id": null,
+      "methods": {}
+    },
+    {
+      "id": "ko96-a05",
+      "expected": "ACCOUNT_ID",
+      "slice": "context_contrast",
+      "pair_id": "pair-government-account",
+      "methods": {}
+    },
+    {
+      "id": "ko96-a06",
+      "expected": "ACCOUNT_ID",
+      "slice": "explicit_schema",
+      "pair_id": null,
+      "methods": {}
+    },
+    {
+      "id": "ko96-a07",
+      "expected": "ACCOUNT_ID",
+      "slice": "alias",
+      "pair_id": null,
+      "methods": {}
+    },
+    {
+      "id": "ko96-a08",
+      "expected": "ACCOUNT_ID",
+      "slice": "prompt_injection",
+      "pair_id": null,
+      "methods": {}
+    },
+    {
+      "id": "ko96-a09",
+      "expected": "ACCOUNT_ID",
+      "slice": "noisy_korean",
+      "pair_id": null,
+      "methods": {}
+    },
+    {
+      "id": "ko96-a10",
+      "expected": "ACCOUNT_ID",
+      "slice": "identifier_semantics",
+      "pair_id": null,
+      "methods": {}
+    },
+    {
+      "id": "ko96-a11",
+      "expected": "ACCOUNT_ID",
+      "slice": "opaque_alias",
+      "pair_id": null,
+      "methods": {}
+    },
+    {
+      "id": "ko96-a12",
+      "expected": "ACCOUNT_ID",
+      "slice": "context_contrast",
+      "pair_id": "pair-account-insufficient",
+      "methods": {}
+    },
+    {
+      "id": "ko96-o01",
+      "expected": "OTHER",
+      "slice": "context_contrast",
+      "pair_id": "pair-health-advice",
+      "methods": {}
+    },
+    {
+      "id": "ko96-o02",
+      "expected": "OTHER",
+      "slice": "context_contrast",
+      "pair_id": "pair-health-fiction",
+      "methods": {}
+    },
+    {
+      "id": "ko96-o03",
+      "expected": "OTHER",
+      "slice": "context_contrast",
+      "pair_id": "pair-religion-tourism",
+      "methods": {}
+    },
+    {
+      "id": "ko96-o04",
+      "expected": "OTHER",
+      "slice": "context_contrast",
+      "pair_id": "pair-religion-literature",
+      "methods": {}
+    },
+    {
+      "id": "ko96-o05",
+      "expected": "OTHER",
+      "slice": "context_contrast",
+      "pair_id": "pair-contact-product",
+      "methods": {}
+    },
+    {
+      "id": "ko96-o06",
+      "expected": "OTHER",
+      "slice": "context_contrast",
+      "pair_id": "pair-name-product",
+      "methods": {}
+    },
+    {
+      "id": "ko96-o07",
+      "expected": "OTHER",
+      "slice": "context_contrast",
+      "pair_id": "pair-account-order",
+      "methods": {}
+    },
+    {
+      "id": "ko96-o08",
+      "expected": "OTHER",
+      "slice": "field_only",
+      "pair_id": null,
+      "methods": {}
+    },
+    {
+      "id": "ko96-o09",
+      "expected": "OTHER",
+      "slice": "ordinary_public",
+      "pair_id": null,
+      "methods": {}
+    },
+    {
+      "id": "ko96-o10",
+      "expected": "OTHER",
+      "slice": "prompt_injection",
+      "pair_id": null,
+      "methods": {}
+    },
+    {
+      "id": "ko96-o11",
+      "expected": "OTHER",
+      "slice": "hypothetical",
+      "pair_id": null,
+      "methods": {}
+    },
+    {
+      "id": "ko96-o12",
+      "expected": "OTHER",
+      "slice": "noisy_korean",
+      "pair_id": null,
+      "methods": {}
+    },
+    {
+      "id": "ko96-u01",
+      "expected": "UNKNOWN",
+      "slice": "context_contrast",
+      "pair_id": "pair-account-insufficient",
+      "methods": {}
+    },
+    {
+      "id": "ko96-u02",
+      "expected": "UNKNOWN",
+      "slice": "context_contrast",
+      "pair_id": "pair-name-insufficient",
+      "methods": {}
+    },
+    {
+      "id": "ko96-u03",
+      "expected": "UNKNOWN",
+      "slice": "context_contrast",
+      "pair_id": "pair-contact-insufficient",
+      "methods": {}
+    },
+    {
+      "id": "ko96-u04",
+      "expected": "UNKNOWN",
+      "slice": "context_contrast",
+      "pair_id": "pair-government-insufficient",
+      "methods": {}
+    },
+    {
+      "id": "ko96-u05",
+      "expected": "UNKNOWN",
+      "slice": "context_contrast",
+      "pair_id": "pair-health-insufficient",
+      "methods": {}
+    },
+    {
+      "id": "ko96-u06",
+      "expected": "UNKNOWN",
+      "slice": "context_contrast",
+      "pair_id": "pair-religion-insufficient",
+      "methods": {}
+    },
+    {
+      "id": "ko96-u07",
+      "expected": "UNKNOWN",
+      "slice": "field_only",
+      "pair_id": null,
+      "methods": {}
+    },
+    {
+      "id": "ko96-u08",
+      "expected": "UNKNOWN",
+      "slice": "ambiguous_alias",
+      "pair_id": null,
+      "methods": {}
+    },
+    {
+      "id": "ko96-u09",
+      "expected": "UNKNOWN",
+      "slice": "insufficient_schema",
+      "pair_id": null,
+      "methods": {}
+    },
+    {
+      "id": "ko96-u10",
+      "expected": "UNKNOWN",
+      "slice": "mixed_value",
+      "pair_id": null,
+      "methods": {}
+    },
+    {
+      "id": "ko96-u11",
+      "expected": "UNKNOWN",
+      "slice": "prompt_injection",
+      "pair_id": null,
+      "methods": {}
+    },
+    {
+      "id": "ko96-u12",
+      "expected": "UNKNOWN",
+      "slice": "insufficient_schema",
+      "pair_id": null,
+      "methods": {}
+    }
+  ],
+  "runs": [
+    {
+      "id": "20260922T052938.065536Z-rules",
+      "method": "rules",
+      "started_at": "2026-09-22T05:29:38.065536+00:00",
+      "run_name": "cli-reproduction-check",
+      "status": "completed",
+      "planned_attempts": 3,
+      "attempted": 3,
+      "raw_file": "evidence/jev/reproductions/cli-reproduction-check/run-20260922T052938.065536Z-rules-rows.jsonl",
+      "dataset_sha256": "78250014809fc55d67b8e73347531841b794a4f2f88be0011df22c5d459fb0ce",
+      "contract_sha256": "736151161d423dfd1f67576c33f73ef92d0e00459eaaa5956723f289d100bbd0",
+      "adapter_version": "korean-cached-contract-v2",
+      "engine_sha256": "938ec8358f3d02f2d9f4240ea67d2c839bc327d652606c35359bf9af78e0a213",
+      "worker_health": null,
+      "timeout_seconds": 240,
+      "rule_source_sha256": "2356db0c4b385117c58f9da764bf472dfcdb95491893fef8c29a17668801fe32",
+      "evaluator_sha256": "66a820cfcd27a6c226d99ff9a28e007ed4d1a2563f699a310e798f9116ffd947",
+      "metrics_sha256": "c580ceadc5532b44bda8f877a432315de8ab3b4a871a3c372ca654efc962d039",
+      "source_hash_scope": "Source files captured once when this evaluator process imported its modules.",
+      "last_case_id": "ko96-h03",
+      "finished_at": "2026-09-22T05:29:38.223654+00:00"
+    }
+  ],
+  "method_notes": {
+    "semif": "Actual pinned upstream SemIf SerialPrefixScorer on local GGUF, adapter korean-cached-contract-v2. The fixed contract moved into shared state and varying untrusted input into the question; this changes prompt arrangement as well as reusing prefix computation. Separate direct-pilot results are not combined. Scores are uncalibrated option-relative preferences.",
+    "json": "Local Ollama constrained JSON output on the same GGUF model and frozen label contract; runtimes differ.",
+    "rules": "Unmodified ml.engine.rule_baseline dictionary/regex comparator; no model inference.",
+    "failed_output": "A completed request attempt with an error counts as incorrect; UNKNOWN is never used as a substitute for an error.",
+    "partial_denominator": "Accuracy uses attempted rows, count. Not-yet-run rows are absent from each method and excluded until attempted.",
+    "retries": "Existing attempts, including failures, are not rerun or replaced automatically."
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "run_id": "incident-4bf3904446c9",
+  "status": "completed",
+  "cases": 14,
+  "note": "합성 API에 GET을 보내 사고 기록을 준비했습니다. 이후 분석은 저장된 DB만 읽습니다."
+}

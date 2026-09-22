@@ -1,0 +1,150 @@
+# 남은 요청·응답 로그 기반 사후 분석
+
+- 실행: incident-4bf3904446c9
+- 대상 계정: bob
+- 분석 방식: stored_capture
+- 분석 중 API 재호출: 없음
+- 모든 기록은 로컬 합성 시나리오에서 생성됐습니다.
+
+- 선택한 기록에서 bob의 요청 13건, API 유형 8개를 확인했습니다.
+- HTTP 2xx 11건, 401/403 1건, 그 밖의 응답 1건입니다.
+- 검증 가능한 응답에서 중복 제거 정보주체 3개를 관측했고, 저장된 정책 위반 근거가 있는 응답은 7건입니다.
+- 그 비인가 응답에서 확인된 정보주체는 3개입니다. 실제 전체 피해자 수의 추정치가 아닙니다.
+
+## 접근 API와 호출 횟수
+
+| API | 로그 호출 | HTTP 2xx | 401/403 | 기타 | 정책 위반 근거 | 증거 ID |
+|---|---:|---:|---:|---:|---:|---|
+| GET admin/export | 2 | 2 | 0 | 0 | 2 | [251, 252] |
+| GET ambiguous/{member_id} | 1 | 1 | 0 | 0 | 0 | [254] |
+| GET consultations/{member_id} | 2 | 2 | 0 | 0 | 2 | [247, 248] |
+| GET documents/private | 1 | 0 | 1 | 0 | 0 | [250] |
+| GET info/health | 1 | 1 | 0 | 0 | 0 | [255] |
+| GET profile/private/{member_id} | 4 | 3 | 0 | 1 | 2 | [243, 244, 245, 246] |
+| GET profile/public/{member_id} | 1 | 1 | 0 | 0 | 0 | [249] |
+| GET tenants/{tenant_id}/profile/{member_id} | 1 | 1 | 0 | 0 | 1 | [253] |
+
+## 응답에서 관측한 정보주체
+
+| 테넌트·회원 체계·ID | 전체 관측 항목 | 비인가 응답 관측 항목 | 증거 ID | 비인가 응답 증거 ID |
+|---|---|---|---|---|
+| alpha:synthetic-member-v1:U100 | consultation.reason, data_subject.id, person.address, person.email, person.name, person.phone | consultation.reason, data_subject.id, person.address, person.email, person.name, person.phone | [243, 244, 247, 248, 249, 251, 252, 254] | [243, 244, 247, 248, 251, 252] |
+| alpha:synthetic-member-v1:U200 | data_subject.id, person.address, person.email, person.name, person.phone | data_subject.id, person.address, person.email, person.name, person.phone | [245, 251, 252] | [251, 252] |
+| beta:synthetic-member-v1:U100 | data_subject.id, person.address, person.email, person.name, person.phone | data_subject.id, person.address, person.email, person.name, person.phone | [253] | [253] |
+
+## 타임라인
+
+| 로그 | 시각 | 계정 | 요청 경로 | 상태 | 저장 판정 |
+|---|---|---|---|---:|---|
+| 243 | 2026-09-22T03:04:03.094944+00:00 | bob | profile/private/U100 | 200 | confirmed |
+| 244 | 2026-09-22T03:04:03.147465+00:00 | bob | profile/private/U100 | 200 | confirmed |
+| 245 | 2026-09-22T03:04:03.189020+00:00 | bob | profile/private/U200 | 200 | allowed |
+| 246 | 2026-09-22T03:04:03.232659+00:00 | bob | profile/private/U999 | 404 | needs_review |
+| 247 | 2026-09-22T03:04:03.261213+00:00 | bob | consultations/U100 | 200 | confirmed |
+| 248 | 2026-09-22T03:04:04.228260+00:00 | bob | consultations/U100 | 200 | confirmed |
+| 249 | 2026-09-22T03:04:04.266768+00:00 | bob | profile/public/U100 | 200 | allowed |
+| 250 | 2026-09-22T03:04:04.294633+00:00 | bob | documents/private | 403 | blocked |
+| 251 | 2026-09-22T03:04:04.320785+00:00 | bob | admin/export | 200 | confirmed |
+| 252 | 2026-09-22T03:04:04.364151+00:00 | bob | admin/export | 200 | confirmed |
+| 253 | 2026-09-22T03:04:04.425929+00:00 | bob | tenants/beta/profile/U100 | 200 | confirmed |
+| 254 | 2026-09-22T03:04:04.493300+00:00 | bob | ambiguous/U100 | 200 | needs_review |
+| 255 | 2026-09-22T03:04:04.531306+00:00 | bob | info/health | 200 | allowed |
+
+## 기록 범위와 알 수 없는 사항
+
+- 로그 완전성을 보증하는 독립 자료가 없어 누락률과 전체 호출 횟수는 알 수 없습니다.
+- 반복 호출도 별도 로그 1건으로 셉니다. HTTP 2xx 횟수는 개인정보 조회 인원과 다릅니다.
+- 정규화 경로는 이 데모의 명시된 경로 계약에 한정하며 요청 대상과 실제 반환 대상을 구분합니다.
+- 쿼리 값과 본문 원문은 보존하지 않아 페이지·검색 조건·전체 DB 조회 범위를 복원할 수 없습니다.
+- 게이트웨이에 남은 기록의 범위만 조사합니다. 누락 로그·우회 접근·삭제된 데이터는 복원하지 못합니다.
+- 여기서 말하는 계정은 로그의 인증 주체입니다. 계정 탈취 여부나 실제 행위자의 신원을 확정하지 않습니다.
+- 등록 당시 정책·관측 자료를 사용하며 새 진단 트래픽이나 외부 API 요청을 생성하지 않습니다.
+- SHA-256은 우발적 변경 확인용이며 관리자에 의한 동시 변조를 막는 서명이 아닙니다.
+- 분석은 저장 기록의 집계와 템플릿입니다. 저장된 AI 후보는 보조 근거이며 새 추론을 실행하지 않습니다.
+- 법률적 유출 판정·신고 의무·전체 피해 규모를 자동 확정하지 않습니다.
+
+## 저장된 AI 후보
+
+분석 시 새 추론을 수행하지 않았습니다.
+```json
+[
+  {
+    "event_id": 247,
+    "result": {
+      "label": "HEALTH",
+      "model": "qwen3:4b-q4_K_M",
+      "source": "live_local_ollama",
+      "status": "needs_review",
+      "backend": "ollama_cpu_structured_generation",
+      "confidence": null,
+      "eval_count": 11,
+      "latency_ms": 21917.51,
+      "raw_content": "{\n  \"label\": \"HEALTH\"\n}",
+      "policy_effect": "none; no authorization decision, blocking, legal determination or automatic CIM approval",
+      "prompt_sha256": "3d299f23398efe580feaaece79c9905450bf4bc8f1180f924ea52cf41ed76ada",
+      "request_sha256": "ada46cbc2a1e89db4fe442f2015aafc3e987a6c76d00cb639cf5aaea00ef2580",
+      "load_duration_ms": 11980.85,
+      "prompt_eval_count": 393,
+      "confidence_meaning": "No calibrated confidence is available; JSON validity is not correctness",
+      "confidence_is_calibrated": false
+    },
+    "backend": "ollama",
+    "endpoint": "consultations/U100",
+    "field_path": "consult_reason",
+    "input_scope": "실제 로컬 합성 응답값 / 외부 전송 없음",
+    "decision_role": "분류 후보만 생성; 인가 판정·법적 확정·자동 차단에 사용하지 않음"
+  },
+  {
+    "event_id": 248,
+    "result": {
+      "label": "HEALTH",
+      "model": "qwen3:4b-q4_K_M",
+      "source": "live_local_ollama",
+      "status": "needs_review",
+      "backend": "ollama_cpu_structured_generation",
+      "confidence": null,
+      "eval_count": 11,
+      "latency_ms": 3606.63,
+      "raw_content": "{\n  \"label\": \"HEALTH\"\n}",
+      "policy_effect": "none; no authorization decision, blocking, legal determination or automatic CIM approval",
+      "prompt_sha256": "3d299f23398efe580feaaece79c9905450bf4bc8f1180f924ea52cf41ed76ada",
+      "request_sha256": "ada46cbc2a1e89db4fe442f2015aafc3e987a6c76d00cb639cf5aaea00ef2580",
+      "load_duration_ms": 463.98,
+      "prompt_eval_count": 393,
+      "confidence_meaning": "No calibrated confidence is available; JSON validity is not correctness",
+      "confidence_is_calibrated": false
+    },
+    "backend": "ollama",
+    "endpoint": "consultations/U100",
+    "field_path": "consult_reason",
+    "input_scope": "실제 로컬 합성 응답값 / 외부 전송 없음",
+    "decision_role": "분류 후보만 생성; 인가 판정·법적 확정·자동 차단에 사용하지 않음"
+  },
+  {
+    "event_id": 255,
+    "result": {
+      "label": "HEALTH",
+      "model": "qwen3:4b-q4_K_M",
+      "source": "live_local_ollama",
+      "status": "needs_review",
+      "backend": "ollama_cpu_structured_generation",
+      "confidence": null,
+      "eval_count": 8,
+      "latency_ms": 3564.48,
+      "raw_content": "{\"label\": \"HEALTH\"}",
+      "policy_effect": "none; no authorization decision, blocking, legal determination or automatic CIM approval",
+      "prompt_sha256": "3d299f23398efe580feaaece79c9905450bf4bc8f1180f924ea52cf41ed76ada",
+      "request_sha256": "a5d3db94fd5da279b6af5405980ef3ba051ef5b856d982b93c73228a9cd4d2e7",
+      "load_duration_ms": 395.48,
+      "prompt_eval_count": 399,
+      "confidence_meaning": "No calibrated confidence is available; JSON validity is not correctness",
+      "confidence_is_calibrated": false
+    },
+    "backend": "ollama",
+    "endpoint": "info/health",
+    "field_path": "text",
+    "input_scope": "실제 로컬 합성 응답값 / 외부 전송 없음",
+    "decision_role": "분류 후보만 생성; 인가 판정·법적 확정·자동 차단에 사용하지 않음"
+  }
+]
+```

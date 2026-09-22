@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "at": "2026-09-22T05:28:54.344135+00:00",
+  "raw_attempts": 288,
+  "cases_per_method": 96,
+  "metrics_recomputed_unchanged": true,
+  "raw_predictions_unchanged": true,
+  "prior_aggregate_sha256": "2e6a74a4c19dd95c2786e1333a353a8cda36b5683c317e7008eb5382b53c4511",
+  "aggregate_sha256": "3c255ef6ea3bc41d62d34c04729af903bd9ae26ef94350caceb7e231f0880a06",
+  "dataset_sha256": "78250014809fc55d67b8e73347531841b794a4f2f88be0011df22c5d459fb0ce",
+  "gguf_sha256": "163553aea1b1de62de7c5eb2ef5afb756b4b3133308d9ae7e42e951d8d696ef5",
+  "same_gguf_basis": "Computed SemIf loaded-model hashes in raw replies, observed loopback Ollama /api/show model identity, and local manifest mapping checked at finalization.",
+  "scorer_identity": "Verified actual upstream SerialPrefixScorer, cached v2 only",
+  "loaded_evaluator_provenance": "evaluator-provenance.json",
+  "interpretation": "Authored development set; not a heldout estimate of Korean PII accuracy."
+}

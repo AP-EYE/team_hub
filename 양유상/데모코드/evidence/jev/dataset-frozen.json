@@ -1,0 +1,17 @@
+{
+  "status": "FROZEN_BEFORE_MODEL_EVALUATION",
+  "count": 96,
+  "labels": {
+    "HEALTH": 12,
+    "RELIGION": 12,
+    "CONTACT": 12,
+    "GOVERNMENT_ID": 12,
+    "PERSON_NAME": 12,
+    "ACCOUNT_ID": 12,
+    "OTHER": 12,
+    "UNKNOWN": 12
+  },
+  "sha256": "78250014809fc55d67b8e73347531841b794a4f2f88be0011df22c5d459fb0ce",
+  "scope": "Authored development set; no independent heldout or human expert validation.",
+  "contract_sha256": "736151161d423dfd1f67576c33f73ef92d0e00459eaaa5956723f289d100bbd0"
+}

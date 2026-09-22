@@ -1,0 +1,116 @@
+{
+  "model": "qwen3:4b-q4_K_M",
+  "model_id": "qwen3:4b-q4_K_M",
+  "backend": "ollama_cpu_structured_generation",
+  "status": "completed",
+  "selection": "best_of_two_local_generative_research_candidates_on_authored_set",
+  "source": "live_local_ollama",
+  "external_inference": false,
+  "created_at": "2026-09-21T21:19:39.752520+00:00",
+  "production_ready": false,
+  "scope": "Authored synthetic development fixtures only; models selected on this same set. Not an independent held-out estimate, legal correctness, or production certification.",
+  "confidence_is_calibrated": false,
+  "automatic_approval": false,
+  "count": 24,
+  "correct": 22,
+  "accuracy": 0.9166666666666666,
+  "baseline_correct": 19,
+  "baseline_accuracy": 0.7916666666666666,
+  "macro_f1": 0.9154761904761904,
+  "per_class": {
+    "HEALTH": {
+      "tp": 2,
+      "fp": 0,
+      "fn": 2,
+      "precision": 1.0,
+      "recall": 0.5,
+      "f1": 0.6666666666666666
+    },
+    "RELIGION": {
+      "tp": 3,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "CONTACT": {
+      "tp": 3,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "GOVERNMENT_ID": {
+      "tp": 3,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "PERSON_NAME": {
+      "tp": 3,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "ACCOUNT_ID": {
+      "tp": 3,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "OTHER": {
+      "tp": 3,
+      "fp": 1,
+      "fn": 0,
+      "precision": 0.75,
+      "recall": 1.0,
+      "f1": 0.8571428571428571
+    },
+    "UNKNOWN": {
+      "tp": 2,
+      "fp": 1,
+      "fn": 0,
+      "precision": 0.6666666666666666,
+      "recall": 1.0,
+      "f1": 0.8
+    }
+  },
+  "prediction_counts": {
+    "HEALTH": 2,
+    "UNKNOWN": 3,
+    "RELIGION": 3,
+    "CONTACT": 3,
+    "GOVERNMENT_ID": 3,
+    "PERSON_NAME": 3,
+    "ACCOUNT_ID": 3,
+    "OTHER": 4
+  },
+  "errors": 0,
+  "median_latency_ms": 4152.0,
+  "p95_latency_ms": 6362.92,
+  "p95_definition": "sorted nearest-rank ceil(0.95*n), no cold/warm filtering",
+  "source_file": "qwen3-4b-isolated-v1-fixtures-metrics.json",
+  "source_sha256": "082b66ad1c8b21923a79ba5089f7bdd1f0bb9df1b79645d2071c8c92c829ac6c",
+  "beats_frozen_rule_baseline_on_authored_set": true,
+  "model_is_not": "Not TypeSafe Jev or SemIf; general Qwen3 generation with a JSON schema",
+  "candidate_comparison": [
+    {
+      "model": "qwen3:1.7b-q4_K_M",
+      "classification_accuracy": 0.5833333333333334,
+      "normalization_accuracy": 0.75
+    },
+    {
+      "model": "qwen3:4b-q4_K_M",
+      "classification_accuracy": 0.9166666666666666,
+      "normalization_accuracy": 0.875
+    }
+  ]
+}

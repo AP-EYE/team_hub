@@ -1,0 +1,595 @@
+{
+  "status": "completed",
+  "created_at": "2026-09-21T21:04:50.135653+00:00",
+  "model_id": "Qwen/Qwen3-0.6B",
+  "model_revision": "c1899de289a04d12100db370d81485cdf75e47ca",
+  "runtime": {
+    "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "torch": "2.14.0+cpu",
+    "device": "cpu",
+    "threads": 6
+  },
+  "fixture_sha256": "63cf151d855e6c99596dfa0db097e3e1b6b29314d793526ff78028947dea9b48",
+  "engine_sha256": "2356db0c4b385117c58f9da764bf472dfcdb95491893fef8c29a17668801fe32",
+  "model_load_seconds": 7.903406000055838,
+  "model": {
+    "n": 24,
+    "accuracy": 0.125,
+    "macro_f1": 0.027777777777777776,
+    "balanced_accuracy": 0.125,
+    "per_label": {
+      "ACCOUNT_ID": {
+        "support": 3,
+        "precision": 0,
+        "recall": 0.0,
+        "f1": 0
+      },
+      "CONTACT": {
+        "support": 3,
+        "precision": 0,
+        "recall": 0.0,
+        "f1": 0
+      },
+      "GOVERNMENT_ID": {
+        "support": 3,
+        "precision": 0,
+        "recall": 0.0,
+        "f1": 0
+      },
+      "HEALTH": {
+        "support": 4,
+        "precision": 0,
+        "recall": 0.0,
+        "f1": 0
+      },
+      "OTHER": {
+        "support": 3,
+        "precision": 0.125,
+        "recall": 1.0,
+        "f1": 0.2222222222222222
+      },
+      "PERSON_NAME": {
+        "support": 3,
+        "precision": 0,
+        "recall": 0.0,
+        "f1": 0
+      },
+      "RELIGION": {
+        "support": 3,
+        "precision": 0,
+        "recall": 0.0,
+        "f1": 0
+      },
+      "UNKNOWN": {
+        "support": 2,
+        "precision": 0,
+        "recall": 0.0,
+        "f1": 0
+      }
+    },
+    "errors": [
+      "health-value",
+      "health-negated",
+      "health-schema",
+      "religion-value",
+      "religion-negated",
+      "religion-schema",
+      "contact-alias",
+      "contact-value",
+      "contact-schema",
+      "government-schema",
+      "government-alias",
+      "government-license",
+      "name-schema",
+      "name-alias",
+      "name-value",
+      "account-uuid",
+      "account-alias",
+      "account-schema",
+      "unknown-id",
+      "unknown-schema",
+      "injection-health"
+    ]
+  },
+  "baseline": {
+    "n": 24,
+    "accuracy": 0.7916666666666666,
+    "macro_f1": 0.7370039682539683,
+    "balanced_accuracy": 0.7916666666666666,
+    "per_label": {
+      "ACCOUNT_ID": {
+        "support": 3,
+        "precision": 0.6,
+        "recall": 1.0,
+        "f1": 0.7499999999999999
+      },
+      "CONTACT": {
+        "support": 3,
+        "precision": 1.0,
+        "recall": 0.6666666666666666,
+        "f1": 0.8
+      },
+      "GOVERNMENT_ID": {
+        "support": 3,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+      },
+      "HEALTH": {
+        "support": 4,
+        "precision": 0.8,
+        "recall": 1.0,
+        "f1": 0.888888888888889
+      },
+      "OTHER": {
+        "support": 3,
+        "precision": 0,
+        "recall": 0.0,
+        "f1": 0
+      },
+      "PERSON_NAME": {
+        "support": 3,
+        "precision": 1.0,
+        "recall": 0.6666666666666666,
+        "f1": 0.8
+      },
+      "RELIGION": {
+        "support": 3,
+        "precision": 0.75,
+        "recall": 1.0,
+        "f1": 0.8571428571428571
+      },
+      "UNKNOWN": {
+        "support": 2,
+        "precision": 0.6666666666666666,
+        "recall": 1.0,
+        "f1": 0.8
+      }
+    },
+    "errors": [
+      "contact-value",
+      "name-alias",
+      "other-advice",
+      "other-landmark",
+      "other-order-id"
+    ]
+  },
+  "slices": {
+    "alias": {
+      "model": {
+        "n": 5,
+        "accuracy": 0.0,
+        "macro_f1": 0,
+        "balanced_accuracy": 0.0,
+        "per_label": {
+          "ACCOUNT_ID": {
+            "support": 1,
+            "precision": 0,
+            "recall": 0.0,
+            "f1": 0
+          },
+          "CONTACT": {
+            "support": 1,
+            "precision": 0,
+            "recall": 0.0,
+            "f1": 0
+          },
+          "GOVERNMENT_ID": {
+            "support": 2,
+            "precision": 0,
+            "recall": 0.0,
+            "f1": 0
+          },
+          "PERSON_NAME": {
+            "support": 1,
+            "precision": 0,
+            "recall": 0.0,
+            "f1": 0
+          }
+        },
+        "errors": [
+          "contact-alias",
+          "government-alias",
+          "government-license",
+          "name-alias",
+          "account-alias"
+        ]
+      },
+      "baseline": {
+        "n": 5,
+        "accuracy": 0.8,
+        "macro_f1": 0.6666666666666666,
+        "balanced_accuracy": 0.75,
+        "per_label": {
+          "ACCOUNT_ID": {
+            "support": 1,
+            "precision": 0.5,
+            "recall": 1.0,
+            "f1": 0.6666666666666666
+          },
+          "CONTACT": {
+            "support": 1,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          "GOVERNMENT_ID": {
+            "support": 2,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          "PERSON_NAME": {
+            "support": 1,
+            "precision": 0,
+            "recall": 0.0,
+            "f1": 0
+          }
+        },
+        "errors": [
+          "name-alias"
+        ]
+      }
+    },
+    "ambiguity": {
+      "model": {
+        "n": 1,
+        "accuracy": 0.0,
+        "macro_f1": 0,
+        "balanced_accuracy": 0.0,
+        "per_label": {
+          "UNKNOWN": {
+            "support": 1,
+            "precision": 0,
+            "recall": 0.0,
+            "f1": 0
+          }
+        },
+        "errors": [
+          "unknown-id"
+        ]
+      },
+      "baseline": {
+        "n": 1,
+        "accuracy": 1.0,
+        "macro_f1": 1.0,
+        "balanced_accuracy": 1.0,
+        "per_label": {
+          "UNKNOWN": {
+            "support": 1,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          }
+        },
+        "errors": []
+      }
+    },
+    "negation": {
+      "model": {
+        "n": 2,
+        "accuracy": 0.0,
+        "macro_f1": 0,
+        "balanced_accuracy": 0.0,
+        "per_label": {
+          "HEALTH": {
+            "support": 1,
+            "precision": 0,
+            "recall": 0.0,
+            "f1": 0
+          },
+          "RELIGION": {
+            "support": 1,
+            "precision": 0,
+            "recall": 0.0,
+            "f1": 0
+          }
+        },
+        "errors": [
+          "health-negated",
+          "religion-negated"
+        ]
+      },
+      "baseline": {
+        "n": 2,
+        "accuracy": 1.0,
+        "macro_f1": 1.0,
+        "balanced_accuracy": 1.0,
+        "per_label": {
+          "HEALTH": {
+            "support": 1,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          "RELIGION": {
+            "support": 1,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          }
+        },
+        "errors": []
+      }
+    },
+    "negative_control": {
+      "model": {
+        "n": 3,
+        "accuracy": 1.0,
+        "macro_f1": 1.0,
+        "balanced_accuracy": 1.0,
+        "per_label": {
+          "OTHER": {
+            "support": 3,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          }
+        },
+        "errors": []
+      },
+      "baseline": {
+        "n": 3,
+        "accuracy": 0.0,
+        "macro_f1": 0,
+        "balanced_accuracy": 0.0,
+        "per_label": {
+          "OTHER": {
+            "support": 3,
+            "precision": 0,
+            "recall": 0.0,
+            "f1": 0
+          }
+        },
+        "errors": [
+          "other-advice",
+          "other-landmark",
+          "other-order-id"
+        ]
+      }
+    },
+    "prompt_injection": {
+      "model": {
+        "n": 1,
+        "accuracy": 0.0,
+        "macro_f1": 0,
+        "balanced_accuracy": 0.0,
+        "per_label": {
+          "HEALTH": {
+            "support": 1,
+            "precision": 0,
+            "recall": 0.0,
+            "f1": 0
+          }
+        },
+        "errors": [
+          "injection-health"
+        ]
+      },
+      "baseline": {
+        "n": 1,
+        "accuracy": 1.0,
+        "macro_f1": 1.0,
+        "balanced_accuracy": 1.0,
+        "per_label": {
+          "HEALTH": {
+            "support": 1,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          }
+        },
+        "errors": []
+      }
+    },
+    "schema_only": {
+      "model": {
+        "n": 7,
+        "accuracy": 0.0,
+        "macro_f1": 0,
+        "balanced_accuracy": 0.0,
+        "per_label": {
+          "ACCOUNT_ID": {
+            "support": 1,
+            "precision": 0,
+            "recall": 0.0,
+            "f1": 0
+          },
+          "CONTACT": {
+            "support": 1,
+            "precision": 0,
+            "recall": 0.0,
+            "f1": 0
+          },
+          "GOVERNMENT_ID": {
+            "support": 1,
+            "precision": 0,
+            "recall": 0.0,
+            "f1": 0
+          },
+          "HEALTH": {
+            "support": 1,
+            "precision": 0,
+            "recall": 0.0,
+            "f1": 0
+          },
+          "PERSON_NAME": {
+            "support": 1,
+            "precision": 0,
+            "recall": 0.0,
+            "f1": 0
+          },
+          "RELIGION": {
+            "support": 1,
+            "precision": 0,
+            "recall": 0.0,
+            "f1": 0
+          },
+          "UNKNOWN": {
+            "support": 1,
+            "precision": 0,
+            "recall": 0.0,
+            "f1": 0
+          }
+        },
+        "errors": [
+          "health-schema",
+          "religion-schema",
+          "contact-schema",
+          "government-schema",
+          "name-schema",
+          "account-schema",
+          "unknown-schema"
+        ]
+      },
+      "baseline": {
+        "n": 7,
+        "accuracy": 1.0,
+        "macro_f1": 1.0,
+        "balanced_accuracy": 1.0,
+        "per_label": {
+          "ACCOUNT_ID": {
+            "support": 1,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          "CONTACT": {
+            "support": 1,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          "GOVERNMENT_ID": {
+            "support": 1,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          "HEALTH": {
+            "support": 1,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          "PERSON_NAME": {
+            "support": 1,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          "RELIGION": {
+            "support": 1,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          "UNKNOWN": {
+            "support": 1,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          }
+        },
+        "errors": []
+      }
+    },
+    "value": {
+      "model": {
+        "n": 5,
+        "accuracy": 0.0,
+        "macro_f1": 0,
+        "balanced_accuracy": 0.0,
+        "per_label": {
+          "ACCOUNT_ID": {
+            "support": 1,
+            "precision": 0,
+            "recall": 0.0,
+            "f1": 0
+          },
+          "CONTACT": {
+            "support": 1,
+            "precision": 0,
+            "recall": 0.0,
+            "f1": 0
+          },
+          "HEALTH": {
+            "support": 1,
+            "precision": 0,
+            "recall": 0.0,
+            "f1": 0
+          },
+          "PERSON_NAME": {
+            "support": 1,
+            "precision": 0,
+            "recall": 0.0,
+            "f1": 0
+          },
+          "RELIGION": {
+            "support": 1,
+            "precision": 0,
+            "recall": 0.0,
+            "f1": 0
+          }
+        },
+        "errors": [
+          "health-value",
+          "religion-value",
+          "contact-value",
+          "name-value",
+          "account-uuid"
+        ]
+      },
+      "baseline": {
+        "n": 5,
+        "accuracy": 0.8,
+        "macro_f1": 0.8,
+        "balanced_accuracy": 0.8,
+        "per_label": {
+          "ACCOUNT_ID": {
+            "support": 1,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          "CONTACT": {
+            "support": 1,
+            "precision": 0,
+            "recall": 0.0,
+            "f1": 0
+          },
+          "HEALTH": {
+            "support": 1,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          "PERSON_NAME": {
+            "support": 1,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          },
+          "RELIGION": {
+            "support": 1,
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0
+          }
+        },
+        "errors": [
+          "contact-value"
+        ]
+      }
+    }
+  },
+  "latency_ms": {
+    "median": 7052.120000000001,
+    "p95_nearest_rank": 16825.23,
+    "min": 2662.15,
+    "max": 17549.2
+  },
+  "scope": "24 authored synthetic Korean fixtures; no independent test set, no training, no calibration, not legal correctness or production reliability",
+  "confidence_is_calibrated": false
+}

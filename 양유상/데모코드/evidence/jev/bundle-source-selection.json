@@ -1,0 +1,9 @@
+{
+  "required_files_present": true,
+  "source_file_count": 234,
+  "vendor_file_count": 12,
+  "no_runtime_weights_venvs_git_or_lock": true,
+  "compiled_owned_scripts": true,
+  "archive_created": false,
+  "host_specific_jev_runtime_config_excluded": true
+}

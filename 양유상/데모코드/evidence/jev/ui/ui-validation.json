@@ -1,0 +1,365 @@
+{
+  "status": "PASS",
+  "at": "2026-09-22T05:28:56.312Z",
+  "source": "Live same-origin lab APIs; no inference or evaluation POST requests",
+  "checks": [
+    {
+      "name": "http_200",
+      "passed": true,
+      "detail": 200
+    },
+    {
+      "name": "actual_case_count",
+      "passed": true,
+      "detail": 96
+    },
+    {
+      "name": "first_case_input",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "first_case_expected_visible",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "three_input_modes",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "two_live_methods",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "official_jev_identity_distinction",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "original_name_openjev_visible",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "desktop_experiment_no_overflow",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "edited_input_comparison_disabled",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "schema_only_expected_disabled",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "schema_only_exclusion_explained",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "value_only_exclusion_explained",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "label_filter_count",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "slice_filter_count",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "case_search_empty_visible",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "saved_three_methods",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "saved_eight_score_bars",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "saved_actual_label",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "saved_score_not_confidence",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "evaluation_tab_visible",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "three_method_cards",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "semif_matrix_eight_rows",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "semif_matrix_preserves_all_counts",
+      "passed": true,
+      "detail": {
+        "observed": 96,
+        "expected": 96
+      }
+    },
+    {
+      "name": "semif_per_label_eight_rows",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "json_matrix_eight_rows",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "json_matrix_preserves_all_counts",
+      "passed": true,
+      "detail": {
+        "observed": 96,
+        "expected": 96
+      }
+    },
+    {
+      "name": "json_per_label_eight_rows",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "rules_matrix_eight_rows",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "rules_matrix_preserves_all_counts",
+      "passed": true,
+      "detail": {
+        "observed": 96,
+        "expected": 96
+      }
+    },
+    {
+      "name": "rules_per_label_eight_rows",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "threshold_0_actual_accepted",
+      "passed": true,
+      "detail": {
+        "observed": 80,
+        "expected": 80
+      }
+    },
+    {
+      "name": "threshold_80_actual_accepted",
+      "passed": true,
+      "detail": {
+        "observed": 80,
+        "expected": 80
+      }
+    },
+    {
+      "name": "threshold_100_actual_accepted",
+      "passed": true,
+      "detail": {
+        "observed": 0,
+        "expected": 0
+      }
+    },
+    {
+      "name": "threshold_unknown_review_visible",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "desktop_evaluation_no_overflow",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "authored_set_limit_visible",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "eight_label_guide_cards",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "actual_commit_visible",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "actual_dataset_sha_visible",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "calibration_limit_visible",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "desktop_guide_no_overflow",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "mobile_experiment_visible",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "mobile_experiment_no_overflow",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "mobile_evaluation_visible",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "mobile_evaluation_no_overflow",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "mobile_guide_visible",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "mobile_guide_no_overflow",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "mobile_matrix_scrolls_inside_container",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "markdown_report_available_or_explicitly_pending",
+      "passed": true,
+      "detail": 200
+    },
+    {
+      "name": "report_is_markdown",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "existing_dashboard_lab_link",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "no_javascript_errors",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "no_console_errors",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "no_failed_requests",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "no_inference_or_mutation_requests",
+      "passed": true,
+      "detail": []
+    }
+  ],
+  "screenshots": [
+    "desktop-experiment.png",
+    "desktop-evaluation.png",
+    "desktop-confusion-matrix.png",
+    "desktop-guide.png",
+    "mobile-experiment.png",
+    "mobile-evaluation.png",
+    "mobile-guide.png"
+  ],
+  "errors": [],
+  "console_errors": [],
+  "failed_requests": [],
+  "write_requests": [],
+  "browser": "153.0.8010.50",
+  "runtime": {
+    "status": "ready",
+    "model": "Qwen3-4B Q4_K_M",
+    "backend": "actual_semif_llamacpp",
+    "semif_commit": "1f2dea3e25379f9dfc98cb83c324f00ab5deda37",
+    "external_inference": false,
+    "load_seconds": 14.233043699990958,
+    "model_metadata": {
+      "source": "C:\\Users\\andyw\\Desktop\\api-privacy-gateway-demo\\.runtime\\jev-tokenizer\\Qwen3-4B",
+      "revision": "1cfa9a7208912126459214e8b04321603b3df60c",
+      "backend": "llamacpp",
+      "dtype": "gguf-quantized",
+      "gguf": {
+        "file": "sha256-163553aea1b1de62de7c5eb2ef5afb756b4b3133308d9ae7e42e951d8d696ef5",
+        "bytes": 2620774592,
+        "sha256": "163553aea1b1de62de7c5eb2ef5afb756b4b3133308d9ae7e42e951d8d696ef5"
+      },
+      "vocab_size": 151936,
+      "threads": 8,
+      "n_gpu_layers": 0,
+      "max_prompt_tokens": 2048,
+      "context_tokens": 2304,
+      "decode_chunk": 512,
+      "llama_cpp_python_version": "0.3.35",
+      "transformers_version": "5.17.0",
+      "project_native_parameter_override": {
+        "use_extra_bufts": false
+      }
+    },
+    "official_typesafe_jev_executed": false,
+    "busy": true
+  },
+  "evaluation_status": "completed",
+  "evaluated_counts": {
+    "semif": 96,
+    "json": 96,
+    "rules": 96
+  },
+  "dataset": {
+    "count": 96,
+    "sha256": "78250014809fc55d67b8e73347531841b794a4f2f88be0011df22c5d459fb0ce",
+    "scope": "Authored development set; no independent heldout or human expert validation.",
+    "name": "KO96 authored Korean technical-type development set"
+  },
+  "passed": 56,
+  "total": 56
+}

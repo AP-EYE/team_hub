@@ -1,0 +1,74 @@
+{
+  "run_time_utc": "2026-09-21T21:20:26.768036+00:00",
+  "checks": [
+    {
+      "name": "health",
+      "status_code": 200,
+      "body": {
+        "status": "ready",
+        "model": "qwen3:4b-q4_K_M",
+        "revision": "2bfd38a7daaf4b1037efe517ccb73d1a3bbd4822cf89f1a82be1569050a114e0",
+        "backend": "ollama_cpu_structured_generation",
+        "source": "live_local_ollama",
+        "external_inference": false,
+        "calibrated": false,
+        "ollama_endpoint": "http://127.0.0.1:11437"
+      },
+      "pass": true
+    },
+    {
+      "name": "/classify",
+      "status_code": 200,
+      "body": {
+        "label": "CONTACT",
+        "confidence": null,
+        "confidence_is_calibrated": false,
+        "confidence_meaning": "No calibrated confidence is available; JSON validity is not correctness",
+        "model": "qwen3:4b-q4_K_M",
+        "backend": "ollama_cpu_structured_generation",
+        "source": "live_local_ollama",
+        "status": "needs_review",
+        "latency_ms": 1493.65,
+        "prompt_sha256": "3d299f23398efe580feaaece79c9905450bf4bc8f1180f924ea52cf41ed76ada",
+        "request_sha256": "86849666588b5806a1fc67b40472fd1ad3f9e19e1959e6e362a9d2437c54341b",
+        "raw_content": "{\"label\": \"CONTACT\"}",
+        "load_duration_ms": 124.44,
+        "prompt_eval_count": 364,
+        "eval_count": 7,
+        "policy_effect": "none; no authorization decision, blocking, legal determination or automatic CIM approval"
+      },
+      "pass": true
+    },
+    {
+      "name": "/normalize",
+      "status_code": 200,
+      "body": {
+        "canonical_field": "data_subject.id",
+        "label": "data_subject.id",
+        "confidence": null,
+        "confidence_is_calibrated": false,
+        "approved": false,
+        "model": "qwen3:4b-q4_K_M",
+        "source": "live_local_ollama",
+        "status": "needs_review",
+        "backend": "ollama_cpu_structured_generation",
+        "latency_ms": 1771.29,
+        "prompt_sha256": "5bf30354860ce1c14c1aa0df1964d09e4b5b77cd8810164f9fb05bb9c84c9635",
+        "raw_content": "{\"canonical_field\": \"data_subject.id\"}",
+        "request_sha256": "b539b7117756b400dc7fab15a6fa6b5b5afdbb9cccfadf5aa5e137cadfccc17b",
+        "load_duration_ms": 138.16,
+        "prompt_eval_count": 219,
+        "eval_count": 10,
+        "policy_effect": "none; proposal only, never updates approved CIM registry"
+      },
+      "pass": true
+    },
+    {
+      "name": "reject_nonstring",
+      "status_code": 400,
+      "pass": true
+    }
+  ],
+  "passed": 4,
+  "count": 4
+}

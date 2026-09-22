@@ -1,0 +1,19 @@
+{
+  "at": "2026-09-22T04:52:44.856657+00:00",
+  "source": "GET-equivalent read-only POST /api/show on loopback11437",
+  "model": "qwen3:4b-q4_K_M",
+  "modelfile_blob_hashes": [
+    "163553aea1b1de62de7c5eb2ef5afb756b4b3133308d9ae7e42e951d8d696ef5"
+  ],
+  "matches_jev_gguf": true,
+  "details": {
+    "parent_model": "",
+    "format": "gguf",
+    "family": "qwen3",
+    "families": [
+      "qwen3"
+    ],
+    "parameter_size": "4.0B",
+    "quantization_level": "Q4_K_M"
+  }
+}

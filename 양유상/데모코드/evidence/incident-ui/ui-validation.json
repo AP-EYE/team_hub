@@ -1,0 +1,294 @@
+{
+  "status": "PASS",
+  "checked_at": "2026-09-22T03:10:32.859Z",
+  "browser": "153.0.8010.50",
+  "run_id": "incident-4bf3904446c9",
+  "source": "Actual localhost UI and stored API records. No prepare or replay action used.",
+  "before_summary": {
+    "logged_requests": 13,
+    "api_count": 8,
+    "http_success": 11,
+    "denied": 1,
+    "other": 1,
+    "confirmed_policy_requests": 7,
+    "returned_subjects": 3,
+    "confirmed_exposure_subjects": 3
+  },
+  "metadata_summary": {
+    "logged_requests": 13,
+    "api_count": 8,
+    "http_success": 11,
+    "denied": 1,
+    "other": 1,
+    "confirmed_policy_requests": null,
+    "returned_subjects": null,
+    "confirmed_exposure_subjects": null
+  },
+  "checks": [
+    {
+      "name": "six_tabs_available",
+      "passed": true
+    },
+    {
+      "name": "direct_hash_opens_incident_tab",
+      "passed": true
+    },
+    {
+      "name": "replay_controls_hidden_in_incident_tab",
+      "passed": true
+    },
+    {
+      "name": "stored_source_is_readonly",
+      "passed": true
+    },
+    {
+      "name": "separate_prepare_control_visible",
+      "passed": true
+    },
+    {
+      "name": "full_metric_logged_requests",
+      "passed": true,
+      "detail": {
+        "observed": 13
+      }
+    },
+    {
+      "name": "full_metric_api_count",
+      "passed": true,
+      "detail": {
+        "observed": 8
+      }
+    },
+    {
+      "name": "full_metric_http_success",
+      "passed": true,
+      "detail": {
+        "observed": 11
+      }
+    },
+    {
+      "name": "full_metric_confirmed_policy_requests",
+      "passed": true,
+      "detail": {
+        "observed": 7
+      }
+    },
+    {
+      "name": "full_metric_returned_subjects",
+      "passed": true,
+      "detail": {
+        "observed": 3
+      }
+    },
+    {
+      "name": "full_metric_confirmed_exposure_subjects",
+      "passed": true,
+      "detail": {
+        "observed": 3
+      }
+    },
+    {
+      "name": "endpoint_row_count",
+      "passed": true
+    },
+    {
+      "name": "timeline_row_count",
+      "passed": true
+    },
+    {
+      "name": "subject_card_count",
+      "passed": true
+    },
+    {
+      "name": "confirmed_fields_separate_from_all_fields",
+      "passed": true
+    },
+    {
+      "name": "confirmed_fields_match_stored_api",
+      "passed": true
+    },
+    {
+      "name": "completeness_unknown_visible",
+      "passed": true
+    },
+    {
+      "name": "full_desktop_no_page_overflow",
+      "passed": true
+    },
+    {
+      "name": "timeline_evidence_opens",
+      "passed": true
+    },
+    {
+      "name": "full_evidence_has_response",
+      "passed": true
+    },
+    {
+      "name": "evidence_closes",
+      "passed": true
+    },
+    {
+      "name": "markdown_download_endpoint",
+      "passed": true
+    },
+    {
+      "name": "markdown_browser_download",
+      "passed": true
+    },
+    {
+      "name": "changed_filter_hides_old_result",
+      "passed": true
+    },
+    {
+      "name": "metadata_confirmed_policy_requests_unknown",
+      "passed": true
+    },
+    {
+      "name": "metadata_returned_subjects_unknown",
+      "passed": true
+    },
+    {
+      "name": "metadata_confirmed_exposure_subjects_unknown",
+      "passed": true
+    },
+    {
+      "name": "metadata_retains_request_count",
+      "passed": true
+    },
+    {
+      "name": "metadata_no_subject_cards",
+      "passed": true
+    },
+    {
+      "name": "metadata_explains_unknown_subjects",
+      "passed": true
+    },
+    {
+      "name": "metadata_model_section_hidden",
+      "passed": true
+    },
+    {
+      "name": "metadata_evidence_no_response_payload",
+      "passed": true
+    },
+    {
+      "name": "scope_persists_on_reload",
+      "passed": true
+    },
+    {
+      "name": "admin_scope_from_stored_logs",
+      "passed": true,
+      "detail": {
+        "logged_requests": 1,
+        "api_count": 1,
+        "http_success": 1,
+        "denied": 0,
+        "other": 0,
+        "confirmed_policy_requests": 0,
+        "returned_subjects": 2,
+        "confirmed_exposure_subjects": 0
+      }
+    },
+    {
+      "name": "all_actor_scope_matches_api",
+      "passed": true,
+      "detail": {
+        "logged_requests": 14,
+        "api_count": 8,
+        "http_success": 12,
+        "denied": 1,
+        "other": 1,
+        "confirmed_policy_requests": 7,
+        "returned_subjects": 3,
+        "confirmed_exposure_subjects": 3
+      }
+    },
+    {
+      "name": "mobile_full_no_page_overflow",
+      "passed": true
+    },
+    {
+      "name": "mobile_metadata_no_page_overflow",
+      "passed": true
+    },
+    {
+      "name": "existing_overview_still_opens",
+      "passed": true
+    },
+    {
+      "name": "existing_overview_mobile_no_page_overflow",
+      "passed": true
+    },
+    {
+      "name": "existing_findings_still_opens",
+      "passed": true
+    },
+    {
+      "name": "existing_findings_mobile_no_page_overflow",
+      "passed": true
+    },
+    {
+      "name": "existing_events_still_opens",
+      "passed": true
+    },
+    {
+      "name": "existing_events_mobile_no_page_overflow",
+      "passed": true
+    },
+    {
+      "name": "existing_mapping_still_opens",
+      "passed": true
+    },
+    {
+      "name": "existing_mapping_mobile_no_page_overflow",
+      "passed": true
+    },
+    {
+      "name": "existing_model_still_opens",
+      "passed": true
+    },
+    {
+      "name": "existing_model_mobile_no_page_overflow",
+      "passed": true
+    },
+    {
+      "name": "stored_event_ids_unchanged",
+      "passed": true
+    },
+    {
+      "name": "stored_summary_unchanged",
+      "passed": true
+    },
+    {
+      "name": "analysis_sends_no_mutating_http_requests",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "no_javascript_errors",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "no_console_errors",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "no_failed_requests",
+      "passed": true,
+      "detail": []
+    }
+  ],
+  "screenshots": [
+    "desktop-overview.png",
+    "desktop-full.png",
+    "desktop-evidence.png",
+    "desktop-metadata-only.png",
+    "mobile-overview.png",
+    "mobile-metrics.png",
+    "mobile-full.png",
+    "mobile-metadata-only.png"
+  ],
+  "mutating_requests": []
+}

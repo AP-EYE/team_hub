@@ -1,0 +1,20 @@
+name: api-privacy-gateway-demo
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: privacy_demo
+      POSTGRES_USER: privacy_demo
+      POSTGRES_PASSWORD: synthetic-local-demo-only
+    ports:
+      - "127.0.0.1:15439:5432"
+    volumes:
+      - privacy_demo_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U privacy_demo -d privacy_demo"]
+      interval: 3s
+      timeout: 10s
+      start_period: 120s
+      retries: 30
+volumes:
+  privacy_demo_data:

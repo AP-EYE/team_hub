@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>GUARDFLOW · API 노출 분석 실험실</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23101c31'/%3E%3Ctext x='7' y='24' fill='%2399baff' font-family='Arial' font-size='25' font-weight='bold'%3EG%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/static/style.css">
+  <script src="/static/app.js" defer></script>
+</head>
+<body>
+  <aside class="sidebar">
+    <a href="/" class="brand" aria-label="Guardflow 처음으로"><span class="brand-mark">G<span></span></span><span>GUARDFLOW<small>API SECURITY LAB</small></span></a>
+    <div class="workspace-label">RESEARCH WORKSPACE</div>
+    <nav aria-label="주 메뉴">
+      <button class="nav-item active" data-tab="overview"><span class="nav-icon">◫</span>분석 개요</button>
+      <button class="nav-item" data-tab="findings"><span class="nav-icon">◇</span>인가 판정<span id="nav-count" class="nav-count">0</span></button>
+      <button class="nav-item" data-tab="events"><span class="nav-icon">≡</span>수집 로그</button>
+      <button class="nav-item" data-tab="mapping"><span class="nav-icon">⌘</span>CIM · 데이터 결합</button>
+      <button class="nav-item" data-tab="model"><span class="nav-icon">✧</span>로컬 분류 실험</button>
+      <button class="nav-item" data-tab="incidents"><span class="nav-icon">◷</span>사후 로그 분석</button>
+      <a class="nav-item" href="/privacy-lab"><span class="nav-icon">✧</span>한국어 분류 상세 실험</a>
+    </nav>
+    <div class="sidebar-note"><span class="status-dot"></span>로컬 실험 환경<p>합성 데이터로 탐지와 분석의<br>전체 흐름을 검증합니다.</p></div>
+    <div class="sidebar-footer">4인 팀 · 보안 게이트웨이 연구<br><span>PROTOTYPE / NOT PRODUCTION</span></div>
+  </aside>
+
+  <div class="main-shell">
+    <header class="topbar"><div class="breadcrumb">워크스페이스 <span>/</span> <strong id="breadcrumb-current">분석 개요</strong></div><div class="topbar-right"><span id="connection" class="connection"><i></i>연결 확인 중</span><button id="refresh" class="icon-button" aria-label="데이터 새로고침" title="데이터 새로고침">↻</button></div></header>
+    <main>
+      <div id="notification" class="notification" role="status" hidden></div>
+      <section class="page-intro"><div><div class="eyebrow">EVIDENCE FIRST. PRIVACY BY DESIGN.</div><h1>API 노출 분석 실험실<span class="version">DEMO</span></h1><p>트래픽을 근거로, 개인정보의 흐름과 인가 경계를 확인하세요.</p></div><a class="button button-quiet report-link" href="/api/report" download="api-privacy-demo-report.md"><span>↓</span> 분석 보고서</a></section>
+
+      <section class="experiment-bar" aria-label="시나리오 실행"><div class="experiment-label"><span class="experiment-icon">▶</span><div><strong>같은 시나리오, 다른 보안 정책</strong><p>취약 상태를 재현하고, 수정 후 동일한 요청을 다시 검증합니다.</p></div></div><div class="experiment-actions"><button id="run-vulnerable" class="button button-primary" data-run="vulnerable"><span>▶</span> 취약 시나리오 실행</button><button id="run-fixed" class="button button-secondary" data-run="fixed"><span>✓</span> 수정 후 재검증</button></div></section>
+      <div class="scope-note"><span>ⓘ</span><span>합성 계정·합성 개인정보만 사용합니다. 노출 범위는 관측된 응답 기준이며, 점수는 프로젝트의 우선순위 기준입니다.</span></div>
+
+      <section id="tab-overview" class="tab-panel active" aria-labelledby="breadcrumb-current">
+        <div id="stats" class="stats-grid"></div>
+        <section class="card flow-card"><div class="card-heading"><div><div class="section-kicker">ANALYSIS PIPELINE</div><h2>하나의 요청이 분석 근거가 되기까지</h2></div><span class="subtle-badge">실제 저장 데이터</span></div><div id="pipeline" class="pipeline"></div></section>
+        <div class="overview-grid"><section class="card"><div class="card-heading"><div><div class="section-kicker">FINDINGS</div><h2>확인된 결과</h2></div><button class="text-button" data-tab="findings">전체 보기 ↗</button></div><div id="recent-findings"></div></section><section class="card feedback-card"><div class="section-kicker">RESEARCH DIRECTION</div><h2>교수님 피드백을 실험으로</h2><div class="feedback-item"><span>01</span><div><strong>남겨야 조사할 수 있습니다</strong><p>요청·응답 로그와 판정 근거를 연결해 사고 조사에 활용합니다.</p></div></div><div class="feedback-item"><span>02</span><div><strong>다른 이름, 같은 의미</strong><p>필드의 의미와 역할을 CIM 형식으로 정규화합니다.</p></div></div><div class="feedback-item"><span>03</span><div><strong>분류는 측정하고 검증합니다</strong><p>규칙과 로컬 모델의 결과를 구분하고, 평가 근거를 확인합니다.</p></div></div><div class="feedback-item"><span>04</span><div><strong>결합과 노출을 구분합니다</strong><p>동일인의 기록 연결과 공격자가 실제 받은 정보를 나눠 봅니다.</p></div></div></section></div>
+        <section class="card"><div class="card-heading"><div><div class="section-kicker">VALIDATION</div><h2>실행 · 검증 현황</h2></div><span id="run-count" class="subtle-badge"></span></div><div id="evaluation-overview"></div><div id="run-history"></div></section>
+      </section>
+
+      <section id="tab-findings" class="tab-panel"><div class="section-top"><div><h2>인가 판정과 개인정보 노출</h2><p>HTTP 상태나 신원 차이만으로 취약점을 확정하지 않습니다. 정책과 반환 필드를 함께 확인하세요.</p></div><div class="filters"><label for="verdict-filter" class="sr-only">판정 필터</label><select id="verdict-filter"><option value="all">모든 판정</option><option value="confirmed">취약 확인</option><option value="needs_review">검토 필요</option><option value="blocked">차단 확인</option><option value="allowed">정상 허용</option></select></div></div><div class="card table-card"><div id="findings-table"></div></div><section id="finding-detail" class="card detail-panel" hidden></section></section>
+
+      <section id="tab-events" class="tab-panel"><div class="section-top"><div><h2>요청·응답 증거 로그</h2><p>행을 선택하면 마스킹된 요청·응답과 개인정보 분류 결과를 확인할 수 있습니다.</p></div><span id="event-count" class="subtle-badge"></span></div><div class="card table-card"><div id="events-table"></div></div><section id="event-detail" class="card detail-panel" hidden></section></section>
+
+      <section id="tab-mapping" class="tab-panel"><div class="section-top"><div><h2>필드 정규화와 데이터 결합</h2><p>요청자·정보 주체의 역할을 구분하고, 검증된 식별자와 테넌트 범위 안에서 기록을 연결합니다.</p></div></div><section class="card"><div class="card-heading"><div><div class="section-kicker">SCHEMA → SEMANTIC CANDIDATE</div><h2>필드 별칭 매핑 제안</h2></div><span class="subtle-badge">후보 생성 · 자동 승인 없음</span></div><form id="mapping-form" class="mapping-form"><div><label for="mapping-path">필드 이름 / 경로</label><input id="mapping-path" name="field_path" placeholder="예: mobile_no" required autocomplete="off"></div><div><label for="mapping-description">스키마 설명</label><input id="mapping-description" name="description" placeholder="예: 회원 휴대전화 번호" required autocomplete="off"></div><div><label for="mapping-backend">실험용 분류 방식</label><select id="mapping-backend"><option value="">현재 기본값</option><option value="direct">선택지 점수 · 0.6B</option><option value="ollama">JSON 생성 · Ollama</option></select></div><button id="mapping-button" class="button button-primary" type="submit">매핑 후보 제안 ↗</button></form><p class="model-notice">필드명과 설명만 입력합니다. 실험 결과는 승인된 레지스트리에 자동 등록되지 않습니다.</p><div id="mapping-result" hidden></div></section><section class="card"><div class="card-heading"><div><div class="section-kicker">COMMON INFORMATION MODEL</div><h2>필드 의미 매핑</h2></div></div><div id="mappings-table"></div></section><section class="card"><div class="card-heading"><div><div class="section-kicker">ENTITY LINKAGE</div><h2>연결된 정보 주체</h2></div></div><div class="inline-note">내부에서 기록을 연결할 수 있다는 사실만으로 공격자의 식별 가능성을 확정할 수 없습니다. 아래에서 공격자 응답에 실제 포함된 정보인지 확인합니다.</div><div id="links-grid" class="links-grid"></div></section></section>
+
+      <section id="tab-model" class="tab-panel"><div class="section-top"><div><h2>로컬 개인정보 분류 실험</h2><p>모델의 실행 상태와 실제 평가 결과를 확인합니다. 모델의 분류 결과는 법적 판단을 대체하지 않습니다.</p></div></div><div class="inline-note">Qwen 계열로 분류 방식을 비교하는 실험입니다. Jev 공식 모델의 실행 결과가 아니며, 모든 출력은 검토 전 후보입니다.</div><div id="benchmark-comparison" class="benchmark-comparison"></div><div class="model-grid"><section class="card"><div class="card-heading"><div><div class="section-kicker">MODEL STATUS</div><h2>실행 환경</h2></div></div><div id="model-status"></div></section><section class="card"><div class="card-heading"><div><div class="section-kicker">TRY A SYNTHETIC SAMPLE</div><h2>분류해 보기</h2></div></div><form id="classify-form"><label for="field-path">필드 경로</label><input id="field-path" name="field_path" placeholder="예: consultation.reason" autocomplete="off"><label for="field-description">필드 설명</label><input id="field-description" name="description" placeholder="예: 상담 신청 동기" autocomplete="off"><label for="classify-backend">실험용 분류 방식</label><select id="classify-backend"><option value="">현재 기본값</option><option value="direct">선택지 점수 · 0.6B</option><option value="ollama">JSON 생성 · Ollama</option></select><label for="sample-text">합성 텍스트</label><textarea id="sample-text" name="text" rows="4" placeholder="실제 개인정보 대신 가상의 예시를 입력하세요." required></textarea><div class="form-bottom"><span>실제 개인정보를 입력하지 마세요.</span><button id="classify-button" class="button button-primary" type="submit">분류 실행 ↗</button></div></form><div id="classification-result" hidden></div></section></div><section class="card"><div class="card-heading"><div><div class="section-kicker">ASYNC RESPONSE CLASSIFICATION</div><h2>수집 응답의 로컬 모델 분류</h2></div><span id="model-pending" class="subtle-badge"></span></div><div id="model-event-results"></div></section><section class="card"><div class="card-heading"><div><div class="section-kicker">MEASURED RESULTS</div><h2>평가 결과와 실행 근거</h2></div></div><div id="model-benchmarks"></div><div id="model-evaluation"></div></section></section>
+
+      <section id="tab-incidents" class="tab-panel">
+        <section class="incident-hero"><div><div class="section-kicker">POST-INCIDENT · STORED EVIDENCE</div><h2>남아 있는 로그로, 어디까지 알 수 있을까요?</h2><p>접근한 API와 호출 횟수를 재구성하고, 응답에 기록된 조회 범위를 확인합니다.</p></div><div class="incident-readonly"><span>↳</span><strong>저장 로그만 조회</strong><small>분석 중 API 재호출 없음</small></div></section>
+        <div class="incident-steps"><span><b>01</b> 조사 대상 선택</span><i>→</i><span><b>02</b> 호출 이력 재구성</span><i>→</i><span><b>03</b> 확인 범위와 한계 구분</span></div>
+        <section class="card incident-query-card"><div class="card-heading"><div><div class="section-kicker">INVESTIGATION SCOPE</div><h2>조사할 기록 선택</h2></div><button id="incident-refresh-runs" class="text-button" type="button">저장 목록 새로고침 ↻</button></div>
+          <form id="incident-form" class="incident-form"><div class="incident-run-field"><label for="incident-run">저장된 실행 기록</label><select id="incident-run" required><option value="">기록을 불러오는 중</option></select></div><div><label for="incident-actor">요청 계정</label><select id="incident-actor"><option value="bob">bob</option><option value="all">모든 계정</option></select></div><div><label for="incident-capture">사용할 로그 증거</label><select id="incident-capture"><option value="full">저장된 응답 증거 포함</option><option value="metadata_only">요청 메타데이터만 남은 경우</option></select></div><button id="incident-analyze" class="button button-primary" type="submit">저장 로그 분석 ↗</button></form>
+          <div class="incident-query-note"><span>ⓘ</span><span>메타데이터 모드는 응답이 유실된 상황을 모의합니다. 원본 로그를 삭제하거나 새 요청을 보내지 않습니다.</span></div><div id="incident-status" class="incident-status" role="status" hidden></div>
+        </section>
+        <div id="incident-results" hidden>
+          <div class="section-top incident-result-top"><div><h2>로그가 말해 주는 사실</h2><p id="incident-result-subtitle"></p></div><a id="incident-report" class="button button-quiet" download="incident-log-analysis.md">↓ 조사 보고서 .md</a></div>
+          <div id="incident-stats" class="incident-stats"></div>
+          <section id="incident-coverage" class="incident-coverage"></section>
+          <section class="card table-card"><div class="incident-table-heading"><div class="section-kicker">API ACCESS HISTORY</div><h2>어느 API를 얼마나 호출했나요?</h2><p>호출 수, 성공 응답 수, 정책 위반이 확인된 요청 수를 구분합니다.</p><p class="incident-scroll-hint">↔ 표를 가로로 움직여 모든 열을 확인하세요</p></div><div id="incident-api-table"></div></section>
+          <section class="card"><div class="card-heading"><div><div class="section-kicker">OBSERVED RESPONSE SCOPE</div><h2>응답에서 확인된 정보 주체와 항목</h2></div><span class="subtle-badge">관측된 식별자 기준</span></div><div id="incident-subjects" class="incident-subject-grid"></div></section>
+          <section class="card table-card"><div class="incident-table-heading"><div class="section-kicker">REQUEST TIMELINE</div><h2>시간순으로 근거 따라가기</h2><p>행을 선택하면 해당 저장 로그의 증거를 확인할 수 있습니다.</p><p class="incident-scroll-hint">↔ 표를 가로로 움직여 모든 열을 확인하세요</p></div><div id="incident-timeline"></div></section>
+          <section id="incident-evidence" class="card detail-panel" hidden></section>
+          <div class="incident-conclusion-grid"><section class="card"><div class="section-kicker">WHAT WE CAN ESTABLISH</div><h2>이 기록으로 확인할 수 있는 것</h2><div id="incident-conclusions"></div></section><section class="card incident-limitations"><div class="section-kicker">WHAT REMAINS UNKNOWN</div><h2>이 기록만으로 확정할 수 없는 것</h2><div id="incident-limitations"></div></section></div>
+          <section id="incident-model-section" class="card" hidden><div class="card-heading"><div><div class="section-kicker">PREVIOUSLY STORED AI CANDIDATES</div><h2>이미 저장된 AI 분류 후보</h2></div><span class="subtle-badge">모델 재실행 없음</span></div><p class="model-notice">분류 후보는 조사 참고 자료입니다. 실제 노출이나 법적 판단을 확정하지 않습니다.</p><div id="incident-model-candidates"></div></section>
+        </div>
+        <div id="incident-empty" class="card"></div>
+        <section class="incident-prepare"><div><strong>새로운 시연용 로그가 필요한가요?</strong><p>합성 API에 요청을 보내 조사용 기록을 만듭니다. 위의 저장 로그 분석과 별개의 단계입니다.</p></div><button id="incident-prepare" class="button button-secondary" type="button">＋ 합성 조사 로그 준비</button></section>
+      </section>
+
+      <footer class="page-footer"><span>GUARDFLOW · 증거 기반 API 보안 연구</span><span id="footer-meta">로컬 데모 · 초기화 중</span></footer>
+    </main>
+  </div>
+</body>
+</html>

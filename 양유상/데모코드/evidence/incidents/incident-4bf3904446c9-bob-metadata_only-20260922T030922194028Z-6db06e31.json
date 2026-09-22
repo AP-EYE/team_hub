@@ -1,0 +1,435 @@
+{
+  "source": "stored_postgresql_records_only",
+  "network_replay": false,
+  "run": {
+    "id": "incident-4bf3904446c9",
+    "created_at": "2026-09-22T03:04:03.032639+00:00",
+    "mode": "vulnerable",
+    "status": "completed"
+  },
+  "actor": "bob",
+  "analysis_mode": "metadata_only_simulation",
+  "window": {
+    "start": null,
+    "end": null,
+    "first_observed": "2026-09-22T03:04:03.094944+00:00",
+    "last_observed": "2026-09-22T03:04:04.531306+00:00"
+  },
+  "summary": {
+    "logged_requests": 13,
+    "api_count": 8,
+    "http_success": 11,
+    "denied": 1,
+    "other": 1,
+    "confirmed_policy_requests": null,
+    "returned_subjects": null,
+    "confirmed_exposure_subjects": null
+  },
+  "api_calls": [
+    {
+      "method": "GET",
+      "endpoint": "admin/export",
+      "requests": 2,
+      "http_success": 2,
+      "denied": 0,
+      "other": 0,
+      "confirmed_policy_requests": null,
+      "evidence_ids": [
+        251,
+        252
+      ],
+      "paths": [
+        "admin/export"
+      ],
+      "requested_targets": [],
+      "returned_subject_keys": [],
+      "fields": []
+    },
+    {
+      "method": "GET",
+      "endpoint": "ambiguous/{member_id}",
+      "requests": 1,
+      "http_success": 1,
+      "denied": 0,
+      "other": 0,
+      "confirmed_policy_requests": null,
+      "evidence_ids": [
+        254
+      ],
+      "paths": [
+        "ambiguous/U100"
+      ],
+      "requested_targets": [
+        "alpha:synthetic-member-v1:U100"
+      ],
+      "returned_subject_keys": [],
+      "fields": []
+    },
+    {
+      "method": "GET",
+      "endpoint": "consultations/{member_id}",
+      "requests": 2,
+      "http_success": 2,
+      "denied": 0,
+      "other": 0,
+      "confirmed_policy_requests": null,
+      "evidence_ids": [
+        247,
+        248
+      ],
+      "paths": [
+        "consultations/U100"
+      ],
+      "requested_targets": [
+        "alpha:synthetic-member-v1:U100"
+      ],
+      "returned_subject_keys": [],
+      "fields": []
+    },
+    {
+      "method": "GET",
+      "endpoint": "documents/private",
+      "requests": 1,
+      "http_success": 0,
+      "denied": 1,
+      "other": 0,
+      "confirmed_policy_requests": null,
+      "evidence_ids": [
+        250
+      ],
+      "paths": [
+        "documents/private"
+      ],
+      "requested_targets": [],
+      "returned_subject_keys": [],
+      "fields": []
+    },
+    {
+      "method": "GET",
+      "endpoint": "info/health",
+      "requests": 1,
+      "http_success": 1,
+      "denied": 0,
+      "other": 0,
+      "confirmed_policy_requests": null,
+      "evidence_ids": [
+        255
+      ],
+      "paths": [
+        "info/health"
+      ],
+      "requested_targets": [],
+      "returned_subject_keys": [],
+      "fields": []
+    },
+    {
+      "method": "GET",
+      "endpoint": "profile/private/{member_id}",
+      "requests": 4,
+      "http_success": 3,
+      "denied": 0,
+      "other": 1,
+      "confirmed_policy_requests": null,
+      "evidence_ids": [
+        243,
+        244,
+        245,
+        246
+      ],
+      "paths": [
+        "profile/private/U100",
+        "profile/private/U200",
+        "profile/private/U999"
+      ],
+      "requested_targets": [
+        "alpha:synthetic-member-v1:U100",
+        "alpha:synthetic-member-v1:U200",
+        "alpha:synthetic-member-v1:U999"
+      ],
+      "returned_subject_keys": [],
+      "fields": []
+    },
+    {
+      "method": "GET",
+      "endpoint": "profile/public/{member_id}",
+      "requests": 1,
+      "http_success": 1,
+      "denied": 0,
+      "other": 0,
+      "confirmed_policy_requests": null,
+      "evidence_ids": [
+        249
+      ],
+      "paths": [
+        "profile/public/U100"
+      ],
+      "requested_targets": [
+        "alpha:synthetic-member-v1:U100"
+      ],
+      "returned_subject_keys": [],
+      "fields": []
+    },
+    {
+      "method": "GET",
+      "endpoint": "tenants/{tenant_id}/profile/{member_id}",
+      "requests": 1,
+      "http_success": 1,
+      "denied": 0,
+      "other": 0,
+      "confirmed_policy_requests": null,
+      "evidence_ids": [
+        253
+      ],
+      "paths": [
+        "tenants/beta/profile/U100"
+      ],
+      "requested_targets": [
+        "beta:synthetic-member-v1:U100"
+      ],
+      "returned_subject_keys": [],
+      "fields": []
+    }
+  ],
+  "subjects": [],
+  "timeline": [
+    {
+      "event_id": 243,
+      "created_at": "2026-09-22T03:04:03.094944+00:00",
+      "actor": "bob",
+      "actor_tenant": "alpha",
+      "method": "GET",
+      "path": "profile/private/U100",
+      "status_code": 200,
+      "verdict": null,
+      "integrity_ok": null,
+      "response_redacted": null,
+      "fields": [],
+      "response_evidence_available": false,
+      "requested_target": "alpha:synthetic-member-v1:U100",
+      "returned_subject_keys": []
+    },
+    {
+      "event_id": 244,
+      "created_at": "2026-09-22T03:04:03.147465+00:00",
+      "actor": "bob",
+      "actor_tenant": "alpha",
+      "method": "GET",
+      "path": "profile/private/U100",
+      "status_code": 200,
+      "verdict": null,
+      "integrity_ok": null,
+      "response_redacted": null,
+      "fields": [],
+      "response_evidence_available": false,
+      "requested_target": "alpha:synthetic-member-v1:U100",
+      "returned_subject_keys": []
+    },
+    {
+      "event_id": 245,
+      "created_at": "2026-09-22T03:04:03.189020+00:00",
+      "actor": "bob",
+      "actor_tenant": "alpha",
+      "method": "GET",
+      "path": "profile/private/U200",
+      "status_code": 200,
+      "verdict": null,
+      "integrity_ok": null,
+      "response_redacted": null,
+      "fields": [],
+      "response_evidence_available": false,
+      "requested_target": "alpha:synthetic-member-v1:U200",
+      "returned_subject_keys": []
+    },
+    {
+      "event_id": 246,
+      "created_at": "2026-09-22T03:04:03.232659+00:00",
+      "actor": "bob",
+      "actor_tenant": "alpha",
+      "method": "GET",
+      "path": "profile/private/U999",
+      "status_code": 404,
+      "verdict": null,
+      "integrity_ok": null,
+      "response_redacted": null,
+      "fields": [],
+      "response_evidence_available": false,
+      "requested_target": "alpha:synthetic-member-v1:U999",
+      "returned_subject_keys": []
+    },
+    {
+      "event_id": 247,
+      "created_at": "2026-09-22T03:04:03.261213+00:00",
+      "actor": "bob",
+      "actor_tenant": "alpha",
+      "method": "GET",
+      "path": "consultations/U100",
+      "status_code": 200,
+      "verdict": null,
+      "integrity_ok": null,
+      "response_redacted": null,
+      "fields": [],
+      "response_evidence_available": false,
+      "requested_target": "alpha:synthetic-member-v1:U100",
+      "returned_subject_keys": []
+    },
+    {
+      "event_id": 248,
+      "created_at": "2026-09-22T03:04:04.228260+00:00",
+      "actor": "bob",
+      "actor_tenant": "alpha",
+      "method": "GET",
+      "path": "consultations/U100",
+      "status_code": 200,
+      "verdict": null,
+      "integrity_ok": null,
+      "response_redacted": null,
+      "fields": [],
+      "response_evidence_available": false,
+      "requested_target": "alpha:synthetic-member-v1:U100",
+      "returned_subject_keys": []
+    },
+    {
+      "event_id": 249,
+      "created_at": "2026-09-22T03:04:04.266768+00:00",
+      "actor": "bob",
+      "actor_tenant": "alpha",
+      "method": "GET",
+      "path": "profile/public/U100",
+      "status_code": 200,
+      "verdict": null,
+      "integrity_ok": null,
+      "response_redacted": null,
+      "fields": [],
+      "response_evidence_available": false,
+      "requested_target": "alpha:synthetic-member-v1:U100",
+      "returned_subject_keys": []
+    },
+    {
+      "event_id": 250,
+      "created_at": "2026-09-22T03:04:04.294633+00:00",
+      "actor": "bob",
+      "actor_tenant": "alpha",
+      "method": "GET",
+      "path": "documents/private",
+      "status_code": 403,
+      "verdict": null,
+      "integrity_ok": null,
+      "response_redacted": null,
+      "fields": [],
+      "response_evidence_available": false,
+      "requested_target": null,
+      "returned_subject_keys": []
+    },
+    {
+      "event_id": 251,
+      "created_at": "2026-09-22T03:04:04.320785+00:00",
+      "actor": "bob",
+      "actor_tenant": "alpha",
+      "method": "GET",
+      "path": "admin/export",
+      "status_code": 200,
+      "verdict": null,
+      "integrity_ok": null,
+      "response_redacted": null,
+      "fields": [],
+      "response_evidence_available": false,
+      "requested_target": null,
+      "returned_subject_keys": []
+    },
+    {
+      "event_id": 252,
+      "created_at": "2026-09-22T03:04:04.364151+00:00",
+      "actor": "bob",
+      "actor_tenant": "alpha",
+      "method": "GET",
+      "path": "admin/export",
+      "status_code": 200,
+      "verdict": null,
+      "integrity_ok": null,
+      "response_redacted": null,
+      "fields": [],
+      "response_evidence_available": false,
+      "requested_target": null,
+      "returned_subject_keys": []
+    },
+    {
+      "event_id": 253,
+      "created_at": "2026-09-22T03:04:04.425929+00:00",
+      "actor": "bob",
+      "actor_tenant": "alpha",
+      "method": "GET",
+      "path": "tenants/beta/profile/U100",
+      "status_code": 200,
+      "verdict": null,
+      "integrity_ok": null,
+      "response_redacted": null,
+      "fields": [],
+      "response_evidence_available": false,
+      "requested_target": "beta:synthetic-member-v1:U100",
+      "returned_subject_keys": []
+    },
+    {
+      "event_id": 254,
+      "created_at": "2026-09-22T03:04:04.493300+00:00",
+      "actor": "bob",
+      "actor_tenant": "alpha",
+      "method": "GET",
+      "path": "ambiguous/U100",
+      "status_code": 200,
+      "verdict": null,
+      "integrity_ok": null,
+      "response_redacted": null,
+      "fields": [],
+      "response_evidence_available": false,
+      "requested_target": "alpha:synthetic-member-v1:U100",
+      "returned_subject_keys": []
+    },
+    {
+      "event_id": 255,
+      "created_at": "2026-09-22T03:04:04.531306+00:00",
+      "actor": "bob",
+      "actor_tenant": "alpha",
+      "method": "GET",
+      "path": "info/health",
+      "status_code": 200,
+      "verdict": null,
+      "integrity_ok": null,
+      "response_redacted": null,
+      "fields": [],
+      "response_evidence_available": false,
+      "requested_target": null,
+      "returned_subject_keys": []
+    }
+  ],
+  "coverage": {
+    "completeness": "unknown",
+    "response_evidence_available": false,
+    "corrupt_event_ids": [],
+    "missing_response_event_ids": [],
+    "notes": [
+      "로그 완전성을 보증하는 독립 자료가 없어 누락률과 전체 호출 횟수는 알 수 없습니다.",
+      "반복 호출도 별도 로그 1건으로 셉니다. HTTP 2xx 횟수는 개인정보 조회 인원과 다릅니다.",
+      "정규화 경로는 이 데모의 명시된 경로 계약에 한정하며 요청 대상과 실제 반환 대상을 구분합니다.",
+      "쿼리 값과 본문 원문은 보존하지 않아 페이지·검색 조건·전체 DB 조회 범위를 복원할 수 없습니다.",
+      "응답 본문·저장 판정·필드 관측·AI 결과를 제외한 비교 모드입니다. 원본 로그를 삭제하지 않습니다."
+    ]
+  },
+  "conclusions": [
+    "선택한 기록에서 bob의 요청 13건, API 유형 8개를 확인했습니다.",
+    "HTTP 2xx 11건, 401/403 1건, 그 밖의 응답 1건입니다.",
+    "요청 횟수와 경로·상태는 집계할 수 있으나 실제 반환 항목·조회 인원·노출 확인은 알 수 없습니다."
+  ],
+  "stored_model_candidates": [],
+  "limitations": [
+    "게이트웨이에 남은 기록의 범위만 조사합니다. 누락 로그·우회 접근·삭제된 데이터는 복원하지 못합니다.",
+    "여기서 말하는 계정은 로그의 인증 주체입니다. 계정 탈취 여부나 실제 행위자의 신원을 확정하지 않습니다.",
+    "등록 당시 정책·관측 자료를 사용하며 새 진단 트래픽이나 외부 API 요청을 생성하지 않습니다.",
+    "SHA-256은 우발적 변경 확인용이며 관리자에 의한 동시 변조를 막는 서명이 아닙니다.",
+    "분석은 저장 기록의 집계와 템플릿입니다. 저장된 AI 후보는 보조 근거이며 새 추론을 실행하지 않습니다.",
+    "법률적 유출 판정·신고 의무·전체 피해 규모를 자동 확정하지 않습니다."
+  ],
+  "export": {
+    "generated_at": "2026-09-22T03:09:22.194028+00:00",
+    "tool": "scripts/export_incident.py"
+  }
+}

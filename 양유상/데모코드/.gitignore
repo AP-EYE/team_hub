@@ -1,0 +1,10 @@
+.venv/
+.venv-model/
+.venv-jev/
+.vendor/
+__pycache__/
+.pytest_cache/
+.runtime/
+models/
+ml/models/
+*.pyc

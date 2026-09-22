@@ -1,0 +1,2485 @@
+{
+  "runs": [
+    {
+      "id": "42666dfe9f744b6a",
+      "created_at": "2026-09-22T06:06:18.813236+09:00",
+      "mode": "vulnerable",
+      "status": "completed"
+    },
+    {
+      "id": "manual-62e3944970fa",
+      "created_at": "2026-09-22T06:05:09.995603+09:00",
+      "mode": "fixed",
+      "status": "failed"
+    },
+    {
+      "id": "manual-a8f0a9509b52",
+      "created_at": "2026-09-22T06:05:08.348594+09:00",
+      "mode": "fixed",
+      "status": "completed"
+    },
+    {
+      "id": "manual-90aa7cfed7e8",
+      "created_at": "2026-09-22T06:05:07.658059+09:00",
+      "mode": "fixed",
+      "status": "completed"
+    },
+    {
+      "id": "manual-764cb84597a4",
+      "created_at": "2026-09-22T06:05:05.708374+09:00",
+      "mode": "fixed",
+      "status": "completed"
+    },
+    {
+      "id": "manual-2573539c6a66",
+      "created_at": "2026-09-22T06:05:04.420139+09:00",
+      "mode": "fixed",
+      "status": "completed"
+    },
+    {
+      "id": "manual-76c05f74b327",
+      "created_at": "2026-09-22T06:05:01.512348+09:00",
+      "mode": "fixed",
+      "status": "completed"
+    },
+    {
+      "id": "manual-f8c833605544",
+      "created_at": "2026-09-22T06:04:59.607958+09:00",
+      "mode": "fixed",
+      "status": "completed"
+    },
+    {
+      "id": "manual-aebde63d497b",
+      "created_at": "2026-09-22T06:04:57.989346+09:00",
+      "mode": "fixed",
+      "status": "completed"
+    },
+    {
+      "id": "manual-679f1fa8666a",
+      "created_at": "2026-09-22T06:04:57.036056+09:00",
+      "mode": "fixed",
+      "status": "completed"
+    },
+    {
+      "id": "manual-89ac8ddcda28",
+      "created_at": "2026-09-22T06:04:56.418713+09:00",
+      "mode": "fixed",
+      "status": "completed"
+    },
+    {
+      "id": "manual-35464c50a37c",
+      "created_at": "2026-09-22T06:03:47.62483+09:00",
+      "mode": "fixed",
+      "status": "completed"
+    },
+    {
+      "id": "manual-5bf55abd33d1",
+      "created_at": "2026-09-22T06:03:47.273258+09:00",
+      "mode": "not-a-mode",
+      "status": "failed"
+    },
+    {
+      "id": "manual-d90d4dcbbef5",
+      "created_at": "2026-09-22T06:03:46.415614+09:00",
+      "mode": "fixed",
+      "status": "completed"
+    },
+    {
+      "id": "d6434e053ef74a52",
+      "created_at": "2026-09-22T06:03:36.797627+09:00",
+      "mode": "fixed",
+      "status": "completed"
+    },
+    {
+      "id": "788ccedcc8864ea7",
+      "created_at": "2026-09-22T06:03:26.643473+09:00",
+      "mode": "vulnerable",
+      "status": "completed"
+    },
+    {
+      "id": "manual-dfe81caa6a69",
+      "created_at": "2026-09-22T05:59:39.142012+09:00",
+      "mode": "fixed",
+      "status": "completed"
+    },
+    {
+      "id": "manual-cef732af9118",
+      "created_at": "2026-09-22T05:59:38.702646+09:00",
+      "mode": "not-a-mode",
+      "status": "failed"
+    },
+    {
+      "id": "manual-e2c146c1444f",
+      "created_at": "2026-09-22T05:59:37.919429+09:00",
+      "mode": "fixed",
+      "status": "completed"
+    },
+    {
+      "id": "b2368adbebc249ed",
+      "created_at": "2026-09-22T05:59:28.160494+09:00",
+      "mode": "fixed",
+      "status": "completed"
+    },
+    {
+      "id": "1537ae95ac4d4d1f",
+      "created_at": "2026-09-22T05:59:06.16883+09:00",
+      "mode": "vulnerable",
+      "status": "completed"
+    }
+  ],
+  "events": [
+    {
+      "mode": "vulnerable",
+      "path": "profile/private/U100",
+      "actor": "alice",
+      "method": "GET",
+      "policy": {
+        "state": "approved",
+        "reason": "동일 테넌트의 소유자 또는 관리자만 조회 허용",
+        "version": "reviewed-fixture-policy-v1",
+        "category": "BOLA",
+        "expected": "allow",
+        "public_fields": []
+      },
+      "run_id": "42666dfe9f744b6a",
+      "tenant": [
+        "alpha"
+      ],
+      "case_id": "owner",
+      "privacy": [
+        {
+          "path": "member_id",
+          "label": "SERVICE_ID",
+          "source": "rules-v1",
+          "canonical": "data_subject.id",
+          "confidence": null,
+          "legal_category": "서비스 식별자 / 맥락상 개인정보"
+        },
+        {
+          "path": "name",
+          "label": "NAME",
+          "source": "rules-v1",
+          "canonical": "person.name",
+          "confidence": null,
+          "legal_category": "일반 개인정보"
+        },
+        {
+          "path": "phone",
+          "label": "PHONE",
+          "source": "rules-v1",
+          "canonical": "person.phone",
+          "confidence": null,
+          "legal_category": "일반 개인정보"
+        },
+        {
+          "path": "address",
+          "label": "ADDRESS",
+          "source": "rules-v1",
+          "canonical": "person.address",
+          "confidence": null,
+          "legal_category": "일반 개인정보"
+        },
+        {
+          "path": "email",
+          "label": "EMAIL",
+          "source": "rules-v1",
+          "canonical": "person.email",
+          "confidence": null,
+          "legal_category": "일반 개인정보"
+        }
+      ],
+      "subject": "alpha:U100",
+      "actor_id": "U100",
+      "subjects": [
+        "alpha:U100"
+      ],
+      "synthetic": true,
+      "duration_ms": 15.655,
+      "status_code": 200,
+      "actor_tenant": "alpha",
+      "request_redacted": {
+        "path": "profile/private/U100",
+        "method": "GET",
+        "headers": {
+          "authorization": "[REMOVED]"
+        },
+        "query_keys_only": []
+      },
+      "response_capture": "구조·분류·연결 식별자 보존, 일반/민감 값 마스킹; 원문 전체 포렌식 복원 불가",
+      "response_redacted": {
+        "name": "[REDACTED:NAME]",
+        "email": "[REDACTED:EMAIL]",
+        "phone": "[REDACTED:PHONE]",
+        "address": "[REDACTED:ADDRESS]",
+        "member_id": "U100",
+        "tenant_id": "alpha"
+      },
+      "id": 79,
+      "created_at": "2026-09-22T06:06:18.917106+09:00",
+      "sha256": "5d515c6c1e2d42f42d1f754abbabc312287b1fcb626681082f9aefdc37b74473",
+      "integrity_ok": true
+    },
+    {
+      "mode": "vulnerable",
+      "path": "profile/private/U100",
+      "actor": "bob",
+      "method": "GET",
+      "policy": {
+        "state": "approved",
+        "reason": "동일 테넌트의 소유자 또는 관리자만 조회 허용",
+        "version": "reviewed-fixture-policy-v1",
+        "category": "BOLA",
+        "expected": "deny",
+        "public_fields": []
+      },
+      "run_id": "42666dfe9f744b6a",
+      "tenant": [
+        "alpha"
+      ],
+      "case_id": "bola_profile",
+      "privacy": [
+        {
+          "path": "member_id",
+          "label": "SERVICE_ID",
+          "source": "rules-v1",
+          "canonical": "data_subject.id",
+          "confidence": null,
+          "legal_category": "서비스 식별자 / 맥락상 개인정보"
+        },
+        {
+          "path": "name",
+          "label": "NAME",
+          "source": "rules-v1",
+          "canonical": "person.name",
+          "confidence": null,
+          "legal_category": "일반 개인정보"
+        },
+        {
+          "path": "phone",
+          "label": "PHONE",
+          "source": "rules-v1",
+          "canonical": "person.phone",
+          "confidence": null,
+          "legal_category": "일반 개인정보"
+        },
+        {
+          "path": "address",
+          "label": "ADDRESS",
+          "source": "rules-v1",
+          "canonical": "person.address",
+          "confidence": null,
+          "legal_category": "일반 개인정보"
+        },
+        {
+          "path": "email",
+          "label": "EMAIL",
+          "source": "rules-v1",
+          "canonical": "person.email",
+          "confidence": null,
+          "legal_category": "일반 개인정보"
+        }
+      ],
+      "subject": "alpha:U100",
+      "actor_id": "U200",
+      "subjects": [
+        "alpha:U100"
+      ],
+      "synthetic": true,
+      "duration_ms": 269.748,
+      "status_code": 200,
+      "actor_tenant": "alpha",
+      "request_redacted": {
+        "path": "profile/private/U100",
+        "method": "GET",
+        "headers": {
+          "authorization": "[REMOVED]"
+        },
+        "query_keys_only": []
+      },
+      "response_capture": "구조·분류·연결 식별자 보존, 일반/민감 값 마스킹; 원문 전체 포렌식 복원 불가",
+      "response_redacted": {
+        "name": "[REDACTED:NAME]",
+        "email": "[REDACTED:EMAIL]",
+        "phone": "[REDACTED:PHONE]",
+        "address": "[REDACTED:ADDRESS]",
+        "member_id": "U100",
+        "tenant_id": "alpha"
+      },
+      "id": 80,
+      "created_at": "2026-09-22T06:06:19.412296+09:00",
+      "sha256": "bd960231e0d94907e93b1d3e09196205cd88ecfda5c3dbb65e06fd91c6c526df",
+      "integrity_ok": true
+    },
+    {
+      "mode": "vulnerable",
+      "path": "consultations/U100",
+      "actor": "bob",
+      "method": "GET",
+      "policy": {
+        "state": "approved",
+        "reason": "동일 테넌트의 소유자 또는 관리자만 조회 허용",
+        "version": "reviewed-fixture-policy-v1",
+        "category": "BOLA",
+        "expected": "deny",
+        "public_fields": []
+      },
+      "run_id": "42666dfe9f744b6a",
+      "tenant": [
+        "alpha"
+      ],
+      "case_id": "bola_consult",
+      "privacy": [
+        {
+          "path": "customer_no",
+          "label": "SERVICE_ID",
+          "source": "rules-v1",
+          "canonical": "data_subject.id",
+          "confidence": null,
+          "legal_category": "서비스 식별자 / 맥락상 개인정보"
+        },
+        {
+          "path": "consult_reason",
+          "label": "SENSITIVE_CANDIDATE",
+          "source": "rules-v1",
+          "canonical": "consultation.reason",
+          "confidence": null,
+          "legal_category": "제23조 민감정보 후보 / 문맥 검토 필요"
+        }
+      ],
+      "subject": "alpha:U100",
+      "actor_id": "U200",
+      "subjects": [
+        "alpha:U100"
+      ],
+      "synthetic": true,
+      "duration_ms": 14.09,
+      "status_code": 200,
+      "actor_tenant": "alpha",
+      "request_redacted": {
+        "path": "consultations/U100",
+        "method": "GET",
+        "headers": {
+          "authorization": "[REMOVED]"
+        },
+        "query_keys_only": []
+      },
+      "response_capture": "구조·분류·연결 식별자 보존, 일반/민감 값 마스킹; 원문 전체 포렌식 복원 불가",
+      "response_redacted": {
+        "tenant_id": "alpha",
+        "customer_no": "U100",
+        "appointment_id": "appt-demo-001",
+        "consult_reason": "[REDACTED:SENSITIVE_CANDIDATE]"
+      },
+      "id": 81,
+      "created_at": "2026-09-22T06:06:21.188949+09:00",
+      "sha256": "13a68ad5f00c5b1b8d144d625b0ea7d80dc09b81d1b153f27978c0cbdaaf3bde",
+      "integrity_ok": true
+    },
+    {
+      "mode": "vulnerable",
+      "path": "profile/public/U100",
+      "actor": "bob",
+      "method": "GET",
+      "policy": {
+        "state": "approved",
+        "reason": "공개 프로필: 별명·소개·서비스 식별자만 공개 허용",
+        "version": "reviewed-fixture-policy-v1",
+        "category": "BOPLA",
+        "expected": "allow_fields",
+        "public_fields": [
+          "tenant_id",
+          "member_id",
+          "display_name",
+          "bio"
+        ]
+      },
+      "run_id": "42666dfe9f744b6a",
+      "tenant": [
+        "alpha"
+      ],
+      "case_id": "public",
+      "privacy": [
+        {
+          "path": "member_id",
+          "label": "SERVICE_ID",
+          "source": "rules-v1",
+          "canonical": "data_subject.id",
+          "confidence": null,
+          "legal_category": "서비스 식별자 / 맥락상 개인정보"
+        }
+      ],
+      "subject": "alpha:U100",
+      "actor_id": "U200",
+      "subjects": [
+        "alpha:U100"
+      ],
+      "synthetic": true,
+      "duration_ms": 953.748,
+      "status_code": 200,
+      "actor_tenant": "alpha",
+      "request_redacted": {
+        "path": "profile/public/U100",
+        "method": "GET",
+        "headers": {
+          "authorization": "[REMOVED]"
+        },
+        "query_keys_only": []
+      },
+      "response_capture": "구조·분류·연결 식별자 보존, 일반/민감 값 마스킹; 원문 전체 포렌식 복원 불가",
+      "response_redacted": {
+        "bio": "공개 소개",
+        "member_id": "U100",
+        "tenant_id": "alpha",
+        "display_name": "가상닉네임"
+      },
+      "id": 82,
+      "created_at": "2026-09-22T06:06:23.486528+09:00",
+      "sha256": "337a2349b2f8d88be2c0887d2b70b9ce3fd468a6d167f18961e4f168d592e42b",
+      "integrity_ok": true
+    },
+    {
+      "mode": "vulnerable",
+      "path": "profile/leaky/U100",
+      "actor": "bob",
+      "method": "GET",
+      "policy": {
+        "state": "approved",
+        "reason": "공개 프로필: 별명·소개·서비스 식별자만 공개 허용",
+        "version": "reviewed-fixture-policy-v1",
+        "category": "BOPLA",
+        "expected": "allow_fields",
+        "public_fields": [
+          "tenant_id",
+          "member_id",
+          "display_name",
+          "bio"
+        ]
+      },
+      "run_id": "42666dfe9f744b6a",
+      "tenant": [
+        "alpha"
+      ],
+      "case_id": "bopla",
+      "privacy": [
+        {
+          "path": "member_id",
+          "label": "SERVICE_ID",
+          "source": "rules-v1",
+          "canonical": "data_subject.id",
+          "confidence": null,
+          "legal_category": "서비스 식별자 / 맥락상 개인정보"
+        },
+        {
+          "path": "phone",
+          "label": "PHONE",
+          "source": "rules-v1",
+          "canonical": "person.phone",
+          "confidence": null,
+          "legal_category": "일반 개인정보"
+        }
+      ],
+      "subject": "alpha:U100",
+      "actor_id": "U200",
+      "subjects": [
+        "alpha:U100"
+      ],
+      "synthetic": true,
+      "duration_ms": 11.886,
+      "status_code": 200,
+      "actor_tenant": "alpha",
+      "request_redacted": {
+        "path": "profile/leaky/U100",
+        "method": "GET",
+        "headers": {
+          "authorization": "[REMOVED]"
+        },
+        "query_keys_only": []
+      },
+      "response_capture": "구조·분류·연결 식별자 보존, 일반/민감 값 마스킹; 원문 전체 포렌식 복원 불가",
+      "response_redacted": {
+        "bio": "공개 소개",
+        "phone": "[REDACTED:PHONE]",
+        "member_id": "U100",
+        "tenant_id": "alpha",
+        "display_name": "가상닉네임"
+      },
+      "id": 83,
+      "created_at": "2026-09-22T06:06:23.598279+09:00",
+      "sha256": "5cc1d08a42b46c48f7d6424426ab55258db6a6ef79f95a94a81d8420fbab3b65",
+      "integrity_ok": true
+    },
+    {
+      "mode": "vulnerable",
+      "path": "admin/export",
+      "actor": "bob",
+      "method": "GET",
+      "policy": {
+        "state": "approved",
+        "reason": "alpha 테넌트 관리자 전용 내보내기",
+        "version": "reviewed-fixture-policy-v1",
+        "category": "BFLA",
+        "expected": "deny",
+        "public_fields": []
+      },
+      "run_id": "42666dfe9f744b6a",
+      "tenant": [
+        "alpha"
+      ],
+      "case_id": "bfla",
+      "privacy": [
+        {
+          "path": "records[0].member_id",
+          "label": "SERVICE_ID",
+          "source": "rules-v1",
+          "canonical": "data_subject.id",
+          "confidence": null,
+          "legal_category": "서비스 식별자 / 맥락상 개인정보"
+        },
+        {
+          "path": "records[0].name",
+          "label": "NAME",
+          "source": "rules-v1",
+          "canonical": "person.name",
+          "confidence": null,
+          "legal_category": "일반 개인정보"
+        },
+        {
+          "path": "records[0].phone",
+          "label": "PHONE",
+          "source": "rules-v1",
+          "canonical": "person.phone",
+          "confidence": null,
+          "legal_category": "일반 개인정보"
+        },
+        {
+          "path": "records[0].address",
+          "label": "ADDRESS",
+          "source": "rules-v1",
+          "canonical": "person.address",
+          "confidence": null,
+          "legal_category": "일반 개인정보"
+        },
+        {
+          "path": "records[0].email",
+          "label": "EMAIL",
+          "source": "rules-v1",
+          "canonical": "person.email",
+          "confidence": null,
+          "legal_category": "일반 개인정보"
+        },
+        {
+          "path": "records[1].member_id",
+          "label": "SERVICE_ID",
+          "source": "rules-v1",
+          "canonical": "data_subject.id",
+          "confidence": null,
+          "legal_category": "서비스 식별자 / 맥락상 개인정보"
+        },
+        {
+          "path": "records[1].name",
+          "label": "NAME",
+          "source": "rules-v1",
+          "canonical": "person.name",
+          "confidence": null,
+          "legal_category": "일반 개인정보"
+        },
+        {
+          "path": "records[1].phone",
+          "label": "PHONE",
+          "source": "rules-v1",
+          "canonical": "person.phone",
+          "confidence": null,
+          "legal_category": "일반 개인정보"
+        },
+        {
+          "path": "records[1].address",
+          "label": "ADDRESS",
+          "source": "rules-v1",
+          "canonical": "person.address",
+          "confidence": null,
+          "legal_category": "일반 개인정보"
+        },
+        {
+          "path": "records[1].email",
+          "label": "EMAIL",
+          "source": "rules-v1",
+          "canonical": "person.email",
+          "confidence": null,
+          "legal_category": "일반 개인정보"
+        }
+      ],
+      "subject": "alpha:U100, alpha:U200",
+      "actor_id": "U200",
+      "subjects": [
+        "alpha:U100",
+        "alpha:U200"
+      ],
+      "synthetic": true,
+      "duration_ms": 11.127,
+      "status_code": 200,
+      "actor_tenant": "alpha",
+      "request_redacted": {
+        "path": "admin/export",
+        "method": "GET",
+        "headers": {
+          "authorization": "[REMOVED]"
+        },
+        "query_keys_only": []
+      },
+      "response_capture": "구조·분류·연결 식별자 보존, 일반/민감 값 마스킹; 원문 전체 포렌식 복원 불가",
+      "response_redacted": {
+        "records": [
+          {
+            "name": "[REDACTED:NAME]",
+            "email": "[REDACTED:EMAIL]",
+            "phone": "[REDACTED:PHONE]",
+            "address": "[REDACTED:ADDRESS]",
+            "member_id": "U100",
+            "tenant_id": "alpha"
+          },
+          {
+            "name": "[REDACTED:NAME]",
+            "email": "[REDACTED:EMAIL]",
+            "phone": "[REDACTED:PHONE]",
+            "address": "[REDACTED:ADDRESS]",
+            "member_id": "U200",
+            "tenant_id": "alpha"
+          }
+        ]
+      },
+      "id": 84,
+      "created_at": "2026-09-22T06:06:23.939822+09:00",
+      "sha256": "8b33ae04be7c51ea0217b38d708dae33d218ce2eb4c52f26848bba50e5ec99f8",
+      "integrity_ok": true
+    },
+    {
+      "mode": "vulnerable",
+      "path": "admin/export",
+      "actor": "admin",
+      "method": "GET",
+      "policy": {
+        "state": "approved",
+        "reason": "alpha 테넌트 관리자 전용 내보내기",
+        "version": "reviewed-fixture-policy-v1",
+        "category": "BFLA",
+        "expected": "allow",
+        "public_fields": []
+      },
+      "run_id": "42666dfe9f744b6a",
+      "tenant": [
+        "alpha"
+      ],
+      "case_id": "admin",
+      "privacy": [
+        {
+          "path": "records[0].member_id",
+          "label": "SERVICE_ID",
+          "source": "rules-v1",
+          "canonical": "data_subject.id",
+          "confidence": null,
+          "legal_category": "서비스 식별자 / 맥락상 개인정보"
+        },
+        {
+          "path": "records[0].name",
+          "label": "NAME",
+          "source": "rules-v1",
+          "canonical": "person.name",
+          "confidence": null,
+          "legal_category": "일반 개인정보"
+        },
+        {
+          "path": "records[0].phone",
+          "label": "PHONE",
+          "source": "rules-v1",
+          "canonical": "person.phone",
+          "confidence": null,
+          "legal_category": "일반 개인정보"
+        },
+        {
+          "path": "records[0].address",
+          "label": "ADDRESS",
+          "source": "rules-v1",
+          "canonical": "person.address",
+          "confidence": null,
+          "legal_category": "일반 개인정보"
+        },
+        {
+          "path": "records[0].email",
+          "label": "EMAIL",
+          "source": "rules-v1",
+          "canonical": "person.email",
+          "confidence": null,
+          "legal_category": "일반 개인정보"
+        },
+        {
+          "path": "records[1].member_id",
+          "label": "SERVICE_ID",
+          "source": "rules-v1",
+          "canonical": "data_subject.id",
+          "confidence": null,
+          "legal_category": "서비스 식별자 / 맥락상 개인정보"
+        },
+        {
+          "path": "records[1].name",
+          "label": "NAME",
+          "source": "rules-v1",
+          "canonical": "person.name",
+          "confidence": null,
+          "legal_category": "일반 개인정보"
+        },
+        {
+          "path": "records[1].phone",
+          "label": "PHONE",
+          "source": "rules-v1",
+          "canonical": "person.phone",
+          "confidence": null,
+          "legal_category": "일반 개인정보"
+        },
+        {
+          "path": "records[1].address",
+          "label": "ADDRESS",
+          "source": "rules-v1",
+          "canonical": "person.address",
+          "confidence": null,
+          "legal_category": "일반 개인정보"
+        },
+        {
+          "path": "records[1].email",
+          "label": "EMAIL",
+          "source": "rules-v1",
+          "canonical": "person.email",
+          "confidence": null,
+          "legal_category": "일반 개인정보"
+        }
+      ],
+      "subject": "alpha:U100, alpha:U200",
+      "actor_id": "A001",
+      "subjects": [
+        "alpha:U100",
+        "alpha:U200"
+      ],
+      "synthetic": true,
+      "duration_ms": 41.2,
+      "status_code": 200,
+      "actor_tenant": "alpha",
+      "request_redacted": {
+        "path": "admin/export",
+        "method": "GET",
+        "headers": {
+          "authorization": "[REMOVED]"
+        },
+        "query_keys_only": []
+      },
+      "response_capture": "구조·분류·연결 식별자 보존, 일반/민감 값 마스킹; 원문 전체 포렌식 복원 불가",
+      "response_redacted": {
+        "records": [
+          {
+            "name": "[REDACTED:NAME]",
+            "email": "[REDACTED:EMAIL]",
+            "phone": "[REDACTED:PHONE]",
+            "address": "[REDACTED:ADDRESS]",
+            "member_id": "U100",
+            "tenant_id": "alpha"
+          },
+          {
+            "name": "[REDACTED:NAME]",
+            "email": "[REDACTED:EMAIL]",
+            "phone": "[REDACTED:PHONE]",
+            "address": "[REDACTED:ADDRESS]",
+            "member_id": "U200",
+            "tenant_id": "alpha"
+          }
+        ]
+      },
+      "id": 85,
+      "created_at": "2026-09-22T06:06:24.474956+09:00",
+      "sha256": "44611662ac6badcb5a9319750bd8dedf2c5b1963c5f2f6659fe58ce5faaa25e8",
+      "integrity_ok": true
+    },
+    {
+      "mode": "vulnerable",
+      "path": "documents/shared",
+      "actor": "bob",
+      "method": "GET",
+      "policy": {
+        "state": "approved",
+        "reason": "객체 소유자 또는 명시된 공유 대상만 조회 허용",
+        "version": "reviewed-fixture-policy-v1",
+        "category": "BOLA",
+        "expected": "allow",
+        "public_fields": []
+      },
+      "run_id": "42666dfe9f744b6a",
+      "tenant": [
+        "alpha"
+      ],
+      "case_id": "shared",
+      "privacy": [
+        {
+          "path": "owner_id",
+          "label": "SERVICE_ID",
+          "source": "rules-v1",
+          "canonical": "resource.owner.id",
+          "confidence": null,
+          "legal_category": "서비스 식별자 / 맥락상 개인정보"
+        }
+      ],
+      "subject": "alpha:U100",
+      "actor_id": "U200",
+      "subjects": [
+        "alpha:U100"
+      ],
+      "synthetic": true,
+      "duration_ms": 98.359,
+      "status_code": 200,
+      "actor_tenant": "alpha",
+      "request_redacted": {
+        "path": "documents/shared",
+        "method": "GET",
+        "headers": {
+          "authorization": "[REMOVED]"
+        },
+        "query_keys_only": []
+      },
+      "response_capture": "구조·분류·연결 식별자 보존, 일반/민감 값 마스킹; 원문 전체 포렌식 복원 불가",
+      "response_redacted": {
+        "title": "합성 공유 문서",
+        "content": "민감한 내용 없는 팀 일정",
+        "owner_id": "U100",
+        "tenant_id": "alpha",
+        "document_id": "shared"
+      },
+      "id": 86,
+      "created_at": "2026-09-22T06:06:24.989421+09:00",
+      "sha256": "6006ec339049b90fb25aa90228b23598a21773716006d748b5e37ad8161133b6",
+      "integrity_ok": true
+    },
+    {
+      "mode": "vulnerable",
+      "path": "documents/private",
+      "actor": "bob",
+      "method": "GET",
+      "policy": {
+        "state": "approved",
+        "reason": "객체 소유자 또는 명시된 공유 대상만 조회 허용",
+        "version": "reviewed-fixture-policy-v1",
+        "category": "BOLA",
+        "expected": "deny",
+        "public_fields": []
+      },
+      "run_id": "42666dfe9f744b6a",
+      "tenant": [],
+      "case_id": "unshared",
+      "privacy": [],
+      "subject": "unknown",
+      "actor_id": "U200",
+      "subjects": [],
+      "synthetic": true,
+      "duration_ms": 11.427,
+      "status_code": 403,
+      "actor_tenant": "alpha",
+      "request_redacted": {
+        "path": "documents/private",
+        "method": "GET",
+        "headers": {
+          "authorization": "[REMOVED]"
+        },
+        "query_keys_only": []
+      },
+      "response_capture": "구조·분류·연결 식별자 보존, 일반/민감 값 마스킹; 원문 전체 포렌식 복원 불가",
+      "response_redacted": {
+        "detail": "document not shared"
+      },
+      "id": 87,
+      "created_at": "2026-09-22T06:06:25.09401+09:00",
+      "sha256": "d475154e0258d6d4c1d37fa97eaf91b53f73d6bbe23f9fd96f6793e76116ab07",
+      "integrity_ok": true
+    },
+    {
+      "mode": "vulnerable",
+      "path": "ambiguous/U100",
+      "actor": "bob",
+      "method": "GET",
+      "policy": {
+        "state": "unknown",
+        "reason": "업무 권한 정책이 제공되지 않아 응답만으로 인가 위반 확정 불가",
+        "version": "reviewed-fixture-policy-v1",
+        "category": "UNKNOWN",
+        "expected": "review",
+        "public_fields": []
+      },
+      "run_id": "42666dfe9f744b6a",
+      "tenant": [
+        "alpha"
+      ],
+      "case_id": "unknown",
+      "privacy": [
+        {
+          "path": "member_id",
+          "label": "SERVICE_ID",
+          "source": "rules-v1",
+          "canonical": "data_subject.id",
+          "confidence": null,
+          "legal_category": "서비스 식별자 / 맥락상 개인정보"
+        }
+      ],
+      "subject": "alpha:U100",
+      "actor_id": "U200",
+      "subjects": [
+        "alpha:U100"
+      ],
+      "synthetic": true,
+      "duration_ms": 11.743,
+      "status_code": 200,
+      "actor_tenant": "alpha",
+      "request_redacted": {
+        "path": "ambiguous/U100",
+        "method": "GET",
+        "headers": {
+          "authorization": "[REMOVED]"
+        },
+        "query_keys_only": []
+      },
+      "response_capture": "구조·분류·연결 식별자 보존, 일반/민감 값 마스킹; 원문 전체 포렌식 복원 불가",
+      "response_redacted": {
+        "note": "공개 여부가 정해지지 않은 정보",
+        "member_id": "U100",
+        "tenant_id": "alpha"
+      },
+      "id": 88,
+      "created_at": "2026-09-22T06:06:25.374072+09:00",
+      "sha256": "b569705de0d80e0d30a5a8a1aeb30eb6953850350e2c88bc9fd481d43a8f73e7",
+      "integrity_ok": true
+    },
+    {
+      "mode": "vulnerable",
+      "path": "tenants/beta/profile/U100",
+      "actor": "bob",
+      "method": "GET",
+      "policy": {
+        "state": "approved",
+        "reason": "동일 테넌트의 소유자 또는 관리자만 조회 허용",
+        "version": "reviewed-fixture-policy-v1",
+        "category": "BOLA",
+        "expected": "deny",
+        "public_fields": []
+      },
+      "run_id": "42666dfe9f744b6a",
+      "tenant": [
+        "beta"
+      ],
+      "case_id": "tenant",
+      "privacy": [
+        {
+          "path": "member_id",
+          "label": "SERVICE_ID",
+          "source": "rules-v1",
+          "canonical": "data_subject.id",
+          "confidence": null,
+          "legal_category": "서비스 식별자 / 맥락상 개인정보"
+        },
+        {
+          "path": "name",
+          "label": "NAME",
+          "source": "rules-v1",
+          "canonical": "person.name",
+          "confidence": null,
+          "legal_category": "일반 개인정보"
+        },
+        {
+          "path": "phone",
+          "label": "PHONE",
+          "source": "rules-v1",
+          "canonical": "person.phone",
+          "confidence": null,
+          "legal_category": "일반 개인정보"
+        },
+        {
+          "path": "address",
+          "label": "ADDRESS",
+          "source": "rules-v1",
+          "canonical": "person.address",
+          "confidence": null,
+          "legal_category": "일반 개인정보"
+        },
+        {
+          "path": "email",
+          "label": "EMAIL",
+          "source": "rules-v1",
+          "canonical": "person.email",
+          "confidence": null,
+          "legal_category": "일반 개인정보"
+        }
+      ],
+      "subject": "beta:U100",
+      "actor_id": "U200",
+      "subjects": [
+        "beta:U100"
+      ],
+      "synthetic": true,
+      "duration_ms": 11.187,
+      "status_code": 200,
+      "actor_tenant": "alpha",
+      "request_redacted": {
+        "path": "tenants/beta/profile/U100",
+        "method": "GET",
+        "headers": {
+          "authorization": "[REMOVED]"
+        },
+        "query_keys_only": []
+      },
+      "response_capture": "구조·분류·연결 식별자 보존, 일반/민감 값 마스킹; 원문 전체 포렌식 복원 불가",
+      "response_redacted": {
+        "name": "[REDACTED:NAME]",
+        "email": "[REDACTED:EMAIL]",
+        "phone": "[REDACTED:PHONE]",
+        "address": "[REDACTED:ADDRESS]",
+        "member_id": "U100",
+        "tenant_id": "beta"
+      },
+      "id": 89,
+      "created_at": "2026-09-22T06:06:25.690227+09:00",
+      "sha256": "97db16f05e15187a7abb93d6728f53d469289dcdc748ceaebfd11c130b57b54c",
+      "integrity_ok": true
+    },
+    {
+      "mode": "vulnerable",
+      "path": "tenants/beta/profile/U100",
+      "actor": "mallory",
+      "method": "GET",
+      "policy": {
+        "state": "approved",
+        "reason": "동일 테넌트의 소유자 또는 관리자만 조회 허용",
+        "version": "reviewed-fixture-policy-v1",
+        "category": "BOLA",
+        "expected": "allow",
+        "public_fields": []
+      },
+      "run_id": "42666dfe9f744b6a",
+      "tenant": [
+        "beta"
+      ],
+      "case_id": "beta_owner",
+      "privacy": [
+        {
+          "path": "member_id",
+          "label": "SERVICE_ID",
+          "source": "rules-v1",
+          "canonical": "data_subject.id",
+          "confidence": null,
+          "legal_category": "서비스 식별자 / 맥락상 개인정보"
+        },
+        {
+          "path": "name",
+          "label": "NAME",
+          "source": "rules-v1",
+          "canonical": "person.name",
+          "confidence": null,
+          "legal_category": "일반 개인정보"
+        },
+        {
+          "path": "phone",
+          "label": "PHONE",
+          "source": "rules-v1",
+          "canonical": "person.phone",
+          "confidence": null,
+          "legal_category": "일반 개인정보"
+        },
+        {
+          "path": "address",
+          "label": "ADDRESS",
+          "source": "rules-v1",
+          "canonical": "person.address",
+          "confidence": null,
+          "legal_category": "일반 개인정보"
+        },
+        {
+          "path": "email",
+          "label": "EMAIL",
+          "source": "rules-v1",
+          "canonical": "person.email",
+          "confidence": null,
+          "legal_category": "일반 개인정보"
+        }
+      ],
+      "subject": "beta:U100",
+      "actor_id": "U100",
+      "subjects": [
+        "beta:U100"
+      ],
+      "synthetic": true,
+      "duration_ms": 10.62,
+      "status_code": 200,
+      "actor_tenant": "beta",
+      "request_redacted": {
+        "path": "tenants/beta/profile/U100",
+        "method": "GET",
+        "headers": {
+          "authorization": "[REMOVED]"
+        },
+        "query_keys_only": []
+      },
+      "response_capture": "구조·분류·연결 식별자 보존, 일반/민감 값 마스킹; 원문 전체 포렌식 복원 불가",
+      "response_redacted": {
+        "name": "[REDACTED:NAME]",
+        "email": "[REDACTED:EMAIL]",
+        "phone": "[REDACTED:PHONE]",
+        "address": "[REDACTED:ADDRESS]",
+        "member_id": "U100",
+        "tenant_id": "beta"
+      },
+      "id": 90,
+      "created_at": "2026-09-22T06:06:25.800786+09:00",
+      "sha256": "c4b04dd7f6e6fdd9a1a7ea3c221641ed19a0be4439c9db6216411e30384bd85f",
+      "integrity_ok": true
+    },
+    {
+      "mode": "vulnerable",
+      "path": "profile/private/U100",
+      "actor": "anonymous",
+      "method": "GET",
+      "policy": {
+        "state": "approved",
+        "reason": "동일 테넌트의 소유자 또는 관리자만 조회 허용",
+        "version": "reviewed-fixture-policy-v1",
+        "category": "BOLA",
+        "expected": "deny",
+        "public_fields": []
+      },
+      "run_id": "42666dfe9f744b6a",
+      "tenant": [],
+      "case_id": "anonymous",
+      "privacy": [],
+      "subject": "unknown",
+      "actor_id": null,
+      "subjects": [],
+      "synthetic": true,
+      "duration_ms": 9.997,
+      "status_code": 401,
+      "actor_tenant": null,
+      "request_redacted": {
+        "path": "profile/private/U100",
+        "method": "GET",
+        "headers": {},
+        "query_keys_only": []
+      },
+      "response_capture": "구조·분류·연결 식별자 보존, 일반/민감 값 마스킹; 원문 전체 포렌식 복원 불가",
+      "response_redacted": {
+        "detail": "synthetic authentication required"
+      },
+      "id": 91,
+      "created_at": "2026-09-22T06:06:25.92204+09:00",
+      "sha256": "f8d583e97ea9c7d74639eed3b4eb2fd73b49bdd72b386909251eaf7f63acd814",
+      "integrity_ok": true
+    },
+    {
+      "mode": "vulnerable",
+      "path": "info/health",
+      "actor": "bob",
+      "method": "GET",
+      "policy": {
+        "state": "approved",
+        "reason": "개인의 진료 기록이 아닌 공개 안내문",
+        "version": "reviewed-fixture-policy-v1",
+        "category": "NONE",
+        "expected": "allow",
+        "public_fields": []
+      },
+      "run_id": "42666dfe9f744b6a",
+      "tenant": [],
+      "case_id": "general_info",
+      "privacy": [],
+      "subject": "unknown",
+      "actor_id": "U200",
+      "subjects": [],
+      "synthetic": true,
+      "duration_ms": 12.944,
+      "status_code": 200,
+      "actor_tenant": "alpha",
+      "request_redacted": {
+        "path": "info/health",
+        "method": "GET",
+        "headers": {
+          "authorization": "[REMOVED]"
+        },
+        "query_keys_only": []
+      },
+      "response_capture": "구조·분류·연결 식별자 보존, 일반/민감 값 마스킹; 원문 전체 포렌식 복원 불가",
+      "response_redacted": {
+        "text": "우울증은 전문가와 상담할 수 있습니다. 이 글은 일반적인 건강 안내이며 개인의 진단 기록이 아닙니다.",
+        "article_id": "info-001"
+      },
+      "id": 92,
+      "created_at": "2026-09-22T06:06:26.022857+09:00",
+      "sha256": "60dbddf2372643712f5c6fa79905f36e60240e7faff774413b4be3bcda97c397",
+      "integrity_ok": true
+    },
+    {
+      "mode": "vulnerable",
+      "path": "orders/U100",
+      "actor": "alice",
+      "method": "GET",
+      "policy": {
+        "state": "approved",
+        "reason": "동일 테넌트의 소유자 또는 관리자만 조회 허용",
+        "version": "reviewed-fixture-policy-v1",
+        "category": "BOLA",
+        "expected": "allow",
+        "public_fields": []
+      },
+      "run_id": "42666dfe9f744b6a",
+      "tenant": [
+        "alpha"
+      ],
+      "case_id": "order",
+      "privacy": [
+        {
+          "path": "customer_no",
+          "label": "SERVICE_ID",
+          "source": "rules-v1",
+          "canonical": "data_subject.id",
+          "confidence": null,
+          "legal_category": "서비스 식별자 / 맥락상 개인정보"
+        },
+        {
+          "path": "mobile_no",
+          "label": "PHONE",
+          "source": "rules-v1",
+          "canonical": "person.phone",
+          "confidence": null,
+          "legal_category": "일반 개인정보"
+        },
+        {
+          "path": "shipping_addr",
+          "label": "ADDRESS",
+          "source": "rules-v1",
+          "canonical": "person.address",
+          "confidence": null,
+          "legal_category": "일반 개인정보"
+        }
+      ],
+      "subject": "alpha:U100",
+      "actor_id": "U100",
+      "subjects": [
+        "alpha:U100"
+      ],
+      "synthetic": true,
+      "duration_ms": 780.769,
+      "status_code": 200,
+      "actor_tenant": "alpha",
+      "request_redacted": {
+        "path": "orders/U100",
+        "method": "GET",
+        "headers": {
+          "authorization": "[REMOVED]"
+        },
+        "query_keys_only": []
+      },
+      "response_capture": "구조·분류·연결 식별자 보존, 일반/민감 값 마스킹; 원문 전체 포렌식 복원 불가",
+      "response_redacted": {
+        "item": "테스트 상품",
+        "order_id": "order-001",
+        "mobile_no": "[REDACTED:PHONE]",
+        "tenant_id": "alpha",
+        "customer_no": "U100",
+        "shipping_addr": "[REDACTED:ADDRESS]"
+      },
+      "id": 93,
+      "created_at": "2026-09-22T06:06:26.919867+09:00",
+      "sha256": "d899107d7d971edcd238dbf74cf6017acb6276754dc29de8811fe1dcf25d2142",
+      "integrity_ok": true
+    },
+    {
+      "mode": "vulnerable",
+      "path": "consultations/U200",
+      "actor": "bob",
+      "method": "GET",
+      "policy": {
+        "state": "approved",
+        "reason": "동일 테넌트의 소유자 또는 관리자만 조회 허용",
+        "version": "reviewed-fixture-policy-v1",
+        "category": "BOLA",
+        "expected": "allow",
+        "public_fields": []
+      },
+      "run_id": "42666dfe9f744b6a",
+      "tenant": [
+        "alpha"
+      ],
+      "case_id": "general_consult",
+      "privacy": [
+        {
+          "path": "customer_no",
+          "label": "SERVICE_ID",
+          "source": "rules-v1",
+          "canonical": "data_subject.id",
+          "confidence": null,
+          "legal_category": "서비스 식별자 / 맥락상 개인정보"
+        },
+        {
+          "path": "consult_reason",
+          "label": "PERSONAL_CONTEXT",
+          "source": "rules-v1",
+          "canonical": "consultation.reason",
+          "confidence": null,
+          "legal_category": "일반 상담 맥락 / 민감성 미확정"
+        }
+      ],
+      "subject": "alpha:U200",
+      "actor_id": "U200",
+      "subjects": [
+        "alpha:U200"
+      ],
+      "synthetic": true,
+      "duration_ms": 13.926,
+      "status_code": 200,
+      "actor_tenant": "alpha",
+      "request_redacted": {
+        "path": "consultations/U200",
+        "method": "GET",
+        "headers": {
+          "authorization": "[REMOVED]"
+        },
+        "query_keys_only": []
+      },
+      "response_capture": "구조·분류·연결 식별자 보존, 일반/민감 값 마스킹; 원문 전체 포렌식 복원 불가",
+      "response_redacted": {
+        "tenant_id": "alpha",
+        "customer_no": "U200",
+        "appointment_id": "appt-demo-001",
+        "consult_reason": "[REDACTED:PERSONAL_CONTEXT]"
+      },
+      "id": 94,
+      "created_at": "2026-09-22T06:06:27.106873+09:00",
+      "sha256": "f49c6e0e85f49ebc664bb8cd55547782e1943061e88b5bbd9bd0239640870dca",
+      "integrity_ok": true
+    }
+  ],
+  "findings": [
+    {
+      "mode": "vulnerable",
+      "actor": "alice",
+      "score": 0,
+      "title": "소유자의 비공개 프로필 조회",
+      "fields": [],
+      "reason": "동일 테넌트의 소유자 또는 관리자만 조회 허용",
+      "run_id": "42666dfe9f744b6a",
+      "case_id": "owner",
+      "subject": "alpha:U100",
+      "verdict": "allowed",
+      "category": "NONE",
+      "endpoint": "profile/private/U100",
+      "scenario_id": "owner",
+      "score_basis": [],
+      "status_code": 200,
+      "evidence_ids": [
+        79
+      ],
+      "score_notice": "팀의 설명 가능한 실험용 우선순위; 법정 점수·법 위반 확정 아님",
+      "id": 79
+    },
+    {
+      "mode": "vulnerable",
+      "actor": "bob",
+      "score": 75,
+      "title": "타인의 비공개 프로필 조회",
+      "fields": [
+        "tenant_id",
+        "member_id",
+        "name",
+        "phone",
+        "address",
+        "email"
+      ],
+      "reason": "검토된 정책의 거부 조건인데 대상 데이터가 성공 응답에 포함됨",
+      "run_id": "42666dfe9f744b6a",
+      "case_id": "bola_profile",
+      "subject": "alpha:U100",
+      "verdict": "confirmed",
+      "category": "BOLA",
+      "endpoint": "profile/private/U100",
+      "scenario_id": "bola_profile",
+      "score_basis": [
+        "BOLA 기준 65",
+        "일반 개인정보 +10"
+      ],
+      "status_code": 200,
+      "evidence_ids": [
+        80
+      ],
+      "score_notice": "팀의 설명 가능한 실험용 우선순위; 법정 점수·법 위반 확정 아님",
+      "id": 80
+    },
+    {
+      "mode": "vulnerable",
+      "actor": "bob",
+      "score": 85,
+      "title": "타인의 상담 내용 조회",
+      "fields": [
+        "tenant_id",
+        "customer_no",
+        "consult_reason",
+        "appointment_id"
+      ],
+      "reason": "검토된 정책의 거부 조건인데 대상 데이터가 성공 응답에 포함됨",
+      "run_id": "42666dfe9f744b6a",
+      "case_id": "bola_consult",
+      "subject": "alpha:U100",
+      "verdict": "confirmed",
+      "category": "BOLA",
+      "endpoint": "consultations/U100",
+      "scenario_id": "bola_consult",
+      "score_basis": [
+        "BOLA 기준 65",
+        "민감정보 후보 +20"
+      ],
+      "status_code": 200,
+      "evidence_ids": [
+        81
+      ],
+      "score_notice": "팀의 설명 가능한 실험용 우선순위; 법정 점수·법 위반 확정 아님",
+      "id": 81
+    },
+    {
+      "mode": "vulnerable",
+      "actor": "bob",
+      "score": 0,
+      "title": "타인의 공개 프로필 정상 조회",
+      "fields": [],
+      "reason": "승인된 공개 필드만 반환됨; 타인 신원이라는 이유로 경보하지 않음",
+      "run_id": "42666dfe9f744b6a",
+      "case_id": "public",
+      "subject": "alpha:U100",
+      "verdict": "allowed",
+      "category": "NONE",
+      "endpoint": "profile/public/U100",
+      "scenario_id": "public",
+      "score_basis": [],
+      "status_code": 200,
+      "evidence_ids": [
+        82
+      ],
+      "score_notice": "팀의 설명 가능한 실험용 우선순위; 법정 점수·법 위반 확정 아님",
+      "id": 82
+    },
+    {
+      "mode": "vulnerable",
+      "actor": "bob",
+      "score": 65,
+      "title": "공개 프로필의 비공개 필드 과다 반환",
+      "fields": [
+        "phone"
+      ],
+      "reason": "공개 허용 목록에 없는 필드가 응답에 포함됨",
+      "run_id": "42666dfe9f744b6a",
+      "case_id": "bopla",
+      "subject": "alpha:U100",
+      "verdict": "confirmed",
+      "category": "BOPLA",
+      "endpoint": "profile/leaky/U100",
+      "scenario_id": "bopla",
+      "score_basis": [
+        "BOPLA 기준 55",
+        "일반 개인정보 +10"
+      ],
+      "status_code": 200,
+      "evidence_ids": [
+        83
+      ],
+      "score_notice": "팀의 설명 가능한 실험용 우선순위; 법정 점수·법 위반 확정 아님",
+      "id": 83
+    },
+    {
+      "mode": "vulnerable",
+      "actor": "bob",
+      "score": 85,
+      "title": "일반 회원의 관리자 기능 호출",
+      "fields": [
+        "records"
+      ],
+      "reason": "검토된 정책의 거부 조건인데 대상 데이터가 성공 응답에 포함됨",
+      "run_id": "42666dfe9f744b6a",
+      "case_id": "bfla",
+      "subject": "alpha:U100, alpha:U200",
+      "verdict": "confirmed",
+      "category": "BFLA",
+      "endpoint": "admin/export",
+      "scenario_id": "bfla",
+      "score_basis": [
+        "BFLA 기준 75",
+        "일반 개인정보 +10"
+      ],
+      "status_code": 200,
+      "evidence_ids": [
+        84
+      ],
+      "score_notice": "팀의 설명 가능한 실험용 우선순위; 법정 점수·법 위반 확정 아님",
+      "id": 84
+    },
+    {
+      "mode": "vulnerable",
+      "actor": "admin",
+      "score": 0,
+      "title": "관리자의 허용된 내보내기",
+      "fields": [],
+      "reason": "alpha 테넌트 관리자 전용 내보내기",
+      "run_id": "42666dfe9f744b6a",
+      "case_id": "admin",
+      "subject": "alpha:U100, alpha:U200",
+      "verdict": "allowed",
+      "category": "NONE",
+      "endpoint": "admin/export",
+      "scenario_id": "admin",
+      "score_basis": [],
+      "status_code": 200,
+      "evidence_ids": [
+        85
+      ],
+      "score_notice": "팀의 설명 가능한 실험용 우선순위; 법정 점수·법 위반 확정 아님",
+      "id": 85
+    },
+    {
+      "mode": "vulnerable",
+      "actor": "bob",
+      "score": 0,
+      "title": "명시적으로 공유된 문서 조회",
+      "fields": [],
+      "reason": "객체 소유자 또는 명시된 공유 대상만 조회 허용",
+      "run_id": "42666dfe9f744b6a",
+      "case_id": "shared",
+      "subject": "alpha:U100",
+      "verdict": "allowed",
+      "category": "NONE",
+      "endpoint": "documents/shared",
+      "scenario_id": "shared",
+      "score_basis": [],
+      "status_code": 200,
+      "evidence_ids": [
+        86
+      ],
+      "score_notice": "팀의 설명 가능한 실험용 우선순위; 법정 점수·법 위반 확정 아님",
+      "id": 86
+    },
+    {
+      "mode": "vulnerable",
+      "actor": "bob",
+      "score": 0,
+      "title": "공유되지 않은 문서 차단",
+      "fields": [],
+      "reason": "정책상 거부 대상이 실제 401/403으로 차단됨",
+      "run_id": "42666dfe9f744b6a",
+      "case_id": "unshared",
+      "subject": "unknown",
+      "verdict": "blocked",
+      "category": "BOLA",
+      "endpoint": "documents/private",
+      "scenario_id": "unshared",
+      "score_basis": [],
+      "status_code": 403,
+      "evidence_ids": [
+        87
+      ],
+      "score_notice": "팀의 설명 가능한 실험용 우선순위; 법정 점수·법 위반 확정 아님",
+      "id": 87
+    },
+    {
+      "mode": "vulnerable",
+      "actor": "bob",
+      "score": 0,
+      "title": "정책 없는 엔드포인트 검토 보류",
+      "fields": [],
+      "reason": "업무 권한 정책이 제공되지 않아 응답만으로 인가 위반 확정 불가",
+      "run_id": "42666dfe9f744b6a",
+      "case_id": "unknown",
+      "subject": "alpha:U100",
+      "verdict": "needs_review",
+      "category": "UNKNOWN",
+      "endpoint": "ambiguous/U100",
+      "scenario_id": "unknown",
+      "score_basis": [],
+      "status_code": 200,
+      "evidence_ids": [
+        88
+      ],
+      "score_notice": "팀의 설명 가능한 실험용 우선순위; 법정 점수·법 위반 확정 아님",
+      "id": 88
+    },
+    {
+      "mode": "vulnerable",
+      "actor": "bob",
+      "score": 75,
+      "title": "다른 테넌트의 동일 회원번호 조회",
+      "fields": [
+        "tenant_id",
+        "member_id",
+        "name",
+        "phone",
+        "address",
+        "email"
+      ],
+      "reason": "검토된 정책의 거부 조건인데 대상 데이터가 성공 응답에 포함됨",
+      "run_id": "42666dfe9f744b6a",
+      "case_id": "tenant",
+      "subject": "beta:U100",
+      "verdict": "confirmed",
+      "category": "BOLA",
+      "endpoint": "tenants/beta/profile/U100",
+      "scenario_id": "tenant",
+      "score_basis": [
+        "BOLA 기준 65",
+        "일반 개인정보 +10"
+      ],
+      "status_code": 200,
+      "evidence_ids": [
+        89
+      ],
+      "score_notice": "팀의 설명 가능한 실험용 우선순위; 법정 점수·법 위반 확정 아님",
+      "id": 89
+    },
+    {
+      "mode": "vulnerable",
+      "actor": "mallory",
+      "score": 0,
+      "title": "beta 소유자의 동일 번호 정상 조회",
+      "fields": [],
+      "reason": "동일 테넌트의 소유자 또는 관리자만 조회 허용",
+      "run_id": "42666dfe9f744b6a",
+      "case_id": "beta_owner",
+      "subject": "beta:U100",
+      "verdict": "allowed",
+      "category": "NONE",
+      "endpoint": "tenants/beta/profile/U100",
+      "scenario_id": "beta_owner",
+      "score_basis": [],
+      "status_code": 200,
+      "evidence_ids": [
+        90
+      ],
+      "score_notice": "팀의 설명 가능한 실험용 우선순위; 법정 점수·법 위반 확정 아님",
+      "id": 90
+    },
+    {
+      "mode": "vulnerable",
+      "actor": "anonymous",
+      "score": 0,
+      "title": "인증 없는 비공개 조회 차단",
+      "fields": [],
+      "reason": "정책상 거부 대상이 실제 401/403으로 차단됨",
+      "run_id": "42666dfe9f744b6a",
+      "case_id": "anonymous",
+      "subject": "unknown",
+      "verdict": "blocked",
+      "category": "BOLA",
+      "endpoint": "profile/private/U100",
+      "scenario_id": "anonymous",
+      "score_basis": [],
+      "status_code": 401,
+      "evidence_ids": [
+        91
+      ],
+      "score_notice": "팀의 설명 가능한 실험용 우선순위; 법정 점수·법 위반 확정 아님",
+      "id": 91
+    },
+    {
+      "mode": "vulnerable",
+      "actor": "bob",
+      "score": 0,
+      "title": "건강 키워드가 있는 일반 안내문",
+      "fields": [],
+      "reason": "개인의 진료 기록이 아닌 공개 안내문",
+      "run_id": "42666dfe9f744b6a",
+      "case_id": "general_info",
+      "subject": "unknown",
+      "verdict": "allowed",
+      "category": "NONE",
+      "endpoint": "info/health",
+      "scenario_id": "general_info",
+      "score_basis": [],
+      "status_code": 200,
+      "evidence_ids": [
+        92
+      ],
+      "score_notice": "팀의 설명 가능한 실험용 우선순위; 법정 점수·법 위반 확정 아님",
+      "id": 92
+    },
+    {
+      "mode": "vulnerable",
+      "actor": "alice",
+      "score": 0,
+      "title": "소유자의 주문·별칭 필드 조회",
+      "fields": [],
+      "reason": "동일 테넌트의 소유자 또는 관리자만 조회 허용",
+      "run_id": "42666dfe9f744b6a",
+      "case_id": "order",
+      "subject": "alpha:U100",
+      "verdict": "allowed",
+      "category": "NONE",
+      "endpoint": "orders/U100",
+      "scenario_id": "order",
+      "score_basis": [],
+      "status_code": 200,
+      "evidence_ids": [
+        93
+      ],
+      "score_notice": "팀의 설명 가능한 실험용 우선순위; 법정 점수·법 위반 확정 아님",
+      "id": 93
+    },
+    {
+      "mode": "vulnerable",
+      "actor": "bob",
+      "score": 0,
+      "title": "건강정보가 아닌 본인 상담 조회",
+      "fields": [],
+      "reason": "동일 테넌트의 소유자 또는 관리자만 조회 허용",
+      "run_id": "42666dfe9f744b6a",
+      "case_id": "general_consult",
+      "subject": "alpha:U200",
+      "verdict": "allowed",
+      "category": "NONE",
+      "endpoint": "consultations/U200",
+      "scenario_id": "general_consult",
+      "score_basis": [],
+      "status_code": 200,
+      "evidence_ids": [
+        94
+      ],
+      "score_notice": "팀의 설명 가능한 실험용 우선순위; 법정 점수·법 위반 확정 아님",
+      "id": 94
+    }
+  ],
+  "links": [
+    {
+      "actor": "bob",
+      "tenant": "alpha",
+      "namespace": "synthetic-member-v1",
+      "subject_id": "U100",
+      "fields": [
+        "consultation.reason",
+        "data_subject.id",
+        "person.address",
+        "person.email",
+        "person.name",
+        "person.phone"
+      ],
+      "endpoints": [
+        "admin/export",
+        "consultations/U100",
+        "profile/leaky/U100",
+        "profile/private/U100"
+      ],
+      "event_ids": [
+        80,
+        81,
+        83,
+        84
+      ],
+      "endpoint_count": 4,
+      "subject_key": "alpha:synthetic-member-v1:U100",
+      "member_ids": [
+        "U100"
+      ],
+      "attacker_observed": true,
+      "reason": "동일 실행·요청자·테넌트·회원 체계에서 비인가 응답에 실제 포함된 정보만 연결. 실명 재식별의 법적 확정 아님."
+    }
+  ],
+  "subjects": 3,
+  "total_events": 94,
+  "meta": {
+    "title": "API 노출 분석 실험실",
+    "version": "0.1.0",
+    "database": "PostgreSQL 17 / local Docker",
+    "scope": "합성 REST/JSON API · localhost 전용 · 사전 진단 + 기록 범위 내 조사",
+    "model_status": "ready",
+    "score_notice": "법정 점수가 아닌 실험용 수정 우선순위"
+  },
+  "summary": {
+    "events": 16,
+    "total_events": 94,
+    "findings": 16,
+    "confirmed": 5,
+    "review": 1,
+    "subjects": 3,
+    "allowed": 8,
+    "blocked": 2
+  },
+  "mappings": [
+    {
+      "source_path": "member_id",
+      "canonical": "data_subject.id",
+      "role": "data_subject",
+      "reason": "합성 회원 서비스 계약에 등록된 회원번호",
+      "source": "approved_registry",
+      "status": "approved",
+      "namespace": "synthetic-member-v1"
+    },
+    {
+      "source_path": "customer_no",
+      "canonical": "data_subject.id",
+      "role": "data_subject",
+      "reason": "회원 서비스와 동일한 alpha 회원번호 체계",
+      "source": "approved_registry",
+      "status": "approved",
+      "namespace": "synthetic-member-v1"
+    },
+    {
+      "source_path": "owner_id",
+      "canonical": "resource.owner.id",
+      "role": "resource_owner",
+      "reason": "문서 소유자, 요청자와 구별",
+      "source": "approved_registry",
+      "status": "approved",
+      "namespace": "synthetic-member-v1"
+    },
+    {
+      "source_path": "phone",
+      "canonical": "person.phone",
+      "role": "attribute",
+      "reason": "회원 연락처",
+      "source": "approved_registry",
+      "status": "approved",
+      "namespace": "synthetic-member-v1"
+    },
+    {
+      "source_path": "mobile_no",
+      "canonical": "person.phone",
+      "role": "attribute",
+      "reason": "주문 배송 연락처 별칭",
+      "source": "approved_registry",
+      "status": "approved",
+      "namespace": "synthetic-member-v1"
+    },
+    {
+      "source_path": "address",
+      "canonical": "person.address",
+      "role": "attribute",
+      "reason": "회원 주소",
+      "source": "approved_registry",
+      "status": "approved",
+      "namespace": "synthetic-member-v1"
+    },
+    {
+      "source_path": "shipping_addr",
+      "canonical": "person.address",
+      "role": "attribute",
+      "reason": "배송 주소 별칭",
+      "source": "approved_registry",
+      "status": "approved",
+      "namespace": "synthetic-member-v1"
+    },
+    {
+      "source_path": "name",
+      "canonical": "person.name",
+      "role": "attribute",
+      "reason": "회원 이름",
+      "source": "approved_registry",
+      "status": "approved",
+      "namespace": "synthetic-member-v1"
+    },
+    {
+      "source_path": "email",
+      "canonical": "person.email",
+      "role": "attribute",
+      "reason": "회원 이메일",
+      "source": "approved_registry",
+      "status": "approved",
+      "namespace": "synthetic-member-v1"
+    },
+    {
+      "source_path": "consult_reason",
+      "canonical": "consultation.reason",
+      "role": "attribute",
+      "reason": "개인 상담 입력 내용",
+      "source": "approved_registry",
+      "status": "approved",
+      "namespace": "synthetic-member-v1"
+    },
+    {
+      "source_path": "order_id",
+      "canonical": "resource.order.id",
+      "role": "resource",
+      "reason": "주문 식별자, 법정 고유식별정보 아님",
+      "source": "approved_registry",
+      "status": "approved",
+      "namespace": "synthetic-member-v1"
+    },
+    {
+      "source_path": "appointment_id",
+      "canonical": "resource.appointment.id",
+      "role": "resource",
+      "reason": "예약 식별자, 법정 고유식별정보 아님",
+      "source": "approved_registry",
+      "status": "approved",
+      "namespace": "synthetic-member-v1"
+    }
+  ],
+  "model": {
+    "status": "ready",
+    "model": "Qwen/Qwen3-0.6B",
+    "revision": "c1899de289a04d12100db370d81485cdf75e47ca",
+    "backend": "cpu_direct_logits",
+    "external_inference": false,
+    "calibrated": false,
+    "event_results": [],
+    "pending_jobs": 3,
+    "evidence_files": [
+      "development-diagnostics.json",
+      "evaluation-summary.json",
+      "model-manifest.json",
+      "normalize-summary.json",
+      "smoke-summary.json",
+      "upstream-versions.json"
+    ],
+    "benchmarks": {}
+  },
+  "evaluation": {
+    "generated_at": "2026-09-22T06:03:54.339396+09:00",
+    "scope": "Local synthetic fixture integration; independent expected outcomes, not production certification",
+    "target": "http://127.0.0.1:8810",
+    "status": "PASS",
+    "total": 60,
+    "passed": 60,
+    "failed": 0,
+    "cases": [
+      {
+        "id": "HTTP-STATE",
+        "description": "state API is available",
+        "status": "PASS"
+      },
+      {
+        "id": "RUN-vulnerable",
+        "description": "scenario execution completes",
+        "status": "PASS"
+      },
+      {
+        "id": "STATE-vulnerable",
+        "description": "post-run state is available",
+        "status": "PASS"
+      },
+      {
+        "id": "COVERAGE-vulnerable",
+        "description": "all 16 independent scenarios are recorded",
+        "status": "PASS",
+        "observed": {
+          "expected": [
+            "admin",
+            "anonymous",
+            "beta_owner",
+            "bfla",
+            "bola_consult",
+            "bola_profile",
+            "bopla",
+            "general_consult",
+            "general_info",
+            "order",
+            "owner",
+            "public",
+            "shared",
+            "tenant",
+            "unknown",
+            "unshared"
+          ],
+          "actual": [
+            "admin",
+            "anonymous",
+            "beta_owner",
+            "bfla",
+            "bola_consult",
+            "bola_profile",
+            "bopla",
+            "general_consult",
+            "general_info",
+            "order",
+            "owner",
+            "public",
+            "shared",
+            "tenant",
+            "unknown",
+            "unshared"
+          ]
+        }
+      },
+      {
+        "id": "AUTH-vulnerable-owner",
+        "description": "owner has the specified policy outcome",
+        "status": "PASS",
+        "observed": {
+          "expected": "allowed",
+          "actual": "allowed"
+        }
+      },
+      {
+        "id": "AUTH-vulnerable-bola_profile",
+        "description": "bola_profile has the specified policy outcome",
+        "status": "PASS",
+        "observed": {
+          "expected": "confirmed",
+          "actual": "confirmed"
+        }
+      },
+      {
+        "id": "AUTH-vulnerable-bola_consult",
+        "description": "bola_consult has the specified policy outcome",
+        "status": "PASS",
+        "observed": {
+          "expected": "confirmed",
+          "actual": "confirmed"
+        }
+      },
+      {
+        "id": "AUTH-vulnerable-public",
+        "description": "public has the specified policy outcome",
+        "status": "PASS",
+        "observed": {
+          "expected": "allowed",
+          "actual": "allowed"
+        }
+      },
+      {
+        "id": "AUTH-vulnerable-bopla",
+        "description": "bopla has the specified policy outcome",
+        "status": "PASS",
+        "observed": {
+          "expected": "confirmed",
+          "actual": "confirmed"
+        }
+      },
+      {
+        "id": "AUTH-vulnerable-bfla",
+        "description": "bfla has the specified policy outcome",
+        "status": "PASS",
+        "observed": {
+          "expected": "confirmed",
+          "actual": "confirmed"
+        }
+      },
+      {
+        "id": "AUTH-vulnerable-admin",
+        "description": "admin has the specified policy outcome",
+        "status": "PASS",
+        "observed": {
+          "expected": "allowed",
+          "actual": "allowed"
+        }
+      },
+      {
+        "id": "AUTH-vulnerable-shared",
+        "description": "shared has the specified policy outcome",
+        "status": "PASS",
+        "observed": {
+          "expected": "allowed",
+          "actual": "allowed"
+        }
+      },
+      {
+        "id": "AUTH-vulnerable-unshared",
+        "description": "unshared has the specified policy outcome",
+        "status": "PASS",
+        "observed": {
+          "expected": "blocked",
+          "actual": "blocked"
+        }
+      },
+      {
+        "id": "AUTH-vulnerable-unknown",
+        "description": "unknown has the specified policy outcome",
+        "status": "PASS",
+        "observed": {
+          "expected": "needs_review",
+          "actual": "needs_review"
+        }
+      },
+      {
+        "id": "AUTH-vulnerable-tenant",
+        "description": "tenant has the specified policy outcome",
+        "status": "PASS",
+        "observed": {
+          "expected": "confirmed",
+          "actual": "confirmed"
+        }
+      },
+      {
+        "id": "AUTH-vulnerable-beta_owner",
+        "description": "beta_owner has the specified policy outcome",
+        "status": "PASS",
+        "observed": {
+          "expected": "allowed",
+          "actual": "allowed"
+        }
+      },
+      {
+        "id": "AUTH-vulnerable-anonymous",
+        "description": "anonymous has the specified policy outcome",
+        "status": "PASS",
+        "observed": {
+          "expected": "blocked",
+          "actual": "blocked"
+        }
+      },
+      {
+        "id": "AUTH-vulnerable-general_info",
+        "description": "general_info has the specified policy outcome",
+        "status": "PASS",
+        "observed": {
+          "expected": "allowed",
+          "actual": "allowed"
+        }
+      },
+      {
+        "id": "AUTH-vulnerable-order",
+        "description": "order has the specified policy outcome",
+        "status": "PASS",
+        "observed": {
+          "expected": "allowed",
+          "actual": "allowed"
+        }
+      },
+      {
+        "id": "AUTH-vulnerable-general_consult",
+        "description": "general_consult has the specified policy outcome",
+        "status": "PASS",
+        "observed": {
+          "expected": "allowed",
+          "actual": "allowed"
+        }
+      },
+      {
+        "id": "EVIDENCE-vulnerable",
+        "description": "confirmed findings reference observed events",
+        "status": "PASS",
+        "observed": {
+          "confirmed_count": 5
+        }
+      },
+      {
+        "id": "LOG-ACTOR-SUBJECT",
+        "description": "requester Bob and subject Alice remain distinct",
+        "status": "PASS"
+      },
+      {
+        "id": "LINK-REAL-OBSERVATIONS",
+        "description": "same attacker observes profile and consultation for one subject",
+        "status": "PASS"
+      },
+      {
+        "id": "LINK-TENANT-ISOLATION",
+        "description": "same identifier in beta is not merged into alpha",
+        "status": "PASS"
+      },
+      {
+        "id": "LINK-EXPOSURE-COUNT",
+        "description": "three distinct tenant-scoped subjects are observed across confirmed responses",
+        "status": "PASS",
+        "observed": 3
+      },
+      {
+        "id": "LOG-INTEGRITY-vulnerable",
+        "description": "all stored event payload checksums match",
+        "status": "PASS"
+      },
+      {
+        "id": "SECRET-vulnerable",
+        "description": "fixture bearer tokens are absent from state",
+        "status": "PASS"
+      },
+      {
+        "id": "RUN-fixed",
+        "description": "scenario execution completes",
+        "status": "PASS"
+      },
+      {
+        "id": "STATE-fixed",
+        "description": "post-run state is available",
+        "status": "PASS"
+      },
+      {
+        "id": "COVERAGE-fixed",
+        "description": "all 16 independent scenarios are recorded",
+        "status": "PASS",
+        "observed": {
+          "expected": [
+            "admin",
+            "anonymous",
+            "beta_owner",
+            "bfla",
+            "bola_consult",
+            "bola_profile",
+            "bopla",
+            "general_consult",
+            "general_info",
+            "order",
+            "owner",
+            "public",
+            "shared",
+            "tenant",
+            "unknown",
+            "unshared"
+          ],
+          "actual": [
+            "admin",
+            "anonymous",
+            "beta_owner",
+            "bfla",
+            "bola_consult",
+            "bola_profile",
+            "bopla",
+            "general_consult",
+            "general_info",
+            "order",
+            "owner",
+            "public",
+            "shared",
+            "tenant",
+            "unknown",
+            "unshared"
+          ]
+        }
+      },
+      {
+        "id": "AUTH-fixed-owner",
+        "description": "owner has the specified policy outcome",
+        "status": "PASS",
+        "observed": {
+          "expected": "allowed",
+          "actual": "allowed"
+        }
+      },
+      {
+        "id": "AUTH-fixed-bola_profile",
+        "description": "bola_profile has the specified policy outcome",
+        "status": "PASS",
+        "observed": {
+          "expected": "blocked",
+          "actual": "blocked"
+        }
+      },
+      {
+        "id": "AUTH-fixed-bola_consult",
+        "description": "bola_consult has the specified policy outcome",
+        "status": "PASS",
+        "observed": {
+          "expected": "blocked",
+          "actual": "blocked"
+        }
+      },
+      {
+        "id": "AUTH-fixed-public",
+        "description": "public has the specified policy outcome",
+        "status": "PASS",
+        "observed": {
+          "expected": "allowed",
+          "actual": "allowed"
+        }
+      },
+      {
+        "id": "AUTH-fixed-bopla",
+        "description": "bopla has the specified policy outcome",
+        "status": "PASS",
+        "observed": {
+          "expected": "allowed",
+          "actual": "allowed"
+        }
+      },
+      {
+        "id": "AUTH-fixed-bfla",
+        "description": "bfla has the specified policy outcome",
+        "status": "PASS",
+        "observed": {
+          "expected": "blocked",
+          "actual": "blocked"
+        }
+      },
+      {
+        "id": "AUTH-fixed-admin",
+        "description": "admin has the specified policy outcome",
+        "status": "PASS",
+        "observed": {
+          "expected": "allowed",
+          "actual": "allowed"
+        }
+      },
+      {
+        "id": "AUTH-fixed-shared",
+        "description": "shared has the specified policy outcome",
+        "status": "PASS",
+        "observed": {
+          "expected": "allowed",
+          "actual": "allowed"
+        }
+      },
+      {
+        "id": "AUTH-fixed-unshared",
+        "description": "unshared has the specified policy outcome",
+        "status": "PASS",
+        "observed": {
+          "expected": "blocked",
+          "actual": "blocked"
+        }
+      },
+      {
+        "id": "AUTH-fixed-unknown",
+        "description": "unknown has the specified policy outcome",
+        "status": "PASS",
+        "observed": {
+          "expected": "needs_review",
+          "actual": "needs_review"
+        }
+      },
+      {
+        "id": "AUTH-fixed-tenant",
+        "description": "tenant has the specified policy outcome",
+        "status": "PASS",
+        "observed": {
+          "expected": "blocked",
+          "actual": "blocked"
+        }
+      },
+      {
+        "id": "AUTH-fixed-beta_owner",
+        "description": "beta_owner has the specified policy outcome",
+        "status": "PASS",
+        "observed": {
+          "expected": "allowed",
+          "actual": "allowed"
+        }
+      },
+      {
+        "id": "AUTH-fixed-anonymous",
+        "description": "anonymous has the specified policy outcome",
+        "status": "PASS",
+        "observed": {
+          "expected": "blocked",
+          "actual": "blocked"
+        }
+      },
+      {
+        "id": "AUTH-fixed-general_info",
+        "description": "general_info has the specified policy outcome",
+        "status": "PASS",
+        "observed": {
+          "expected": "allowed",
+          "actual": "allowed"
+        }
+      },
+      {
+        "id": "AUTH-fixed-order",
+        "description": "order has the specified policy outcome",
+        "status": "PASS",
+        "observed": {
+          "expected": "allowed",
+          "actual": "allowed"
+        }
+      },
+      {
+        "id": "AUTH-fixed-general_consult",
+        "description": "general_consult has the specified policy outcome",
+        "status": "PASS",
+        "observed": {
+          "expected": "allowed",
+          "actual": "allowed"
+        }
+      },
+      {
+        "id": "EVIDENCE-fixed",
+        "description": "confirmed findings reference observed events",
+        "status": "PASS",
+        "observed": {
+          "confirmed_count": 0
+        }
+      },
+      {
+        "id": "FIXED-NO-LINKS",
+        "description": "fixed authorization leaves no confirmed exposure joins",
+        "status": "PASS"
+      },
+      {
+        "id": "LOG-INTEGRITY-fixed",
+        "description": "all stored event payload checksums match",
+        "status": "PASS"
+      },
+      {
+        "id": "SECRET-fixed",
+        "description": "fixture bearer tokens are absent from state",
+        "status": "PASS"
+      },
+      {
+        "id": "LOG-APPEND-RUNS",
+        "description": "new run preserves old run identities in PostgreSQL",
+        "status": "PASS"
+      },
+      {
+        "id": "LOG-PRESERVED-EVENTS",
+        "description": "prior run event identities and payload hashes persist in PostgreSQL",
+        "status": "PASS"
+      },
+      {
+        "id": "LOG-APPEND-EVENTS",
+        "description": "database event count accumulates across runs",
+        "status": "PASS"
+      },
+      {
+        "id": "LOG-NEW-EVENTS",
+        "description": "second run creates separate new observations",
+        "status": "PASS"
+      },
+      {
+        "id": "HTTP-UNKNOWN-TOKEN",
+        "description": "unknown credentials cannot access private data",
+        "status": "PASS"
+      },
+      {
+        "id": "HTTP-NO-WRITES",
+        "description": "gateway refuses state-changing methods",
+        "status": "PASS"
+      },
+      {
+        "id": "HTTP-UNKNOWN-MODE",
+        "description": "gateway rejects an unsupported upstream mode",
+        "status": "PASS"
+      },
+      {
+        "id": "HTTP-REPORT",
+        "description": "report API returns an export",
+        "status": "PASS"
+      },
+      {
+        "id": "SECRET-QUERY-HEADERS",
+        "description": "raw query/header/cookie canary is not retained or exported",
+        "status": "PASS"
+      },
+      {
+        "id": "SEMANTIC-UNIT-SUITE",
+        "description": "independent semantic edge cases all pass",
+        "status": "PASS",
+        "observed": {
+          "tests_run": 15,
+          "failures": 0,
+          "errors": 0
+        }
+      }
+    ],
+    "unit_tests": {
+      "status": "PASS",
+      "tests_run": 15,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "output": "...............\n----------------------------------------------------------------------\nRan 15 tests in 5.726s\n\nOK\n"
+    },
+    "source_sha256": {
+      "gateway/app.py": "beb5af410db0e2bb6077d84f7f497a046dc578cdac9fce53f501d964064d539e",
+      "gateway/domain.py": "a79d965e42da4a720e6b28a7dca36b450cc8760af44cbb6162c2e621196a7dd4",
+      "gateway/mock_api.py": "98df2d7839e1869aa11174cc659b8aefcf14d1a680572b20b26748e5285cefc5",
+      "gateway/privacy.py": "23bef1b1781f25f3fc2d080f905b9f773783546e696794b913d742f24ab74714",
+      "gateway/store.py": "0eb12ffe265eb8738777da828178921279a249a1db9208fc7c90e1bb7acf803b",
+      "gateway/__init__.py": "027c0191fb90d7db11feb4e423a8bf81e461e231f75a1c7582a6d8354ef4612d",
+      "tests/evaluate_demo.py": "60409250462944822264fca16843fcdd59ec87614dc276ce39bcc8f42ddc6a0c",
+      "tests/test_semantics.py": "34eeca311012274116fd148ce33cc0f235411b0c44ddf3e1b9a53b2f8bc1a64f"
+    },
+    "limitations": [
+      "Expected authorization policies are synthetic and explicitly supplied.",
+      "A passing fixture does not demonstrate universal field mapping or legal identifiability.",
+      "Local model accuracy/latency are evaluated in separate model evidence.",
+      "Gateway full production hardening and performance are outside this acceptance run."
+    ]
+  }
+}

@@ -1,0 +1,18 @@
+# Local runtimes, downloaded model weights, and generated state
+.runtime/
+.venv/
+.venv-*/
+**/.venv/
+**/.venv-*/
+**/ml/models/
+**/ml_jev/local-runtime.json
+**/ml_alternative/local-runtime.json
+**/*.pid
+**/*.log
+**/__pycache__/
+**/.pytest_cache/
+**/.mypy_cache/
+**/node_modules/
+
+# Local-only model/server outputs
+**/evidence/jev/reproductions/*/run-*.jsonl

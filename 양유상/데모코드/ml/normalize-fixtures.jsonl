@@ -1,0 +1,8 @@
+{"id":"customer-alias","field_path":"customer_no","description":"응답 정보주체인 회원의 식별자","gold":"data_subject.id"}
+{"id":"mobile-alias","field_path":"mobile_no","description":"","gold":"person.phone"}
+{"id":"shipping-address","field_path":"shipping_addr","description":"고객 배송지 주소","gold":"person.address"}
+{"id":"order-key","field_path":"order_id","description":"주문 리소스 식별자","gold":"resource.order.id"}
+{"id":"ambiguous-id","field_path":"id","description":"","gold":"unknown"}
+{"id":"id-with-order-context","field_path":"id","description":"주문 API 응답의 주문 레코드 기본키","gold":"resource.order.id"}
+{"id":"subject-alias","field_path":"subjectKey","description":"응답이 설명하는 사람의 서비스 계정 식별자","gold":"data_subject.id"}
+{"id":"actor-not-subject","field_path":"user_id","description":"로그인하여 요청한 호출자의 식별자이며 응답 정보주체 ID와는 다름","gold":"unknown"}

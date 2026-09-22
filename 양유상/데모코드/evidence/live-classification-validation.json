@@ -1,0 +1,49 @@
+{
+  "status": "MEASURED",
+  "run_id": "8641bfd85d3443e9",
+  "count": 3,
+  "correct": 2,
+  "classification_errors": [
+    "general_info"
+  ],
+  "rows": [
+    {
+      "event_id": 213,
+      "case_id": "bola_consult",
+      "path": "consultations/U100",
+      "expected": "HEALTH",
+      "actual": "HEALTH",
+      "correct": true,
+      "source": "live_local_ollama",
+      "model": "qwen3:4b-q4_K_M",
+      "latency_ms": 12395.48,
+      "candidate_only": true
+    },
+    {
+      "event_id": 224,
+      "case_id": "general_info",
+      "path": "info/health",
+      "expected": "OTHER",
+      "actual": "HEALTH",
+      "correct": false,
+      "source": "live_local_ollama",
+      "model": "qwen3:4b-q4_K_M",
+      "latency_ms": 2526.27,
+      "candidate_only": true
+    },
+    {
+      "event_id": 226,
+      "case_id": "general_consult",
+      "path": "consultations/U200",
+      "expected": "OTHER",
+      "actual": "OTHER",
+      "correct": true,
+      "source": "live_local_ollama",
+      "model": "qwen3:4b-q4_K_M",
+      "latency_ms": 2561.05,
+      "candidate_only": true
+    }
+  ],
+  "scope": "동일 데모의 실제 응답 3건과 API 맥락. 24건 작성자 평가와 별도로 측정하며 독립 통계 평가라고 주장하지 않음.",
+  "interpretation": "오답도 원본 유지. 인가 판단에는 사용하지 않아 공개 안내를 취약점으로 만들지 않음."
+}

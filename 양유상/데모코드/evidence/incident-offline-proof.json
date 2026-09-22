@@ -1,0 +1,108 @@
+{
+  "created_at": "2026-09-22T03:08:18.933804+00:00",
+  "run_id": "incident-4bf3904446c9",
+  "scope": "Synthetic upstream 8811 was stopped; gateway 8810 and PostgreSQL remained running. Analysis/export used existing logs only.",
+  "upstream_listening_before": false,
+  "upstream_listening_after": false,
+  "source_before": {
+    "runs": {
+      "count": 66,
+      "sha256": "3946e4c007277736856a1d275e5eb082df7ac2e5c9ebebf4d5097723d415858d"
+    },
+    "events": {
+      "count": 256,
+      "sha256": "63d63aa3f919171b0298d6fcb72bb95aa7e39a313e0e5d522d53383e2dd27471"
+    },
+    "findings": {
+      "count": 256,
+      "sha256": "181a64f711ec4a7534c0659e312e634bc379ba997c473364441c59a9cc4c5061"
+    },
+    "observations": {
+      "count": 783,
+      "sha256": "9683bf5d556841a4666b942131fc9191dc6af3f814e32d1dc62ef0729bbe48d5"
+    },
+    "model_results": {
+      "count": 34,
+      "sha256": "d1ca989b8b9fead8d364c9bd2fc9702ab3e7a00d0fbf35c15e6bcf54130ec6f8"
+    }
+  },
+  "source_after": {
+    "runs": {
+      "count": 66,
+      "sha256": "3946e4c007277736856a1d275e5eb082df7ac2e5c9ebebf4d5097723d415858d"
+    },
+    "events": {
+      "count": 256,
+      "sha256": "63d63aa3f919171b0298d6fcb72bb95aa7e39a313e0e5d522d53383e2dd27471"
+    },
+    "findings": {
+      "count": 256,
+      "sha256": "181a64f711ec4a7534c0659e312e634bc379ba997c473364441c59a9cc4c5061"
+    },
+    "observations": {
+      "count": 783,
+      "sha256": "9683bf5d556841a4666b942131fc9191dc6af3f814e32d1dc62ef0729bbe48d5"
+    },
+    "model_results": {
+      "count": 34,
+      "sha256": "d1ca989b8b9fead8d364c9bd2fc9702ab3e7a00d0fbf35c15e6bcf54130ec6f8"
+    }
+  },
+  "full_summary": {
+    "logged_requests": 13,
+    "api_count": 8,
+    "http_success": 11,
+    "denied": 1,
+    "other": 1,
+    "confirmed_policy_requests": 7,
+    "returned_subjects": 3,
+    "confirmed_exposure_subjects": 3
+  },
+  "metadata_summary": {
+    "logged_requests": 13,
+    "api_count": 8,
+    "http_success": 11,
+    "denied": 1,
+    "other": 1,
+    "confirmed_policy_requests": null,
+    "returned_subjects": null,
+    "confirmed_exposure_subjects": null
+  },
+  "checks": [
+    {
+      "name": "synthetic_upstream_offline_before_and_after",
+      "pass": true
+    },
+    {
+      "name": "full_analysis_http_200",
+      "pass": true
+    },
+    {
+      "name": "metadata_analysis_http_200",
+      "pass": true
+    },
+    {
+      "name": "markdown_export_http_200",
+      "pass": true
+    },
+    {
+      "name": "all_source_tables_byte_fingerprints_unchanged",
+      "pass": true
+    },
+    {
+      "name": "no_analysis_replay",
+      "pass": true
+    },
+    {
+      "name": "same_call_count_without_response",
+      "pass": true
+    },
+    {
+      "name": "metadata_exposure_unknown",
+      "pass": true
+    }
+  ],
+  "passed": 8,
+  "total": 8,
+  "status": "PASS"
+}

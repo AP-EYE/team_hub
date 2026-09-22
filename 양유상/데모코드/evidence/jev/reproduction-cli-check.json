@@ -1,0 +1,5 @@
+{
+  "check": "named_reproduction_preserves_canonical",
+  "result": "PASS",
+  "canonical_sha256": "3C255EF6EA3BC41D62D34C04729AF903BD9AE26EF94350CACEB7E231F0880A06"
+}

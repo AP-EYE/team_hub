@@ -1,0 +1,21 @@
+{
+  "model_id": "Qwen/Qwen3-4B",
+  "tokenizer_revision": "1cfa9a7208912126459214e8b04321603b3df60c",
+  "tokenizer_directory": "C:\\Users\\andyw\\Desktop\\api-privacy-gateway-demo\\.runtime\\jev-tokenizer\\Qwen3-4B",
+  "gguf": "C:\\Users\\andyw\\Desktop\\api-privacy-gateway-demo\\.runtime\\ollama-models\\blobs\\sha256-163553aea1b1de62de7c5eb2ef5afb756b4b3133308d9ae7e42e951d8d696ef5",
+  "gguf_sha256": "163553aea1b1de62de7c5eb2ef5afb756b4b3133308d9ae7e42e951d8d696ef5",
+  "gguf_bytes": 2620774592,
+  "semif_commit": "1f2dea3e25379f9dfc98cb83c324f00ab5deda37",
+  "threads": 4,
+  "max_tokens": 2048,
+  "tokenizer_files": {
+    "config.json": "8ba006f74fecfaaeb392872a60f4a480e7ec9860153d2e1b769ec81f9a147f8a",
+    "generation_config.json": "2325da0f15bb848e018c5ae071b7943332e9f871d6b60e2ed22ca97d4cb993d2",
+    "LICENSE": "832dd9e00a68dd83b3c3fb9f5588dad7dcf337a0db50f7d9483f310cd292e92e",
+    "merges.txt": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5",
+    "README.md": "71add1cd091c309b1cb1a6b943f2476eb2b004124b3bd1d32dcd0b24cc1abc47",
+    "tokenizer.json": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+    "tokenizer_config.json": "d5d09f07b48c3086c508b30d1c9114bd1189145b74e982a265350c923acd8101",
+    "vocab.json": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910"
+  }
+}

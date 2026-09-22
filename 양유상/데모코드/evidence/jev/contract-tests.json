@@ -1,0 +1,119 @@
+{
+  "scope": "Input shaping, ASGI API transport, local-worker failure contracts and dependency isolation only; all worker calls mocked; no model/DB inference or writes",
+  "tests": 27,
+  "failures": 0,
+  "errors": 0,
+  "cases": [
+    {
+      "name": "test_input_mode_preserves_only_declared_context[full-expected0]",
+      "passed": true
+    },
+    {
+      "name": "test_input_mode_preserves_only_declared_context[schema_only-expected1]",
+      "passed": true
+    },
+    {
+      "name": "test_input_mode_preserves_only_declared_context[value_only-expected2]",
+      "passed": true
+    },
+    {
+      "name": "test_unicode_input_at_limits_is_not_truncated",
+      "passed": true
+    },
+    {
+      "name": "test_input_over_limits_rejected_even_if_hidden_by_mode[values0]",
+      "passed": true
+    },
+    {
+      "name": "test_input_over_limits_rejected_even_if_hidden_by_mode[values1]",
+      "passed": true
+    },
+    {
+      "name": "test_input_over_limits_rejected_even_if_hidden_by_mode[values2]",
+      "passed": true
+    },
+    {
+      "name": "test_non_string_inputs_rejected[values0]",
+      "passed": true
+    },
+    {
+      "name": "test_non_string_inputs_rejected[values1]",
+      "passed": true
+    },
+    {
+      "name": "test_non_string_inputs_rejected[values2]",
+      "passed": true
+    },
+    {
+      "name": "test_unknown_input_mode_rejected",
+      "passed": true
+    },
+    {
+      "name": "test_api_invalid_inputs_never_call_local_model[payload0]",
+      "passed": true
+    },
+    {
+      "name": "test_api_invalid_inputs_never_call_local_model[payload1]",
+      "passed": true
+    },
+    {
+      "name": "test_api_invalid_inputs_never_call_local_model[payload2]",
+      "passed": true
+    },
+    {
+      "name": "test_api_invalid_inputs_never_call_local_model[payload3]",
+      "passed": true
+    },
+    {
+      "name": "test_api_invalid_inputs_never_call_local_model[payload4]",
+      "passed": true
+    },
+    {
+      "name": "test_api_invalid_inputs_never_call_local_model[payload5]",
+      "passed": true
+    },
+    {
+      "name": "test_api_invalid_inputs_never_call_local_model[payload6]",
+      "passed": true
+    },
+    {
+      "name": "test_busy_is_409_with_no_fake_classification",
+      "passed": true
+    },
+    {
+      "name": "test_worker_rejects_input_as_400",
+      "passed": true
+    },
+    {
+      "name": "test_network_failure_is_503_not_a_rule_fallback[error0]",
+      "passed": true
+    },
+    {
+      "name": "test_network_failure_is_503_not_a_rule_fallback[error1]",
+      "passed": true
+    },
+    {
+      "name": "test_upstream_server_error_is_503",
+      "passed": true
+    },
+    {
+      "name": "test_success_returns_worker_scores_without_rewriting",
+      "passed": true
+    },
+    {
+      "name": "test_json_comparator_has_no_fabricated_option_probabilities",
+      "passed": true
+    },
+    {
+      "name": "test_gateway_import_does_not_load_model_dependencies",
+      "passed": true
+    },
+    {
+      "name": "test_jev_backend_import_does_not_require_torch",
+      "passed": true
+    }
+  ],
+  "source": "tests/test_jev_contract.py",
+  "junit": "evidence/jev/contract-tests.xml",
+  "initial_fixture_failure_note": "evidence/jev/contract-test-harness-note.md"
+}

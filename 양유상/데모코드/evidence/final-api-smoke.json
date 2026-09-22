@@ -1,0 +1,90 @@
+{
+  "created_at": "2026-09-21T21:31:25.133992+00:00",
+  "scope": "Gateway forwarding smoke; synthetic examples, not accuracy benchmark",
+  "passed": 3,
+  "count": 4,
+  "checks": [
+    {
+      "case": "customer_no",
+      "status_code": 200,
+      "expected": "data_subject.id",
+      "result": {
+        "canonical_field": "unknown",
+        "label": "unknown",
+        "confidence": null,
+        "confidence_is_calibrated": false,
+        "approved": false,
+        "model": "qwen3:4b-q4_K_M",
+        "source": "live_local_ollama",
+        "status": "needs_review",
+        "backend": "ollama_cpu_structured_generation",
+        "latency_ms": 5442.8,
+        "prompt_sha256": "5bf30354860ce1c14c1aa0df1964d09e4b5b77cd8810164f9fb05bb9c84c9635",
+        "raw_content": "{\"canonical_field\": \"unknown\"}",
+        "request_sha256": "28eed0cab5ab1ce7b0c71ca3629e216ab7bbaf0e757d815c82afa072af4652c3",
+        "load_duration_ms": 136.32,
+        "prompt_eval_count": 224,
+        "eval_count": 8,
+        "policy_effect": "none; proposal only, never updates approved CIM registry",
+        "approval_status": "candidate_requires_review",
+        "notice": "로컬 모델의 매핑 후보입니다. 승인된 규칙이나 DB 연결 키를 자동 변경하지 않습니다."
+      },
+      "pass": false
+    },
+    {
+      "case": "mobile_no",
+      "status_code": 200,
+      "expected": "person.phone",
+      "result": {
+        "canonical_field": "person.phone",
+        "label": "person.phone",
+        "confidence": null,
+        "confidence_is_calibrated": false,
+        "approved": false,
+        "model": "qwen3:4b-q4_K_M",
+        "source": "live_local_ollama",
+        "status": "needs_review",
+        "backend": "ollama_cpu_structured_generation",
+        "latency_ms": 2120.74,
+        "prompt_sha256": "5bf30354860ce1c14c1aa0df1964d09e4b5b77cd8810164f9fb05bb9c84c9635",
+        "raw_content": "{\n  \"canonical_field\": \"person.phone\"\n}",
+        "request_sha256": "f8e3458c8d7ea7931f879a880eae47d6f8eb2c5f22ffa6d7f33be93ca09c9e24",
+        "load_duration_ms": 166.73,
+        "prompt_eval_count": 220,
+        "eval_count": 12,
+        "policy_effect": "none; proposal only, never updates approved CIM registry",
+        "approval_status": "candidate_requires_review",
+        "notice": "로컬 모델의 매핑 후보입니다. 승인된 규칙이나 DB 연결 키를 자동 변경하지 않습니다."
+      },
+      "pass": true
+    },
+    {
+      "case": "explicit_backend_classify",
+      "status_code": 200,
+      "expected": "CONTACT",
+      "result": {
+        "label": "CONTACT",
+        "confidence": null,
+        "confidence_is_calibrated": false,
+        "confidence_meaning": "No calibrated confidence is available; JSON validity is not correctness",
+        "model": "qwen3:4b-q4_K_M",
+        "backend": "ollama_cpu_structured_generation",
+        "source": "live_local_ollama",
+        "status": "needs_review",
+        "latency_ms": 1992.98,
+        "prompt_sha256": "3d299f23398efe580feaaece79c9905450bf4bc8f1180f924ea52cf41ed76ada",
+        "request_sha256": "9a2e1427f9d4f10fee20b06496de504a1efdffc3d74729749b2e5b1bb95e7e66",
+        "raw_content": "{\"label\": \"CONTACT\"}",
+        "load_duration_ms": 158.16,
+        "prompt_eval_count": 370,
+        "eval_count": 7,
+        "policy_effect": "none; no authorization decision, blocking, legal determination or automatic CIM approval"
+      },
+      "pass": true
+    },
+    {
+      "case": "no_automatic_approval_or_observation_mutation",
+      "pass": true
+    }
+  ]
+}

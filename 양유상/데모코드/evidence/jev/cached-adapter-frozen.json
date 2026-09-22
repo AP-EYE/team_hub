@@ -1,0 +1,8 @@
+{
+  "adapter_version": "korean-cached-contract-v2",
+  "frozen_at": "2026-09-22T04:08:20.225951+00:00",
+  "engine_sha256": "938ec8358f3d02f2d9f4240ea67d2c839bc327d652606c35359bf9af78e0a213",
+  "change": "Constant contract in state; untrusted input in question; short named options; actual upstream SerialPrefixScorer. Semantic label contract and dataset unchanged. This changes prompt arrangement, not merely caching.",
+  "direct_pilot_attempted": 3,
+  "direct_pilot_status": "INTERRUPTED for performance; complete saved attempts retained; in-flight unsaved request not counted."
+}

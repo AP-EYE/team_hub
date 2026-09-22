@@ -1,0 +1,11 @@
+# Minimal direct dependencies for the actual SemIf llama.cpp CPU wrapper.
+# Tested on Windows x64, Python 3.12.10 in the isolated .venv-jev environment.
+# Install llama-cpp-python from the official CPU wheel index as documented in
+# docs/jev-source-verification.md; this is not the upstream Torch environment.
+llama-cpp-python==0.3.35
+transformers==5.17.0
+huggingface-hub==1.31.0
+tokenizers==0.23.2
+safetensors==0.8.0
+numpy==2.2.6
+httpx==0.28.1

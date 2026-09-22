@@ -1,0 +1,35 @@
+{
+  "at": "2026-09-22T05:32:47.809805+00:00",
+  "runtime": "Actual local SemIf SerialPrefixScorer + Qwen3-4B Q4_K_M",
+  "official_typesafe_jev_executed": false,
+  "dataset_cases": 96,
+  "measured_methods": 3,
+  "canonical_raw_attempts": 288,
+  "tests": {
+    "pytest_passed": 103,
+    "pytest_subtests_passed": 19,
+    "read_only_ui": "PASS",
+    "live_ui": "PASS",
+    "live_ui_post_count": 1
+  },
+  "input_modes": "Three additional actual requests: full correct, schema_only correct, value_only incorrect ACCOUNT_ID; expectations frozen before this demonstration; excluded from KO96.",
+  "source_sha256": {
+    "ml_jev/engine.py": "938ec8358f3d02f2d9f4240ea67d2c839bc327d652606c35359bf9af78e0a213",
+    "ml_jev/worker.py": "b01c687906e1f6663b36746821c56ccd795cac224694eb14a609a12bad3ac818",
+    "ml_jev/evaluate.py": "66a820cfcd27a6c226d99ff9a28e007ed4d1a2563f699a310e798f9116ffd947",
+    "ml_jev/finalize.py": "3237c58836689f46f828b70f2d1dc3a577787aa656be5a9d6c95581fb23a2774",
+    "ml_jev/demo_modes.py": "2892204f8e18c70f699498e2e00e69127fb7a4030f05754d5f44823c18fab85d",
+    "ml_jev/cases.jsonl": "78250014809fc55d67b8e73347531841b794a4f2f88be0011df22c5d459fb0ce",
+    "gateway/jev.py": "2cf900c6d46f909c20009457baad665da721e1950fb9e0fc0faf13e129b04b6b",
+    "static/jev-lab.html": "72d2106d50d526211a85c79e15bc364e61a4c5f6fa3ec87de7426dd5b25d9cd8",
+    "static/jev-lab.js": "f04c4c42008ba00710829ad3339adcc4540d00ed44c9c73157a88e37aaabf983",
+    "static/jev-lab.css": "63b14729983ccf15de3c0760687f2306ebbeb1db2700093601d701849da7b8dd"
+  },
+  "limitations": [
+    "Authored balanced development set, not heldout or expert validated.",
+    "Official TypeSafe Jev was not executed.",
+    "Scores are uncalibrated; all model outputs remain review candidates.",
+    "Timing was not isolated; another Ollama client connection was observed.",
+    "Exact loaded benchmark evaluator is preserved separately from subsequently hardened CLI."
+  ]
+}

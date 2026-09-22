@@ -1,0 +1,84 @@
+{
+  "count": 4,
+  "correct": 4,
+  "accuracy": 1.0,
+  "baseline_correct": 4,
+  "baseline_accuracy": 1.0,
+  "macro_f1": 0.5,
+  "per_class": {
+    "HEALTH": {
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "RELIGION": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "precision": 0,
+      "recall": 0,
+      "f1": 0
+    },
+    "CONTACT": {
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "GOVERNMENT_ID": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "precision": 0,
+      "recall": 0,
+      "f1": 0
+    },
+    "PERSON_NAME": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "precision": 0,
+      "recall": 0,
+      "f1": 0
+    },
+    "ACCOUNT_ID": {
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "OTHER": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "precision": 0,
+      "recall": 0,
+      "f1": 0
+    },
+    "UNKNOWN": {
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    }
+  },
+  "prediction_counts": {
+    "CONTACT": 1,
+    "HEALTH": 1,
+    "ACCOUNT_ID": 1,
+    "UNKNOWN": 1
+  },
+  "errors": 0,
+  "median_latency_ms": 2249.52,
+  "p95_latency_ms": 22334.95,
+  "p95_definition": "sorted nearest-rank ceil(0.95*n), no cold/warm filtering"
+}

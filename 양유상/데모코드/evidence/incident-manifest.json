@@ -1,0 +1,85 @@
+{
+  "created_at": "2026-09-22T03:11:54.237045+00:00",
+  "run_id": "incident-4bf3904446c9",
+  "basis": "Stored synthetic requests, observed offline analysis, independent tests and screenshots.",
+  "source_sha256": {
+    "compose.yaml": "2be36c9fce9ee12e5ce107999ad1ad18654b656ce9b5e2a1b0cf88b281f2dde5",
+    "docs/acceptance-plan.md": "00d8ea612acfa7c5342673fd087b0cee54f0a1acc1ad762d5314ab8ff8f54eb2",
+    "docs/architecture.md": "38da39d1a44365f43c6666bb4c4f2aa70a3e554e55f13e2b24666ee392a2e8df",
+    "docs/demo-results.md": "716810cde9d879f75e2c2a2f992ffad1bfc0b55bb8377c11b523e6609f492d44",
+    "docs/incident-demo.md": "0dd8369329f27efc20c9888c0fdea85315a51d47b9df7147437d869525d242d3",
+    "docs/kickoff-plan.md": "0a4320a7187c652322ea3b28c95333ac405ed7692e6306f780086bfc41827b8c",
+    "docs/model-alternative.md": "04728b231a2411a2eae9d68c4bc60548eb8085750e202c7c1db76e11e6d8d5d2",
+    "docs/model-evaluation.md": "fa4b598b3e13e08ba603ccdd34d55eef79de529a032e810e4de35135a1c2e800",
+    "docs/professor-feedback.md": "21d59d5684c4e88f173819f44c7b069dd177326bf91283816b3c0df50006a8c7",
+    "docs/sources.md": "0408ddd69b76a6fafbcbc7e285926565ad2fd9a45dadfb5146c222c421191df4",
+    "gateway/__init__.py": "027c0191fb90d7db11feb4e423a8bf81e461e231f75a1c7582a6d8354ef4612d",
+    "gateway/app.py": "62745eda714f0957678fd82ee7e86ed4c8d6c034c2f9a7f031252eb5d88172f2",
+    "gateway/domain.py": "a79d965e42da4a720e6b28a7dca36b450cc8760af44cbb6162c2e621196a7dd4",
+    "gateway/incident.py": "a8919c853126b047cc77e891486ae7a74eefc29d9308ab8f5c918d6db287afbf",
+    "gateway/mock_api.py": "98df2d7839e1869aa11174cc659b8aefcf14d1a680572b20b26748e5285cefc5",
+    "gateway/privacy.py": "23bef1b1781f25f3fc2d080f905b9f773783546e696794b913d742f24ab74714",
+    "gateway/store.py": "6d9f6848b63c652e305179956463875e8d581c6b750e7c7d284c521bccbcdef0",
+    "README.md": "1dbba2a10bc1dddcb0bb198ca6b943ed70faff0f23d05fb58ed8a3037fab07fc",
+    "requirements.txt": "38842f23efc0d466ab941e94bac5474565b6b8c7e252372347cb49965177602f",
+    "scripts/benchmark.py": "ea14bdd88382dea9344edd18ec058352e1671ce745afbf697e778904a934a6f0",
+    "scripts/build_bundle.py": "d0641258e710fdc1cea948b8fb48cd7fa692ec0be8e800a5d388f8021d8761a6",
+    "scripts/export_incident.py": "2d05f65190782caa1bb0bff0f5d5cc1434235acf3508f95f034e9cbb60144267",
+    "scripts/final_api_smoke.py": "4d50afe0dafded81ba4635cc56fe51444f6f3f1c152491254687c58b07a146c9",
+    "scripts/investigate.py": "5fda73d974e07879e9ee033074f40d4f3f4a0f208c2eb371901b61188f6471b0",
+    "scripts/package_evidence.py": "d8a46dd7c1744d774dbae07f39d18b981215d32e23a7ca8f6aaaa5ea1caf8213",
+    "scripts/package_incident_evidence.py": "c760b921482a46efe2915be8bf1f960d1e96bac3b3beb94f3818ee19e99881ec",
+    "scripts/pin_local_runtime.py": "81eb61cc25c1f6faca35a72c4f2fc9de00635eb46df14b476ad35b98a95dffce",
+    "scripts/prove_incident_offline.py": "eff5b29f2dafb72a057b5be1c7809f69651610f85d4831cd6307b70b54bbbfc9",
+    "scripts/validate_live_model.py": "dbd54545e8467dfb0c6eba33286a7816b4bdf546b769263ac441273e441a2e84",
+    "scripts/write_results.py": "ac56da4c096ce31a35f41ceeb42d3622775612a0952faaf251ed7263527d6954",
+    "static/app.js": "488a6174f958bcc7c75577afb9b8c9cba33ef7da91e0b062f59edd30ea53b034",
+    "static/index.html": "615f5c1081c27c871808aea88a05b949bd967db6bd5e45ad6a81afe2b6a7b725",
+    "static/style.css": "e316b5c9304db9d0d4a8fa438bf86467819384810db9fbdee4a3334378ccfa82",
+    "tests/evaluate_demo.py": "60409250462944822264fca16843fcdd59ec87614dc276ce39bcc8f42ddc6a0c",
+    "tests/evaluate_incident.py": "fc6596b8331bac7856bc52d160735b8d65726732fbdc913a3b5ce9bbd6776ea3",
+    "tests/test_incidents.py": "4172aa20d29e1e14aa73f03c956071d4f4511d33d17b5c2ffa58b48fa1a02537",
+    "tests/test_semantics.py": "bbcc35c9ccd8b449e61ca6970f0f1037e99bd4408e57695ae92f759824f68559"
+  },
+  "evidence_sha256": {
+    "evidence/incident-tests.json": "65c81136f015fec3d66b652da971254212e140b321c2a404fb27760e1b4e672a",
+    "evidence/incident-offline-proof.json": "f63bcb75e1558694a9728f4c39b522526070de0362c9ca027001d91d7a2f5325",
+    "evidence/incident-ui/ui-validation.json": "d151c4b161255f2119d5519a9940b4bea56a248839d62a13e0e3efd995085b98",
+    "evidence/incident-offline-process.json": "c54d89dcefb0e6b4d6942e46b15b7aa5e0f9f567e6182f75400214056b1a86bb"
+  },
+  "full_summary": {
+    "logged_requests": 13,
+    "api_count": 8,
+    "http_success": 11,
+    "denied": 1,
+    "other": 1,
+    "confirmed_policy_requests": 7,
+    "returned_subjects": 3,
+    "confirmed_exposure_subjects": 3
+  },
+  "metadata_summary": {
+    "logged_requests": 13,
+    "api_count": 8,
+    "http_success": 11,
+    "denied": 1,
+    "other": 1,
+    "confirmed_policy_requests": null,
+    "returned_subjects": null,
+    "confirmed_exposure_subjects": null
+  },
+  "offline_checks": {
+    "passed": 8,
+    "total": 8
+  },
+  "ui_checks": {
+    "passed": 53,
+    "total": 53
+  },
+  "restored_synthetic_api": {
+    "port": 8811,
+    "pid": 34040,
+    "checked_at": "2026-09-22T12:10:30.0370173+09:00",
+    "health": "ok"
+  },
+  "prior_evidence": "Earlier 16-scenario authorization results and source ZIP remain historical evidence; not rerun as 60 new checks."
+}

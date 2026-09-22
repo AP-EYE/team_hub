@@ -1,0 +1,301 @@
+{
+  "status": "PASS",
+  "started_at": "2026-09-22T05:30:51.117Z",
+  "source": "One actual same-origin browser form POST; no mock, retry or fallback",
+  "fixed_case_id": "ko96-h01",
+  "method": "semif",
+  "input_mode": "full",
+  "correctness_is_ui_pass_condition": false,
+  "checks": [
+    {
+      "name": "lab_http_200",
+      "passed": true,
+      "detail": 200
+    },
+    {
+      "name": "fixed_case_selected",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "original_text_selected",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "full_mode_selected",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "semif_method_selected",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "button_disabled_during_inference",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "classification_http_200",
+      "passed": true,
+      "detail": 200
+    },
+    {
+      "name": "displayed_label_matches_response",
+      "passed": true,
+      "detail": {
+        "displayed": "건강·의료HEALTH",
+        "response": "HEALTH"
+      }
+    },
+    {
+      "name": "displayed_selected_score_matches_response",
+      "passed": true,
+      "detail": {
+        "displayed": "100.0%",
+        "response": 0.9999999963992243
+      }
+    },
+    {
+      "name": "displayed_latency_matches_response",
+      "passed": true,
+      "detail": {
+        "displayed": "50.92초\nSemIf · 선택지 점수\n필드 + 설명 + 값",
+        "response_ms": 50924.89
+      }
+    },
+    {
+      "name": "eight_option_score_rows",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "score_HEALTH_matches_response",
+      "passed": true,
+      "detail": {
+        "displayed": "100.0%",
+        "response": 0.9999999963992243
+      }
+    },
+    {
+      "name": "score_RELIGION_matches_response",
+      "passed": true,
+      "detail": {
+        "displayed": "0.0%",
+        "response": 1.490878599946588e-9
+      }
+    },
+    {
+      "name": "score_CONTACT_matches_response",
+      "passed": true,
+      "detail": {
+        "displayed": "0.0%",
+        "response": 8.410015045513666e-11
+      }
+    },
+    {
+      "name": "score_GOVERNMENT_ID_matches_response",
+      "passed": true,
+      "detail": {
+        "displayed": "0.0%",
+        "response": 3.4723106698287935e-10
+      }
+    },
+    {
+      "name": "score_PERSON_NAME_matches_response",
+      "passed": true,
+      "detail": {
+        "displayed": "0.0%",
+        "response": 7.567692994012863e-10
+      }
+    },
+    {
+      "name": "score_ACCOUNT_ID_matches_response",
+      "passed": true,
+      "detail": {
+        "displayed": "0.0%",
+        "response": 4.58522695418018e-13
+      }
+    },
+    {
+      "name": "score_OTHER_matches_response",
+      "passed": true,
+      "detail": {
+        "displayed": "0.0%",
+        "response": 6.366139322255174e-13
+      }
+    },
+    {
+      "name": "score_UNKNOWN_matches_response",
+      "passed": true,
+      "detail": {
+        "displayed": "0.0%",
+        "response": 9.207014244092275e-10
+      }
+    },
+    {
+      "name": "allowed_token_mass_matches_response",
+      "passed": true,
+      "detail": {
+        "displayed": "선택지 내부 점수 100.0% · 허용 토큰 질량 100.000%\n위 점수는 정해진 8개 선택지 안의 상대값이며, 보정된 신뢰도나 법적 판단이 아닙니다.",
+        "response": 0.9999991691363773
+      }
+    },
+    {
+      "name": "uncalibrated_score_explanation_visible",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "review_status_visible",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "button_reenabled_after_response",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "no_live_error_displayed",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "exactly_one_post_request",
+      "passed": true,
+      "detail": [
+        {
+          "url": "http://127.0.0.1:8810/api/jev/classify",
+          "method": "POST",
+          "body": "{\"text\":\"저는 어제 천식 진단을 받았어요.\",\"field_path\":\"record.statement\",\"description\":\"가상 환자가 본인의 상태를 적은 문장\",\"input_mode\":\"full\",\"method\":\"semif\"}",
+          "at": "2026-09-22T05:30:54.596Z"
+        }
+      ]
+    },
+    {
+      "name": "post_payload_matches_original_case",
+      "passed": true,
+      "detail": {
+        "text": "저는 어제 천식 진단을 받았어요.",
+        "field_path": "record.statement",
+        "description": "가상 환자가 본인의 상태를 적은 문장",
+        "input_mode": "full",
+        "method": "semif"
+      }
+    },
+    {
+      "name": "post_is_same_origin_classify_route",
+      "passed": true,
+      "detail": "http://127.0.0.1:8810/api/jev/classify"
+    },
+    {
+      "name": "desktop_no_page_overflow",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "no_javascript_errors",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "no_console_errors",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "no_failed_requests",
+      "passed": true,
+      "detail": []
+    }
+  ],
+  "page_errors": [],
+  "console_errors": [],
+  "failed_requests": [],
+  "post_requests": [
+    {
+      "url": "http://127.0.0.1:8810/api/jev/classify",
+      "method": "POST",
+      "body": "{\"text\":\"저는 어제 천식 진단을 받았어요.\",\"field_path\":\"record.statement\",\"description\":\"가상 환자가 본인의 상태를 적은 문장\",\"input_mode\":\"full\",\"method\":\"semif\"}",
+      "at": "2026-09-22T05:30:54.596Z"
+    }
+  ],
+  "screenshots": [
+    "desktop-live-experiment.png",
+    "desktop-live-result.png"
+  ],
+  "browser": "153.0.8010.50",
+  "runtime": {
+    "status": "ready",
+    "model": "Qwen3-4B Q4_K_M",
+    "backend": "actual_semif_llamacpp",
+    "semif_commit": "1f2dea3e25379f9dfc98cb83c324f00ab5deda37",
+    "external_inference": false,
+    "load_seconds": 14.233043699990958,
+    "model_metadata": {
+      "source": "C:\\Users\\andyw\\Desktop\\api-privacy-gateway-demo\\.runtime\\jev-tokenizer\\Qwen3-4B",
+      "revision": "1cfa9a7208912126459214e8b04321603b3df60c",
+      "backend": "llamacpp",
+      "dtype": "gguf-quantized",
+      "gguf": {
+        "file": "sha256-163553aea1b1de62de7c5eb2ef5afb756b4b3133308d9ae7e42e951d8d696ef5",
+        "bytes": 2620774592,
+        "sha256": "163553aea1b1de62de7c5eb2ef5afb756b4b3133308d9ae7e42e951d8d696ef5"
+      },
+      "vocab_size": 151936,
+      "threads": 8,
+      "n_gpu_layers": 0,
+      "max_prompt_tokens": 2048,
+      "context_tokens": 2304,
+      "decode_chunk": 512,
+      "llama_cpp_python_version": "0.3.35",
+      "transformers_version": "5.17.0",
+      "project_native_parameter_override": {
+        "use_extra_bufts": false
+      }
+    },
+    "official_typesafe_jev_executed": false,
+    "busy": false
+  },
+  "batch_status_at_start": "completed",
+  "expected_label": "HEALTH",
+  "expected_label_source": "Demo-authored evaluation criterion; not a browser functionality requirement",
+  "submitted_at": "2026-09-22T05:30:54.561Z",
+  "response_received_at": "2026-09-22T05:31:47.457Z",
+  "browser_submission_to_body_ms": 52895.96,
+  "http_status": 200,
+  "response_file": "live-classification-response.json",
+  "response_sha256": "33d29eecb7cf4ff4fdeb2062a103710aaf8ba86192bab818b2cf6a28dd6f75f3",
+  "response_headers": {
+    "content-length": "3085",
+    "date": "Tue, 22 Sep 2026 05:30:53 GMT",
+    "content-type": "application/json",
+    "server": "uvicorn"
+  },
+  "response_summary": {
+    "label": "HEALTH",
+    "score": 0.9999999963992243,
+    "allowed_token_mass": 0.9999991691363773,
+    "model_latency_ms": 50924.89,
+    "model": "Qwen3-4B Q4_K_M",
+    "source": "actual_semif_llamacpp",
+    "status": "needs_review",
+    "input_mode": "full",
+    "semif_commit": "1f2dea3e25379f9dfc98cb83c324f00ab5deda37",
+    "generated_tokens": 0,
+    "external_inference": false
+  },
+  "matches_expected": true,
+  "expected_and_observed": {
+    "expected": "HEALTH",
+    "observed": "HEALTH"
+  },
+  "displayed_latency": "50.92초\nSemIf · 선택지 점수\n필드 + 설명 + 값",
+  "latency_interpretation": "model_latency_ms is the server-provided measured inference duration. browser_submission_to_body_ms includes the form submission and HTTP response body receipt. This is one sample, not a latency benchmark.",
+  "finished_at": "2026-09-22T05:31:48.090Z",
+  "passed": 31,
+  "total": 31
+}

@@ -1,0 +1,8 @@
+{
+  "status": "INTERRUPTED_BY_EXPERIMENTER",
+  "reason": "Shared preexisting Ollama server was also processing another 4B model. Repeated model swaps contaminated wall latency and could disturb unrelated work. Preserved partial records and switched to a separate server at 11437 using the same existing model files. No old service was stopped or reconfigured.",
+  "use_for_final_accuracy": false,
+  "replacement_run": "qwen3-1p7b-isolated-v1",
+  "prompt_changed": false,
+  "historical_source_field": "Earlier records use live_local_model; current wrapper uses live_local_ollama. This naming change does not change inference."
+}

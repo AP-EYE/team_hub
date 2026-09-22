@@ -1,0 +1,102 @@
+{
+  "label": "CONTACT",
+  "score": 0.999999996482452,
+  "probabilities": {
+    "HEALTH": 3.1967321307915426e-10,
+    "RELIGION": 1.0749318104969142e-09,
+    "CONTACT": 0.999999996482452,
+    "GOVERNMENT_ID": 1.0076923942807262e-09,
+    "PERSON_NAME": 1.0853005064780947e-09,
+    "ACCOUNT_ID": 4.452174182119035e-12,
+    "OTHER": 3.158274815921595e-12,
+    "UNKNOWN": 2.2339602536875412e-11
+  },
+  "allowed_token_mass": 1.000000003517549,
+  "latency_ms": 30425.37,
+  "input_tokens": 618,
+  "model": "Qwen3-4B Q4_K_M",
+  "source": "actual_semif_llamacpp",
+  "backend": "semif_phase1.llamacpp_backend.score",
+  "semif_commit": "1f2dea3e25379f9dfc98cb83c324f00ab5deda37",
+  "status": "needs_review",
+  "input_mode": "full",
+  "score_is_calibrated": false,
+  "prompt_sha256": "7d8a4f464d9276157831d82f46985e412e836db3ca52ed55217a7517543b4c33",
+  "contract_sha256": "736151161d423dfd1f67576c33f73ef92d0e00459eaaa5956723f289d100bbd0",
+  "generated_tokens": 0,
+  "external_inference": false,
+  "gguf_sha256": "163553aea1b1de62de7c5eb2ef5afb756b4b3133308d9ae7e42e951d8d696ef5",
+  "raw": {
+    "id": "live-korean-field",
+    "option_ids": [
+      "HEALTH",
+      "RELIGION",
+      "CONTACT",
+      "GOVERNMENT_ID",
+      "PERSON_NAME",
+      "ACCOUNT_ID",
+      "OTHER",
+      "UNKNOWN"
+    ],
+    "probabilities": [
+      3.1967321307915426e-10,
+      1.0749318104969142e-09,
+      0.999999996482452,
+      1.0076923942807262e-09,
+      1.0853005064780947e-09,
+      4.452174182119035e-12,
+      3.158274815921595e-12,
+      2.2339602536875412e-11
+    ],
+    "option_logits": [
+      23.737592697143555,
+      24.950305938720703,
+      45.601314544677734,
+      24.885711669921875,
+      24.95990562438965,
+      19.463685989379883,
+      19.120319366455078,
+      21.0766544342041
+    ],
+    "answer_token_ids": [
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39
+    ],
+    "input_tokens": 618,
+    "allowed_token_mass": 1.000000003517549,
+    "full_vocab_argmax_id": 34,
+    "prompt_sha256": "7d8a4f464d9276157831d82f46985e412e836db3ca52ed55217a7517543b4c33",
+    "prompt_version": "direct-options-v1",
+    "model": {
+      "source": "C:\\Users\\andyw\\Desktop\\api-privacy-gateway-demo\\.runtime\\jev-tokenizer\\Qwen3-4B",
+      "revision": "1cfa9a7208912126459214e8b04321603b3df60c",
+      "backend": "llamacpp",
+      "dtype": "gguf-quantized",
+      "gguf": {
+        "file": "sha256-163553aea1b1de62de7c5eb2ef5afb756b4b3133308d9ae7e42e951d8d696ef5",
+        "bytes": 2620774592,
+        "sha256": "163553aea1b1de62de7c5eb2ef5afb756b4b3133308d9ae7e42e951d8d696ef5"
+      },
+      "vocab_size": 151936,
+      "threads": 4,
+      "n_gpu_layers": 0,
+      "max_prompt_tokens": 2048,
+      "context_tokens": 2304,
+      "decode_chunk": 512,
+      "llama_cpp_python_version": "0.3.35",
+      "transformers_version": "5.17.0",
+      "serving_config": "llamacpp-direct-v1"
+    },
+    "readout": "quantized last-position logits restricted to declared answer slots; no generated tokens",
+    "probability_status": "conditional option score over quantized weights; uncalibrated as decision confidence",
+    "forward_seconds": 30.39544949994888,
+    "total_seconds": 30.42537239997182
+  },
+  "notice": "점수는 선택지 사이의 상대 선호도이며 정답 확률이나 법적 판단의 확신도가 아닙니다."
+}

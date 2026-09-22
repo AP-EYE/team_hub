@@ -1,0 +1,38 @@
+{
+  "documents": [
+    {
+      "file": "01-architecture.md",
+      "bytes": 18564,
+      "lines": 262,
+      "sha256": "33262edb8b4fed2419e1a657efad5e9bdc2eb160998fd4e861061b48b8b09fda"
+    },
+    {
+      "file": "02-detection-and-privacy.md",
+      "bytes": 24997,
+      "lines": 363,
+      "sha256": "68e826f6325086b29f9aa844afd6b44ffc310b5300f3a8538e09895ff771a968"
+    },
+    {
+      "file": "03-implementation-and-evaluation.md",
+      "bytes": 17132,
+      "lines": 275,
+      "sha256": "a8799b19d0a6cc805957915b073bb88d49a177b1a977e2746de2896168225fc1"
+    },
+    {
+      "file": "04-sources-and-review.md",
+      "bytes": 14451,
+      "lines": 133,
+      "sha256": "7629108c9c98ac08dcce1a49022d659e52e5b86a484755ca585336ba5148dc6d"
+    },
+    {
+      "file": "README.md",
+      "bytes": 11720,
+      "lines": 129,
+      "sha256": "c40f6db0f997378108c978a1e47407bb2a30da14adf2991869d480fae590f4ab"
+    }
+  ],
+  "yaml_parser_available": false,
+  "errors": [],
+  "original_attachments_unchanged": true,
+  "scope": "Local document consistency only; no product runtime or performance test; Mermaid not rendered."
+}

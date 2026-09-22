@@ -1,0 +1,12 @@
+{
+  "stopped_pid": 47228,
+  "module": "gateway.mock_api:app",
+  "port": 8811,
+  "stopped_at": "2026-09-22T12:08:15.1370324+09:00",
+  "restored": {
+    "port": 8811,
+    "pid": 34040,
+    "checked_at": "2026-09-22T12:10:30.0370173+09:00",
+    "health": "ok"
+  }
+}
