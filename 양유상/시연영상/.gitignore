@@ -1,3 +1,4 @@
+# Temporary screen captures and separate audio tracks; the final user-recorded MP4 can be committed.
 rendered/audio/*.wav
 rendered/video/*.webm
 rendered/video/*.png
