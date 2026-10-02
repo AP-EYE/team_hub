@@ -1,0 +1,1042 @@
+Privacy Risk Predictions Based on F undamental Understanding of
+Personal Data and an Evolving Threat Landscape
+Haoran Niu
+ a , K. Suzanne Barber
+ b
+The University of T exas at Austin
+haoranniu@utexas.edu, sbarber@identity .utexas.edu
+Keywords:
+privacy protection, risk prediction, link prediction algorithms, graph neural networks, graph
+convolutional networks, deep learning, identity graph.
+Abstract:
+It is diﬀicult for individuals and organizations to protect personal information without a fun-
+damental understanding of relative privacy risks. By analyzing over 5,000 empirical identity
+theft and fraud cases, this research identifies which types of personal data are exposed, how
+frequently such exposures occur, and what the consequences of those exposures are. W e con-
+struct an Identity Ecosystem graph—a foundational, graph-based model in which nodes represent
+personally identifiable information (PII) attributes and edges represent empirical disclosure re-
+lationships between them (e.g., one PII attribute is exposed due to the exposure of another).
+Leveraging this graph structure, we develop a privacy risk prediction framework that uses graph
+theory and graph neural networks to estimate the likelihood of further disclosures when cer-
+tain PII attributes are compromised. The results show that our approach effectively addresses
+the core question: Can the disclosure of a given identity attribute possibly lead to the disclo-
+sure of another attribute? The code for the privacy risk prediction framework is available at:
+https://github.com/niu-haoran/Privacy-Risk-Predictions-and-UTCID-Identity-Ecosystem.git.
+1 INTRODUCTION
+Different individuals and organizations have dif-
+ferent sets of personally identifiable information
+(PII), and therefore hold distinct perspectives on
+which PII attributes are more vulnerable, more
+valuable, and in greater need of protection. An
+individual’s PII includes personal data in four
+categories—What Y ou Know (e.g., name, ad-
+dress, phone number, mother’s maiden name),
+What Y ou Have (e.g., driver’s license, Social Se-
+curity card, employee ID, passport), What Y ou
+Are (e.g., fingerprint, voice, facial image), and
+What Y ou Do (e.g., patterns of life such as web-
+sites visited, GPS location history , phone logs)
+[Zaeem et al., 2016].
+Protecting PII data can be costly and time-
+consuming. Previous research has uncovered var-
+ious strategies to reduce the risks of unintended
+data disclosure [Karr and Reiter, 2014], including
+a
+ https://orcid.org/0000-0003-4596-6127
+b
+ https://orcid.org/0000-0003-2906-6583
+statistical disclosure limitation (SDL) techniques
+commonly used by national statistical agencies
+before releasing public-use data sets. Mean-
+while, research on data self-destruction focuses
+on protecting data privacy for users who choose
+cloud services [Zeng et al., 2010, Geambasu et al.,
+2009]. Among the many existing privacy protec-
+tion methodologies, this paper focuses on the first
+step of privacy protection: determining which set
+of data to protect. Protecting the most valu-
+able and risky (i.e., likely to be exposed) set of
+PII promises to be a more effective and eﬀicient
+method of protecting a person’s personal, sensi-
+tive data. This is because individuals and insti-
+tutions usually have limited time, energy , and fi-
+nancial resources allocated for privacy protection.
+This research is based on the premise that if
+individuals and organizations have a more funda-
+mental understanding and a more accurate eval-
+uation of privacy risks resulting from disclosing
+PII, they will be in a better position to protect
+that information. Additionally , better risk anal-
+arXiv:2508.04542v2  [cs.LG]  3 Mar 2026
+ysis of personal data sharing will inform a wide
+range of information security and privacy appli-
+cations.
+Accordingly , this research determines which
+data require the most protection by evaluating
+the consequences of exposing specific PII at-
+tributes. Specifically , it analyzes the privacy risks
+incurred when an individual or an organization
+shares or loses a given PII attribute. W e primar-
+ily seek to answer the question: Could the disclo-
+sure of a given PII attribute, such as date of birth,
+lead to the disclosure of another attribute, such as
+an A TM PIN? PII attributes have associated risk
+values [Zaeem et al., 2016, Zaiss et al., 2019]. By
+evaluating the risk scores of the potentially dis-
+closed PII attributes, we provide a quantified pre-
+diction of privacy risks based on empirical data on
+disclosures.
+T o provide quantified predictions of privacy
+risks, we leverage graph theory . Many well-
+studied networks, such as transportation net-
+works and social networks, are analyzed using
+graphs [Nippani et al., 2023, Ediger et al., 2010].
+Similar to these systems, meaningful connections
+and relationships exist among PII attributes.
+This research represents each PII attribute as a
+node in the graph. The directional edges capture
+the disclosure/exposure relationship between two
+PII attributes—specifically , the probability that
+the disclosure of one PII attribute (e.g., date of
+birth) could lead to the exposure of another PII
+attribute (e.g., address). W e refer to this graph
+of PII nodes with directed disclosure or exposure
+relationships as the University of T exas Center
+for Identity (UTCID) Identity Ecosystem graph.
+After constructing UTCID Identity Ecosys-
+tem graphs, we create and train three different
+link prediction models. W e also develop a risk
+score calculation model. T ogether, the UTCID
+Identity Ecosystem graphs, the link prediction
+algorithms, and the risk score calculation model
+form a comprehensive risk prediction framework.
+Suppose an individual has lost PII attributes
+A1 and B2 and wishes to determine which other
+PII attributes become highly risky as a result.
+The pipeline of the risk prediction framework is
+outlined below:
+• The individual provides a risk score threshold
+(e.g., on a [0, 100] scale) to indicate the level of
+risk of concern. The default risk score thresh-
+old is 0, meaning that all potentially disclosed
+attributes are considered.
+• The individual specifies the PII attributes A1
+and B2 that were stolen or lost.
+• The PII attribute set is defined as all nodes
+in the UTCID Identity Ecosystem graph as-
+sociated with the individual, excluding A1 and
+B2. Alternatively , the individual may specify
+separate PII attribute sets of interest for A1
+and B2.
+• The risk prediction model—composed of a
+link prediction module and a risk score cal-
+culation module—takes A1, B2, the risk score
+threshold, and the PII attribute set as input,
+and outputs the PII attributes that may be
+disclosed and have risk scores exceeding the
+specified threshold.
+Figure 1 uses an example of risk score thresh-
+old 75 to explain the pipeline. In general, the
+contributions of this paper include:
+• W e propose a method for constructing UTCID
+Identity Ecosystem graphs and provide mech-
+anisms to customize the graphs for different
+scales and individual needs. (Section 3).
+• W e create and train three different link pre-
+diction models (Section 4.2, 4.3, and 4.4).
+• W e conduct extensive evaluations on UTCID
+Identity Ecosystem graphs of different sizes to
+demonstrate the performance of the proposed
+link prediction models. (Section 5).
+• W e construct a risk score calculation model
+to quantify privacy risks associated with PII
+disclosures (Section 6).
+Figure 1: Pipeline of the risk prediction framework, il-
+lustrating the process from user query to PII attribute
+risk prediction results. User may choose different link
+prediction output formats depending on whether link
+prediction probabilities are heavily taken into account
+in the risk score calculation. Details of risk score cal-
+culation under different output options are provided
+in Section 6.
+2 RELA TED WORK
+Privacy protection and risk assessment are im-
+portant research topics for many market sectors
+that collect, store, and analyze personally iden-
+tifiable information. Researchers have developed
+a variety of data mining techniques to find suspi-
+cious patterns in data and identity fraud trans-
+actions [Javaid, 2024]. Applications of machine
+learning and data mining algorithms can help
+market sectors such as financial services, health-
+care, transportation, and others mitigate finan-
+cial losses and time costs.
+F or instance, the paper [Zhang and Guo, 2024]
+provides a method to assess privacy risks for med-
+ical big data. The researchers also apply the
+F uzzy C-means clustering algorithm to cluster
+users into different groups, assign different per-
+missions, and improve the access control accu-
+racy .
+Despite substantial research on privacy risk
+assessment, there is limited work on identifying
+the connections among different aspects of per-
+sonal data. This paper not only fills this gap
+by uncovering interconnections between personal
+data attributes, but also employs graph-based
+models to represent and predict their interac-
+tions, thereby revealing the risks associated with
+data sharing and leakage.
+In relation to the graph-based models utilized
+in this project, link prediction methods play an
+important role. Link prediction is commonly
+used to detect missing links or add future con-
+nections. There are some simple methodologies
+based on node similarity , such as Jaccard’s co-
+eﬀicient [Murphy , 1996] and the Adamic/Adar
+measure [Adamic and Adar, 2003]. These tech-
+niques are computationally eﬀicient but do not
+perform well across many types of graphs. There-
+fore, an increasing number of researchers have
+turned to machine learning algorithms [W ang
+et al., 2007, Lichtenwalter et al., 2010, Al Hasan
+et al., 2006].
+The framework of this paper combines both
+simple similarity-based properties/scores and su-
+pervised learning algorithms, enabling eﬀicient
+prediction of PII risks.
+3 UTCID IDENTITY
+ECOSYSTEM GRAPH
+CONSTRUCTION
+W e now explore the UTCID Identity
+Ecosystem—its content, its privacy risk an-
+alytics, and the new prediction capabilities
+introduced in this paper to help individuals
+protect their personal information from unin-
+tended and harmful disclosure. The Center for
+Identity at The University of T exas at Austin
+(UTCID) first introduced an Identity Ecosystem
+graph [Zaeem et al., 2016]. The UTCID Identity
+Ecosystem graph represents PII attributes (i.e.,
+personal data) as nodes and connects these nodes
+based on various types of relationships between
+PII attributes (Figure 2). While the work
+in [Zaeem et al., 2016] presents multiple types
+of relationships, this paper focuses specifically
+on the probability of disclosure relationship for
+privacy risk prediction.
+Figure 2 illustrates the UTCID Identity
+Ecosystem graph, with nodes colored by Type
+(What Y ou Know, What Y ou Have, What Y ou
+Are, What Y ou Do) and sized by value. Based
+on more than 5, 000 identity theft and fraud
+cases collected in the Identity Threat Assessment
+and Prediction (IT AP) project [Zaeem et al.,
+2016, Zaiss et al., 2019] and analyzed to build the
+UTCID Identity Ecosystem graph, there is evi-
+dence that PII attributes have relative value. In
+an effort to estimate the relative contribution of
+a PII attribute Ai to cumulative monetary loss
+across cases in which Ai was used or targeted, the
+value of Ai can be estimated as Equation 1. Let
+SAi denote the set of cases in which Ai appears,
+and Cj ∈ SAi denotes an individual case.
+value(Ai) = ∑
+Cj∈SAi
+MonetaryLoss(Cj)
+NumbrO f Attributes(Cj) (1)
+F or simplicity , we refer to the collection of
+identity theft and fraud cases from the IT AP
+project as the “UTCID IT AP dataset” .
+In this paper, we reconstruct the UTCID Iden-
+tity Ecosystem graph and retain only a min-
+imal set of structural graph features in order
+to predict PII disclosure risks based solely on
+PII attribute occurrences in the IT AP dataset.
+The construction of the new Identity Ecosystem
+graphs—referred to as UTCID Identity Ecosys-
+tem v2.01—follows the principles outlined below.
+1 UTCID Identity Ecosystem v2.0 offers a new
+Figure 2: UTCID Identity Ecosystem Graph Repre-
+senting PII Attributes and Their Relationships.
+F uture work will examine how these prediction of
+PII risks can be used to predict harms such as
+monetary loss.
+W e use nodes to represent PII attributes. A
+directed edge between PII attributes A and B, de-
+noted as A → B, indicates that an event disclos-
+ing attribute A leads to the disclosure of attribute
+B. Each edge is assigned a weight. Specifically ,
+an edge A → B with weight wi indicates that an
+event disclosing A may lead to the disclosure of
+B, and that such a disclosure occurred wi times in
+the empirical UTCID IT AP dataset [Zaiss et al.,
+2019].
+Figure 3 presents an example visualization
+based on a simplified use case, where edge thick-
+ness corresponds to the edge weight, representing
+the frequency of a specific disclosure relationship
+(i.e., A → B with weight wi). This figure illus-
+trates a simple UTCID Identity Ecosystem graph
+with three PII attributes. The weight of the edge
+“name → bank account” is 3, indicating three ob-
+served events in which disclosure of a name led to
+the disclosure of a bank account. Similarly , the
+weight of the edge “name → birth date” is 7, indi-
+cating seven observed events in which disclosure
+of a name led to the disclosure of a birth date.
+Assuming that these weights are derived from dis-
+tinct events, the example graph illustrates the fol-
+lowing:
+• Disclosure of the “name” attribute may lead
+to the disclosure of a “bank account” with
+probability 0.3 (calculated as 3/(3+ 7) =0.3).
+• Disclosure of the “name” attribute may lead
+to the disclosure of a “birth date” with prob-
+ability 0.7 (calculated as 7/(3 + 7) =0.7).
+Throughout this paper, we use UTCID Iden-
+tity Ecosystem graphs, constructed according to
+means by which Identity Ecosystem graphs are con-
+structed to promote accurate prediction of risks re-
+sulting from identity attribute exposure and disclo-
+sures. Throughout this paper, references to the UT-
+CID Identity Ecosystem refer to UTCID Identity
+Ecosystem v2.0.
+Figure 3: An Example Identity Ecosystem Graph
+with Three Nodes.
+the rules described above, to analyze and predict
+PII attribute disclosures and, consequently , pri-
+vacy risks.
+T o collect and structure the data necessary to
+perform the proposed risk prediction, two steps
+are required. First, we preprocess the UTCID
+IT AP dataset. F or the inputs and outputs of
+the identity theft and fraud cases in the IT AP
+dataset, only identity-related information is re-
+tained. F or each case, inputs are the data used by
+the actors to conduct the identity theft or fraud.
+The outputs include the consequent data that are
+acquired, stolen, or otherwise exposed by the con-
+clusion of the identity theft or fraud actions.
+The second step is to construct the UTCID
+Identity Ecosystem graphs. W e previously intro-
+duced the graph construction rules using a small
+example graph (e.g., Figure 3, which illustrates
+a graph with three nodes and two edges). Here,
+we provide a more comprehensive explanation of
+these rules using multiple input and output iden-
+tity attributes.
+Suppose there is a reported identity theft and
+fraud case. F rom this case, three input PII
+attributes can be extracted: “bank account”,
+“name”, and “Social Security Number” (abbre-
+viated as “SSN”). The corresponding output PII
+attributes are “credit card” and “debit card” .
+If we construct a UTCID Identity Ecosystem
+graph based on this single case, five nodes and
+six directed edges are added to the graph. The
+five nodes are “bank account”, “name”, “SSN”,
+“credit card”, and “debit card” . The six directed
+edges are listed below:
+• F rom “bank account” to “credit card” .
+• F rom “bank account” to “debit card” .
+• F rom “name” to “credit card” .
+• F rom “name” to “debit card” .
+• F rom “SSN” to “credit card” .
+• F rom “SSN” to “debit card” .
+Because this graph is constructed from a single
+identity theft and fraud case, every edge in the
+graph has a weight 1, reflecting that each input–
+output attribute pair appears only once within
+this scope.
+Now consider a more complex scenario involv-
+ing three identity theft and fraud cases (Cases
+1, 2 and 3). In Case 1, the input PII attributes
+are “bank account”, “name”, and “SSN”, and the
+corresponding output attributes are “credit card”
+and “debit card” . In Case 2, the input attributes
+are “bank account” and “SSN”, and the output
+attributes are “birth date”, “credit history”, and
+“credit card” . In Case 3, the input attribute is
+“SSN”, and the output attribute is “bank ac-
+count” .
+Across these three cases, there are seven
+unique PII attributes: “bank account”, “name”,
+“SSN”, “credit card”, “debit card”, “birth date”
+and “credit history” . Based on the three cases,
+the relationships among the seven attributes are
+listed below:
+• bank account → credit card (weight: 2).
+• bank account → debit card (weight: 1).
+• bank account → birth date (weight: 1).
+• bank account → credit history (weight: 1).
+• name → credit card (weight: 1).
+• name → debit card (weight: 1).
+• SSN → credit card (weight: 2).
+• SSN → debit card (weight: 1).
+• SSN → birth date (weight: 1).
+• SSN → credit history (weight: 1).
+• SSN → bank account (weight: 1).
+These weights reflect the occurrence frequen-
+cies of the input–output pairs among the identity
+theft and fraud cases. Figure 4 shows a visual-
+ization of the UTCID Identity Ecosystem graph
+constructed from the three-case example above.
+The largest UTCID Identity Ecosystem graph
+we construct in this paper is based on 5,636 cases
+from the UTCID IT AP dataset. F ollowing the
+procedures given above, the resulting graph con-
+tains 1,733 nodes and 19,483 edges. W e denote
+this graph as Ggrand.
+F ollowing the construction rules, UTCID
+Identity Ecosystem graphs can be constructed at
+different scales. F or example, the UTCID IT AP
+dataset includes identity theft and fraud cases
+spanning a wide range of market sectors and vic-
+tim demographics, involving different types of
+PII with varying values and losses. By filter-
+ing cases based on specific parameters (e.g., vic-
+tim age, market sector, monetary loss amount),
+we can tailor the analysis to particular scenarios.
+As an illustration, filtering for cases with losses
+greater than $10,000 yields a smaller graph with
+761 nodes and 6,413 edges. W e denote this fil-
+tered graph as Gbig_loss.
+Figure 4: An Example of UTCID Identity Ecosystem
+Graph Construction Using Three Cases.
+4 LINK PREDICTION
+ALGORITHMS
+T o answer a question such as Could the disclo-
+sure of a given identity attribute possibly lead
+to the disclosure of another identity attribute of
+concern?, we convert the question into a link pre-
+diction task [Kumar et al., 2020] and a risk score
+calculation process, as shown in Figure 1. F or the
+link prediction task, we aim to determine whether
+a directed edge exists between an initial PII at-
+tribute (input) and a target PII attribute (out-
+put).
+Suppose a UTCID Identity Ecosystem graph
+GT X is constructed based on identity theft and
+fraud cases that occurred in T exas. If an individ-
+ual living in T exas is involved in a breach and is
+informed that their driver’s license number was
+disclosed, then, given knowledge of GT X, the link
+prediction algorithms can help determine whether
+a possible link (i.e., a potential privacy risk) exists
+between the disclosed “driver’s license number”
+and other PII attributes, such as a bank account
+or a credit card.
+In general, link prediction algorithms can be
+used to examine whether directed links exist be-
+tween initially exposed PII attributes and the
+remaining PII attributes in a UTCID Identity
+Ecosystem graph. An overview of link prediction
+algorithms is shown in Figure 10 in the Appendix,
+constructed based on [Kumar et al., 2020, Arrar
+et al., 2024].
+Based on prior experimental studies con-
+ducted on ten benchmark homogeneous graphs
+(e.g., Ecoli [Salgado et al., 2001], FB15K [New-
+man, 2006]), GNN-based link prediction algo-
+rithms have demonstrated superior performance
+compared with similarity-based methods [Is-
+lam et al., 2020]. Additional research shows
+that graph convolutional networks (GCNs) and
+W ord2V ec combined with a multilayer perceptron
+(MLP) offer significant computational eﬀiciency
+advantages over exponential random graph–
+based approaches while maintaining strong pre-
+diction performance [Sosa et al., 2024].
+Moreover, because the nodes of a UTCID
+Identity Ecosystem graph represent PII at-
+tributes and carry background information re-
+lated to individuals’ identities, a major limita-
+tion of non-learning-based approaches is their dif-
+ficulty in incorporating contextual information.
+Given the potentially large scale of UTCID Iden-
+tity Ecosystem graphs and the importance of ac-
+curate privacy risk prediction, it is necessary to
+develop link prediction algorithms that are both
+eﬀicient and accurate while accounting for graph
+structural complexity . Therefore, we narrow the
+link prediction algorithm choices to GNN-based
+and general deep-learning-based models, which
+are highlighted with red boxes in Figure 10. In
+the following subsections, we discuss the features
+of the UTCID Identity Ecosystem graphs that
+are used as inputs to the deep models. W e also
+explain the three link prediction models that we
+propose.
+4.1 Semantic Processing for PII
+Attribute Nodes
+The nodes of UTCID Identity Ecosystem graphs
+correspond to PII attributes. These PII at-
+tributes are represented in natural language to de-
+scribe identity- and privacy-related information.
+In other words, each PII attribute consists of one
+or more English words. In this paper, we focus
+exclusively on English-language PII attributes.
+Each English word has a corresponding defi-
+nition that can be obtained from standard dic-
+tionaries. Accordingly , we define the contextual
+information of PII attributes as the collection of
+word-level definitions associated with the words
+composing that attribute. W e refer to the process
+of transforming a PII attribute from its surface
+form into a word-level semantic representation as
+semantic processing.
+Our hypothesis is that, similar to inherent
+node properties of the UTCID Identity Ecosys-
+tem graphs (e.g., node degrees and node cen-
+trality), semantic features derived from PII at-
+tribute descriptions—such as token IDs obtained
+from word-level representations—provide mean-
+ingful node features. These semantic features can
+assist in predicting whether a link exists between
+two PII attribute nodes. W e evaluate this hy-
+pothesis using the proposed model described in
+Section 4.4.
+The semantic processing toolkit we use is the
+Natural Language Processing T oolkit (NL TK)
+[Bird et al., 2009]. F or each node in a UTCID
+Identity Ecosystem graph, the semantic process-
+ing procedure consists of the following steps:
+• Extract the words that compose the PII at-
+tribute.
+• Process each word iteratively using the NL TK
+synsets and definition functions to obtain a
+textual explanation. Specifically , we apply the
+synsets function to obtain the synonym set for
+each word. W e then concatenate the outputs
+of definition corresponding to each item in the
+synonym set to derive the explanation of each
+word.
+• Concatenate the explanations of all con-
+stituent words into a single paragraph repre-
+senting the contextual information of the PII
+attribute.
+F urthermore, we use the BER T-base-uncased
+tokenizer [Devlin et al., 2019] to obtain token
+IDs from the context information associated with
+each node. W e treat the resulting token IDs as
+weak contextual signals—deterministic numerical
+representations that reflect semantic features and
+capture contextual patterns to a limited degree.
+Since our focus is not on comparing tokenization
+techniques or optimizing semantic embeddings,
+we do not evaluate alternative tokenizers in this
+paper. Our objective is to demonstrate that in-
+corporating weak semantic information can im-
+prove link prediction performance. W e refer to
+the token IDs generated from context information
+using the BER T-base-uncased tokenizer as se-
+mantic encoded signals or semantic embeddings,
+noting that this usage differs from the conven-
+tional definition of semantic embeddings.
+T o illustrate the process of converting PII at-
+tributes written in English into semantic embed-
+dings, we consider a concrete example: the PII
+attribute “employee credential” (Figure 5). This
+attribute consists of two words: “employee” and
+“credential” . As described above, our semantic
+processing algorithm applies the NL TK synsets
+and definition functions to each word. Using
+this procedure, the context information for “em-
+ployee” is “a worker who is hired to perform a
+job”, and the context information for “credential”
+is “a document attesting to the truth of certain
+stated facts” . Concatenating these two strings
+yields the context information for “employee cre-
+dential”: “a worker who is hired to perform a
+job a document attesting to the truth of certain
+stated facts” . This text is then passed to the
+pretrained BER T-base-uncased tokenizer [Devlin
+et al., 2019] to generate the corresponding token
+ID sequence. The token ID sequences associated
+with different PII attribute nodes may vary in
+length. In our experiments, the median seman-
+tic embedding length across all nodes in Ggrand is
+162. Accordingly , we truncate sequences longer
+than 162 and apply zero padding to sequences
+shorter than 162.
+4.2 MLP-Based Model for Link
+Prediction – F eatureMLP
+F or each node in a directed graph, basic node
+properties such as in-degree and out-degree can
+be computed. These properties can be used to
+characterize structural similarity between nodes.
+Since links are more likely to exist between sim-
+ilar nodes [Al Musawi et al., 2022], and be-
+cause powerful yet simple classifiers such as multi-
+layer perceptrons (MLPs) [Rumelhart et al., 1986]
+and support vector machines (SVMs) [Cortes and
+V apnik, 1995] are effective in modeling nonlinear
+relationships, we construct an MLP-based link
+prediction model that uses basic node properties
+as features [Al Hasan et al., 2006]. An additional
+motivation for using an MLP is to maintain ar-
+chitectural consistency among the deep learning
+models developed in this paper. W e refer to this
+model as F eatureMLP .
+The overall model structure is shown in Figure
+6. F or F eatureMLP , the node features (illustrated
+by the pink block in Figure 6) include:
+• in-degree: the number of incoming links for
+each node;
+• out-degree: the number of outgoing links for
+each node;
+• betweenness centrality [F reeman, 1977]: a
+measure of how often a node lies on shortest
+paths between other nodes;
+• closeness centrality [Sabidussi, 1966]: a mea-
+sure of how close a node is to all other nodes
+in the graph.
+The edge feature vector is formed by concate-
+nating the feature vector of a node pair.
+Since each node feature vector has dimen-
+sion four, the resulting edge vector has dimension
+eight.
+F eatureMLP is computationally eﬀicient and
+straightforward to implement, relying on low-
+level node statistics to perform link prediction.
+However, while these features capture global
+structural summaries, F eatureMLP does not ex-
+plicitly model higher-order relational patterns or
+neighborhood-level interactions in the graph. T o
+address scenarios that require capturing more
+complex structural dependencies and to maintain
+robust performance on large-scale graphs, we fur-
+ther develop additional link prediction models in
+Section 4.3 and 4.4.
+4.3 GCN-Based Model for Link
+Prediction – F eatureGCN
+Building on the first model (F eatureMLP), we
+next seek to leverage graph structural informa-
+tion. Therefore, we employ a two-layer graph con-
+volutional network (GCN). Note that the term
+GCN is used here in a broad sense, encompass-
+ing successors of the original GCN architecture,
+including GraphSAGE [Hamilton et al., 2017].
+The model structure is shown in Figure 7.
+W e use two SAGEConv layers (based on Graph-
+SAGE), implemented using the PyT orch Geomet-
+ric package [F ey and Lenssen, 2019], to gener-
+ate node embeddings that capture local graph
+structural information. The output node em-
+beddings have dimension 16. W e then com-
+bine the node embeddings to form edge embed-
+dings. F or each edge embedding, the correspond-
+ing node embeddings are denoted as (ne1, ne2).
+W e apply element-wise multiplication to incor-
+porate the two node embeddings, resulting in a
+16-dimensional edge interaction output ne1 ⊙ne2.
+This interaction output is denoted by E1 in Fig-
+ure 7.
+F eatureGCN simultaneously leverages low-
+level node properties and graph structural infor-
+mation. However, as discussed earlier, the seman-
+tic information associated with PII attributes also
+Figure 5: Process of Converting PII Attributes Expressed in English into Semantic Embeddings.
+Figure 6: Overview of the F eatureMLP Model Archi-
+tecture.
+Figure 7: Overview of the F eatureGCN Model Archi-
+tecture.
+contains valuable signals. Therefore, a more ad-
+vanced GCN-based model is required to incorpo-
+rate semantic information, which we introduce in
+the next section.
+4.4 GCN with Semantic Embeddings
+for Link Prediction - SeeGCN
+As discussed in Section 4.1, we obtain weak se-
+mantic embeddings—namely , the token ID se-
+quences derived from the explanations of PII
+attributes—for each node in the input graphs.
+Building on the F eatureGCN model, we incorpo-
+rate these semantic embeddings into the model
+and demonstrate that they can improve link pre-
+diction performance. The proposed model struc-
+ture is shown in Figure 8, and we refer to this
+new model as SeeGCN.
+F or each pair of nodes (n1, n2) correspond-
+ing to an edge in the input graphs, we obtain
+a pair of 162-dimensional node semantic embed-
+dings (se1, se2). W e refer to this pair as the edge
+semantic embedding. W e then combine se1 and
+se2 through concatenation followed by fully con-
+nected layers. Note that normalizing the concate-
+nated semantic token ID sequence pair (se1, se2),
+as well as intermediate semantic representations
+produced by the fully connected layers, leads to
+more robust performance across different graphs.
+The resulting semantic concatenation is denoted
+as C1 in Figure 8. Passing C1 through fully con-
+nected layers yields an eight-dimensional seman-
+tic processing result, denoted as S1.
+The edge interaction output E1 in Figure 8
+is identical to that defined in Figure 7. W e con-
+catenate E1 and S1 to obtain the 24-dimensional
+representation C2, as shown in Figure 8.
+Overall, E1, C2, and C1 are each passed
+through fully connected layers, producing O1, O2,
+and O3, respectively . O1, O2, and O3 are scalars.
+W e concatenate these three scalars to form a
+three-dimensional vector, which is then used to
+generate the final prediction results.
+This link prediction model effectively inte-
+grates low-level node properties, graph structural
+information, and semantic information. More-
+over, the model shares architectural components
+with F eatureGCN and remains straightforward to
+implement.
+5 RESUL TS AND ANAL YSIS
+T o compare the performance of the three pro-
+posed models, we evaluate them on the Ggrand
+and Gbig_loss graphs, as described in Section 3.
+W e also randomly sample identity theft and fraud
+cases from the UTCID IT AP dataset and con-
+struct graphs based on these samples. W e denote
+these graphs as G(#nodes,#edges), where #nodes rep-
+resents the total number of nodes and #edges rep-
+resents the total number of edges in the graph. T o
+examine model robustness across graphs of differ-
+ent sizes, the number of randomly sampled cases
+ranges from 500 to 5,000, with evenly spaced in-
+tervals. Graphs are constructed using the Net-
+workX [Hagberg et al., 2008] Python library and
+converted to PyT orch Geometric (PyG) data us-
+ing the from_networkX function provided by
+PyG [F ey and Lenssen, 2019]. The number of
+training epochs is set to 100, and the learning
+rate is set to 0.001, which is the default value
+for the Adam optimizer. F or each graph, edges
+Figure 8: Overview of the SeeGCN Model Architecture. Normalizing the edge semantic embeddings before
+subsequent processing improves robustness across different graphs.
+are randomly split into training and validation
+sets using the RandomLinkSplit function from
+the transforms module of PyG, with a training-
+to-validation ratio of 9:1. The model performance
+results, based on the experiments we have con-
+ducted, are reported in T able 1. All experiments
+follow a consistent training and validation data
+construction strategy , as documented in the re-
+leased code repository .
+The table summarizes the performance of dif-
+ferent models across the evaluated graphs. F or
+each experiment, we report the best validation
+performance achieved over 100 training epochs in
+terms of ROC AUC [Hanley and McNeil, 1982]
+and link existence prediction accuracy . F or each
+graph, the highest AUC and accuracy values are
+highlighted in bold. V alues below 0.7 are high-
+lighted in red to indicate relatively poor results.
+Across all experiments, at least two of the
+three proposed models achieve strong predictive
+performance, with AUC scores above 0.8. Al-
+though we designate scores below 0.7 as relatively
+poor, all reported performances remain above the
+random-guessing baseline of 0.5. These results
+indicate that all three proposed models demon-
+strate robust predictive capability . Notably , the
+SeeGCN model does not exhibit any results below
+the 0.7 threshold, suggesting strong robustness
+across both AUC and accuracy metrics. Based on
+the results reported in T able 1, F eatureGCN and
+SeeGCN generally maintain stable link prediction
+performance on larger graphs, with the exception
+that F eatureGCN performs poorly on the graph
+constructed from 5,000 cases (G(1625,17694)). Over-
+all, the findings show that link relationships in
+UTCID Identity Ecosystem graphs can be effec-
+tively predicted using the proposed models.
+In this paper, UTCID Identity Ecosystem
+graphs are constructed from empirical cases in
+the UTCID IT AP dataset. The original dataset
+contains manual annotation errors and inconsis-
+tencies. While some of the errors are removed
+during preprocessing, the dataset is intentionally
+not heavily cleaned, resulting in graphs that con-
+tain noise. Despite this, the models achieve AUC
+scores as high as 0.95, and at least two of the three
+proposed models attain AUC values above 0.80
+in every experiment. These results suggest that
+the proposed link prediction framework is robust
+to data noise. Moreover, they indicate that pre-
+diction performance could further improve when
+using cleaner data or when users construct cus-
+tomized UTCID Identity Ecosystem graphs from
+higher-quality empirical cases.
+6 RISK SCORE CALCULA TION
+F or the same PII attribute, people may assign
+different levels of importance. Some people may
+spend most of their time on social media, while
+others may only check social media occasionally .
+It is therefore reasonable that individuals in the
+former group would assign higher risk scores to
+usernames and passwords associated with their
+online accounts. After identifying potentially dis-
+closed nodes based on the link prediction results
+from Section 4, risk scores can be assigned either
+graph number of cases involved F eatureMLP F eatureGCN SeeGCN
+AUC ACC AUC ACC AUC ACC
+Ggrand 5,636 0.94 0.84 0.88 0.83 0.93 0.85
+Gbig_loss 897 0.92 0.80 0.86 0.82 0.90 0.83
+G(611,3094) 500 0.95 0.87 0.89 0.84 0.91 0.83
+G(823,5135) 1,000 0.94 0.87 0.91 0.84 0.92 0.85
+G(1003,7221) 1,500 0.93 0.85 0.90 0.77 0.92 0.83
+G(1128,9095) 2,000 0.93 0.65 0.91 0.85 0.93 0.85
+G(1213,10647) 2,500 0.94 0.83 0.91 0.83 0.90 0.83
+G(1318,12279) 3,000 0.94 0.61 0.89 0.82 0.92 0.84
+G(1398,13689) 3,500 0.94 0.53 0.89 0.84 0.91 0.85
+G(1471,15018) 4,000 0.94 0.77 0.86 0.82 0.93 0.86
+G(1554,16413) 4,500 0.93 0.61 0.90 0.85 0.93 0.85
+G(1625,17694) 5,000 0.94 0.86 0.68 0.64 0.92 0.86
+T able 1: Model Evaluation Results on Different Graphs; AUC—ROC AUC score, ACC—Accuracy .
+manually according to individual preferences or
+automatically using quantitative evaluation met-
+rics.
+In this section, we propose a risk score calcu-
+lation method. Suppose the query is to assess the
+risk scores of nodes related to the disclosure of a
+PII attribute α. Let the PII attribute set be de-
+fined as all nodes in a UTCID Identity Ecosystem
+graph except for α, denoted as {n1, n2, n3, . . . ,nm},
+where m is the total number of attributes in the
+set.
+W e apply the PageRank algorithm [Page
+et al., 1999] to the graph of interest to obtain
+PageRank coeﬀicients, denoted as PR(ni) for each
+node ni. W e also calculate the reverse PageRank
+coeﬀicients by applying the reverse PageRank al-
+gorithm on the graph [Bar-Y ossef and Mashiach,
+2008], denoted as rPR(ni) for each node ni. The
+score Si for each node is defined as the sum of its
+forward and reverse PageRank coeﬀicients:
+Si = PR(ni) +rPR(ni). (2)
+Let maxS denote the maximum value of Si
+across all nodes. W e normalize and scale Si to
+the range [0, 100] as follows:
+Si = Si
+maxS ×100. (3)
+Next, for each node pair (α, ni), the link pre-
+diction algorithm outputs either a link existence
+probability pi or a binary indicator of link exis-
+tence. If a user chooses to output the link exis-
+tence probability , the risk score of node ni under
+the disclosure of α is defined as:
+RSi = pi ×Si. (4)
+Let maxRS denote the maximum value of RSi
+across all nodes. T o map the risk scores to the
+range [0, 100] scale, we normalize and scale RSi
+as:
+RSi = RSi
+maxRS ×100. (5)
+Alternatively , if the user chooses to consider
+only whether a link exists, the risk score of node
+ni is set equal to Si when the link prediction result
+indicates a positive link from α to ni. Figure 9
+illustrates the risk score calculation process under
+the two link prediction output options.
+W e do not evaluate which link prediction out-
+put option is superior, as the two options are in-
+tended to provide flexibility to accommodate dif-
+ferent user preferences. The difference between
+the two approaches is illustrated as follows. Sup-
+pose the link prediction probability for (α, n10) is
+0.42, and the scaled PageRank-based score for n10
+is S10 = 97. Assume the user wishes to protect the
+PII attributes with risk scores above 40.
+When the link prediction probability is incor-
+porated, the unscaled risk score is 97 × 0.42 =
+40.74. Applying Equation 5 yields a final risk
+score of 81.48, assuming maxRS = 50 in this ex-
+ample. In this case, the user should allocate
+resources (e.g., money , time, or effort) to pro-
+tect the PII attribute corresponding to n10. In
+contrast, if the user considers only positive link
+prediction outcomes—using a probability thresh-
+old of 0.5 as an example in this paper—then n10
+would not be selected for protection, since its link
+prediction probability is 0.42.
+Although we provide the equations to convert
+the scores to a [0, 100] scale (Equations 3 and 5),
+Figure 9: Process of Risk Score Calculation.
+users are free to adopt alternative scales to reflect
+their own perceptions of PII attributes.
+7 CONCLUSION
+The goal of this paper is to analyze and pre-
+dict privacy risks incurred when individuals
+share personal data. W e introduce MLP-based
+and GCN-based algorithms—F eatureMLP , F ea-
+tureGCN, and SeeGCN—to answer the following
+question: Can the disclosure of a given identity
+attribute possibly lead to the disclosure of an-
+other attribute?
+This work is motivated by the premise that
+individuals who better understand the risks asso-
+ciated with sharing specific personal data (iden-
+tity attributes) are better equipped to make in-
+formed decisions and protect their privacy . Ex-
+perimental evaluations on multiple UTCID Iden-
+tity Ecosystem graphs demonstrate that the pro-
+posed framework can answer this question with
+strong predictive performance, robustness, and
+consistency . F urthermore, the UTCID Identity
+Ecosystem graphs, together with the proposed
+privacy risk prediction framework, offer flexibil-
+ity and customization to support a wide range of
+practical use cases.
+F uture work will focus on identifying optimal
+GCN architectures for graphs of varying sizes,
+exploring integration between graph neural net-
+works and reinforcement learning, and developing
+more advanced methods for incorporating seman-
+tic information from PII attributes into GCN-
+based link prediction models.
+8 ACKNOWLEDGMENTS
+The authors used ChatGPT and Google Search
+AI tools solely for grammar check, language pol-
+ishing, and manuscript review. All research ideas,
+methods, analyses, and conclusions are entirely
+those of the authors.
+REFERENCES
+Adamic, L. A. and Adar, E. (2003). F riends
+and neighbors on the web. Social networks,
+25(3):211–230.
+Al Hasan, M., Chaoji, V., Salem, S., and Zaki, M.
+(2006). Link prediction using supervised learn-
+ing. In SDM06: workshop on link analysis,
+counter-terrorism and security , volume 30, pages
+798–805.
+Al Musawi, A. F., Roy , S., and Ghosh, P . (2022).
+Identifying accurate link predictors based on as-
+sortativity of complex networks. Scientific Re-
+ports, 12(1):18107.
+Arrar, D., Kamel, N., and Lakhfif, A. (2024). A
+comprehensive survey of link prediction meth-
+ods. The journal of supercomputing, 80(3):3902–
+3942.
+Bar-Y ossef, Z. and Mashiach, L.-T. (2008). Local ap-
+proximation of pagerank and reverse pagerank.
+In Proceedings of the 17th ACM conference on
+Information and knowledge management, pages
+279–288.
+Bird, S., Klein, E., and Loper, E. (2009). Natural lan-
+guage processing with Python: analyzing text
+with the natural language toolkit. O’Reilly Me-
+dia, Inc.
+Cortes, C. and V apnik, V. (1995). Support-vector
+networks. Machine learning, 20:273–297.
+Devlin, J., Chang, M.-W., Lee, K., and T outanova,
+K. (2019). Bert: Pre-training of deep bidi-
+rectional transformers for language understand-
+ing. In Proceedings of the 2019 conference of
+the North American chapter of the association
+for computational linguistics: human language
+technologies, volume 1 (long and short papers),
+pages 4171–4186.
+Ediger, D., Jiang, K., Riedy , J., Bader, D. A., Cor-
+ley , C., F arber, R., and Reynolds, W. N. (2010).
+Massive social network analysis: Mining twit-
+ter for social good. In 2010 39th international
+conference on parallel processing, pages 583–593.
+IEEE.
+F ey , M. and Lenssen, J. E. (2019). F ast graph repre-
+sentation learning with pytorch geometric. arXiv
+preprint arXiv:1903.02428.
+F reeman, L. C. (1977). A set of measures of centrality
+based on betweenness. Sociometry , pages 35–41.
+Geambasu, R., Kohno, T., Levy , A. A., and Levy ,
+H. M. (2009). V anish: Increasing data privacy
+with self-destructing data. In USENIX security
+symposium, volume 316.
+Hagberg, A., Swart, P . J., and Schult, D. A.
+(2008). Exploring network structure, dynamics,
+and function using networkx. T echnical report,
+Los Alamos National Laboratory (LANL), Los
+Alamos, NM (United States).
+Hamilton, W., Ying, Z., and Leskovec, J. (2017). In-
+ductive representation learning on large graphs.
+Advances in neural information processing sys-
+tems, 30.
+Hanley , J. A. and McNeil, B. J. (1982). The meaning
+and use of the area under a receiver operating
+characteristic (roc) curve. Radiology , 143(1):29–
+36.
+Islam, M. K., Aridhi, S., and Smail-T abbone, M.
+(2020). A comparative study of similarity-based
+and gnn-based link prediction approaches. arXiv
+preprint arXiv:2008.08879.
+Javaid, H. A. (2024). Improving fraud detection and
+risk assessment in financial service using predic-
+tive analytics and data mining. Integrated Jour-
+nal of Science and T echnology , 1(8):1–11.
+Karr, A. F. and Reiter, J. P . (2014). Using statistics
+to protect privacy . Privacy Big Data, and the
+Public Good: F rameworks for Engagement.
+Kumar, A., Singh, S. S., Singh, K., and Biswas, B.
+(2020). Link prediction techniques, applications,
+and performance: A survey . Physica A: Statisti-
+cal Mechanics and its Applications, 553:124289.
+Lichtenwalter, R. N., Lussier, J. T., and Chawla,
+N. V. (2010). New perspectives and methods in
+link prediction. In Proceedings of the 16th ACM
+SIGKDD international conference on Knowledge
+discovery and data mining, pages 243–252.
+Murphy , A. H. (1996). The finley affair: A sig-
+nal event in the history of forecast verification.
+W eather and forecasting, 11(1):3–20.
+Newman, M. E. (2006). Finding community structure
+in networks using the eigenvectors of matrices.
+Physical Review E—Statistical, Nonlinear, and
+Soft Matter Physics, 74(3):036104.
+Nippani, A., Li, D., Ju, H., Koutsopoulos, H., and
+Zhang, H. (2023). Graph neural networks for
+road safety modeling: Datasets and evaluations
+for accident analysis. Advances in neural infor-
+mation processing systems, 36:52009–52032.
+Page, L., Brin, S., Motwani, R., and Winograd, T.
+(1999). The pagerank citation ranking: Bring-
+ing order to the web. T echnical report, Stanford
+infolab.
+Rumelhart, D. E., Hinton, G. E., and Williams,
+R. J. (1986). Learning representations by back-
+propagating errors. nature, 323(6088):533–536.
+Sabidussi, G. (1966). The centrality index of a graph.
+Psychometrika, 31(4):581–603.
+Salgado, H., Santos-Zavaleta, A., Gama-Castro, S.,
+Millán-Zárate, D., Díaz-Peredo, E., Sánchez-
+Solano, F., Pérez-Rueda, E., Bonavides-
+Martínez, C., and Collado-Vides, J. (2001). Reg-
+ulondb (version 3.2): transcriptional regulation
+and operon organization in escherichia coli k-12.
+Nucleic acids research, 29(1):72–74.
+Sosa, J., Martínez, D., and Guerrero, N. (2024). An
+unified approach to link prediction in collabora-
+tion networks. arXiv preprint arXiv:2411.01066.
+W ang, C., Satuluri, V., and Parthasarathy , S. (2007).
+Local probabilistic models for link prediction. In
+Seventh IEEE international conference on data
+mining (ICDM 2007), pages 322–331. IEEE.
+Zaeem, R. N., Budalakoti, S., Barber, K. S., Rasheed,
+M., and Bajaj, C. (2016). Predicting and ex-
+plaining identity risk, exposure and cost using
+the ecosystem of identity attributes. In 2016
+IEEE International Carnahan Conference on Se-
+curity T echnology (ICCST), pages 1–8. IEEE.
+Zaiss, J., Nokhbeh Zaeem, R., and Barber, K. S.
+(2019). Identity threat assessment and predic-
+tion. Journal of Consumer Affairs, 53(1):58–70.
+Zeng, L., Shi, Z., Xu, S., and F eng, D. (2010). Safe-
+vanish: An improved data self-destruction for
+protecting data privacy . In 2010 IEEE Second
+International Conference on Cloud Computing
+T echnology and Science, pages 521–528. IEEE.
+Zhang, X. and Guo, T. (2024). Privacy risk assess-
+ment of medical big data based on information
+entropy and fcm algorithm. IEEE Access.
+APPENDIX - LINK PREDICTION METHODS OVER VIEW
+Figure 10 shows an overview of link prediction algorithms, as discussed in Section 4. The red boxes
+highlight the focus of this paper.
+Figure 10: Overview of Link Prediction Algorithms [Kumar et al., 2020, Arrar et al., 2024]. Reinforcement
+learning is shown as a representative learning-based algorithm in this discussion.

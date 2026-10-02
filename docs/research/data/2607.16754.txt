@@ -1,0 +1,959 @@
+A Non-Intrusive Traﬀic Analysis Framework for
+Authorization Risk Detection and Coordinated
+Response in Web Applications*
+Siqi Lin1,2,† Y uchao Luo3 Zihan Zhu4 Yiran W ang1 Borui Qiu3
+1Ara Institute of Canterbury International Engineering College, Shenyang Jianzhu University ,
+Shenyang 110168, China
+2Xiamen Moefire T echnology Co., Ltd., Xiamen 361000, China
+3School of Computer Science and Engineering, Shenyang Jianzhu University , Shenyang 110168, China
+4School of Management, Shenyang Jianzhu University , Shenyang 110168, China
+†Corresponding author: Siqi Lin, E-mail: lsq@moefire.net
+Abstract: Objective: Authorization violations under valid W eb sessions are diﬀicult to identify and
+handle in real time from traﬀic because they depend strongly on business semantics and exhibit few
+distinctive protocol-level features. This paper proposes a non-intrusive traﬀic analysis framework for
+authorization risk detection and coordinated response.
+Methods: Request–response transactions are correlated to extract runtime context, including the ac-
+cess subject, business endpoint, object identifier, authentication state, and behavioral sequence. Object-
+access evidence, identity consistency , behavioral anomalies, authentication context, network environ-
+ment, and endpoint-operation risk are mapped to interpretable risk components. W eighted fusion and
+high-risk priority constraints produce graded decisions that drive allow, alert, block, and external policy
+actions. The risk components are instantiated using deterministic and interpretable rules so that the
+study can evaluate multi-source evidence organization, risk fusion, and the coordinated-response loop
+at the framework level.
+Results: The controlled local testbed contained 2,000 balanced labeled samples, including 1,000 normal
+accesses and 1,000 authorization-risk events. The framework classified 998 of the 1,000 authorization-risk
+events as risky and produced no false positives among normal accesses. Accuracy , precision, recall, and
+F1 score were 99.90%, 100.00%, 99.80%, and 99.90%, respectively . Removing runtime object evidence
+reduced the F1 score to 81.31%, while removing the high-risk priority constraint reduced it to 73.90%. In
+a prototype feasibility test with 100 concurrent requests and 1,000 total requests, the mean risk-decision
+computation latency was 0.077 ms and the P99 latency was 0.137 ms.
+Conclusions: The controlled evaluation shows that the framework can organize heterogeneous runtime
+evidence and establish an executable authorization-risk decision and coordinated-response loop without
+modifying application code. The results demonstrate the feasibility of the overall mechanism in the
+specified validation scenarios, but do not establish general applicability in production environments.
+Keywords: W eb application security; authorization risk; non-intrusive traﬀic analysis; run-
+time evidence; coordinated response
+CLC number: TP393.08
+*This work is one of the outcomes of the Liaoning Provincial College Student Innovation and Entrepreneurship
+T raining Program project “W eb Application Authorization Risk Identification and Response System Based on
+Non-Intrusive T raﬀic Analysis” (Project No. S202610153008).
+1
+arXiv:2607.16754v1  [cs.SE]  18 Jul 2026
+1 Introduction
+1.1 Background
+W eb applications and API systems have become the principal service form for govern-
+ment and enterprise information systems, business platforms, and mobile application backends.
+Business-object identifiers such as user IDs, contract IDs, order IDs, file IDs, and device IDs
+are commonly transmitted between clients and servers as URL path segments, query param-
+eters, form fields, or JSON request-body fields. Explicit object identifiers improve interface
+composability but also enlarge the attack surface for object-level authorization failures. The
+OW ASP API Security T op 10 ranks Broken Object Level Authorization among the foremost
+API security risks and notes that attackers may access resources they do not own by modifying
+object identifiers in requests [1] .
+Compared with unauthenticated access, SQL injection, and cross-site scripting, authoriza-
+tion violations depend more heavily on business semantics. Malicious requests often carry valid
+sessions, legitimate tokens, and correctly formatted parameters. Network-layer features, status
+codes, and URL blocklists alone therefore cannot determine whether the current subject is
+authorized to perform the requested operation. As W eb systems evolve toward microservices,
+gateways, and separated front- and backends, access subjects, business objects, role claims,
+and authentication events become distributed across multiple interfaces and services, further
+complicating runtime authorization-risk detection.
+Existing systems generally rely on code-level authorization checks, RBAC or ABAC poli-
+cies, API gateway rules, and W AF signatures. These mechanisms remain the primary means of
+access control, but rapid interface evolution, third-party component integration, legacy-system
+modernization, and cross-system invocation may lead to delayed rules, invisible object seman-
+tics, or fragmented policy enforcement points. A complementary capability is therefore needed
+to extract runtime access evidence from request–response traﬀic and support independent risk
+detection, auditing, and coordinated response without replacing application authorization.
+1.2 Problem Analysis
+The central question in authorization-risk detection is not whether a user is logged in, but
+whether the current subject is authorized to access the target object or perform the requested
+operation. When an attacker modifies an object identifier while legitimately authenticated, or
+when an ordinary user invokes a privileged operation, the HTTP method, parameter format,
+and response status may resemble normal business traﬀic. Authorization violations in produc-
+tion may also be infrequent, slow, triggered by a single request, or distributed across endpoints,
+making them diﬀicult to cover reliably with a single threshold rule.
+A complementary traﬀic-side protection framework must address four general problems.
+First, it must correlate requests and responses to recover interpretable business transactions.
+Second, it must provide a unified representation of heterogeneous context, including subjects,
+endpoints, objects, authentication state, and historical behavior. Third, without direct access
+to the application’s permission database, it must convert multi-source evidence into actionable
+risk decisions. F ourth, its decisions must form a response loop with gateways, W AF s, and
+security operations platforms.
+This study focuses on the unified organization of multi-source traﬀic-side evidence, risk
+2
+fusion, and coordinated response, examining how different evidence sources work together
+within the same transaction and decision chain.
+1.3 Contributions
+This paper presents a non-intrusive traﬀic analysis framework for authorization risk de-
+tection and coordinated response in W eb applications. Its main contributions are as follows:
+(1) A request–response transaction-driven runtime context extraction process is proposed
+to obtain access-subject, endpoint, object, authentication-state, and behavioral-sequence
+information consistently at a proxy or gateway .
+(2) A framework-level runtime evidence abstraction maps object-access evidence, identity
+consistency , behavioral anomalies, authentication context, network environment, and
+endpoint-operation risk into unified risk components rather than relying on a single URL
+rule or access-frequency threshold.
+(3) An interpretable decision mechanism combines weighted fusion with high-risk priority
+constraints and maps the result to allow, alert, block, and external policy actions, thereby
+forming a decision–response loop.
+(4) Overall comparison, framework-level ablation, and prototype feasibility tests are con-
+ducted in a controlled testbed to evaluate risk-decision capability , the contribution of key
+evidence, and basic runtime overhead.
+2 Related Work
+2.1 Object-Level Authorization Violations in Web Applications
+Object-level authorization violations are commonly associated with Insecure Direct Object
+Reference (IDOR) and Broken Object Level Authorization (BOLA). The OW ASP W eb Secu-
+rity T esting Guide defines IDOR as the direct use of user-controlled input to reference database
+records, files, or other resources, allowing an attacker to bypass authorization checks by modi-
+fying parameters [2] . Broken access control has also remained one of the most important W eb
+application security risks in the OW ASP T op 10[3] .
+Object-level authorization violations are not simple authentication failures. A user may
+have authenticated successfully and hold a valid token while the backend fails to verify the
+authorization relationship between the user and the target object. Such risks can affect read
+operations as well as higher-impact modification, deletion, approval, and export operations.
+Compared with conventional vulnerabilities, object-level authorization failures depend more
+strongly on business data structures and access context and are therefore harder to detect
+automatically .
+2.2 Rule-Based Protection and Automated Scanning
+Rule-based W eb protection typically filters traﬀic using URL allowlists or blocklists, pa-
+rameter constraints, sensitive-path matching, and signature detection. W AF s and API gate-
+ways can quickly block known attack patterns, but their policies require manual maintenance
+and cannot automatically understand whether user A is entitled to access object B. F requent
+interface changes and inconsistent object-field names can therefore result in missing rules and
+false positives.
+3
+Automated black-box scanners can identify some input-validation, injection, and config-
+uration vulnerabilities. Bau et al. [4] and Doupé et al. [5] systematically evaluated black-box
+W eb vulnerability scanners and reported limitations in state maintenance, post-authentication
+path coverage, and business-logic vulnerability detection. RESTler infers producer–consumer
+dependencies from API specifications and generates stateful request sequences [6] , improving
+state coverage for complex REST APIs. Its primary objective, however, is defect discovery
+during testing rather than online authorization decisions over production traﬀic. Object-level
+authorization testing generally requires comparisons across users, objects, and roles; generic
+scanners and request-sequence generation alone are insuﬀicient to reconstruct complete autho-
+rization semantics.
+2.3 Access-Control Models and Runtime Monitoring
+Role-Based Access Control (RBAC) associates permissions with roles and reduces
+permission-management complexity [7] . Attribute-Based Access Control (ABAC) further
+incorporates subject, object, operation, and environmental attributes into authorization
+decisions [8] . These models provide a theoretical basis for internal permission design, but
+an external runtime traﬀic monitor generally cannot read complete permission configu-
+rations, database relationships, or application logic. Sun et al. [9] used static analysis to
+infer role-specific access-control assumptions, whereas AUTHSCOPE discovered vulnerable
+authorizations in online services through differential traﬀic analysis and field substitution [10] .
+The former requires source code, and the latter targets active testing; both demonstrate the
+importance of cross-role or cross-subject comparison for identifying authorization defects.
+Runtime monitoring methods use application state, request sequences, and historical be-
+havior to identify anomalies. Cova et al. [11] proposed anomaly detection based on internal ap-
+plication state, while F elmetsger et al.[12] studied runtime W eb detection from the perspective
+of logic vulnerabilities. These studies show that business-logic security problems require state
+and contextual reasoning. In contrast to static analysis, active scanning, and in-application
+instrumentation, the present framework accepts passive or proxy-side request–response trans-
+actions as input, organizes several forms of runtime authorization-risk evidence on the traﬀic
+side, and maps risk decisions directly to graded response actions. The focus is the overall frame-
+work and coordination mechanism, while the individual evidence components are instantiated
+only to support the unified decision chain.
+3 Overall Framework
+3.1 Architecture
+The framework consists of traﬀic ingress, transaction correlation, context extraction, run-
+time evidence organization, risk fusion, coordinated response, state management, and auditing,
+as shown in Fig. 1. It can be deployed at a reverse proxy , API gateway , or passive observation
+point. In online mode, the system evaluates the current request against its context and pre-
+viously established runtime evidence before forwarding the request, and updates transaction
+state after the response returns; passive mode primarily generates audit and alert outputs. In
+this paper, “non-intrusive” means that the protected application’s business code and internal
+authorization logic do not need to be modified; reverse-proxy and gateway deployments may
+4
+still operate on the inline forwarding path.
+Client/Caller
+Non-Intrusive T raﬀic Ingress
+Reverse Proxy/API
+Gateway/Passive T ap
+Protected W eb
+Application
+or API System
+Request–Response
+T ransaction Correlation
+Subject and
+Authentication
+Context
+Endpoint and
+Object Context
+Behavioral and
+Network Context
+Runtime
+Authorization-Risk
+Evidence
+Risk F usion and
+Priority Constraints
+Coordinated Response
+and Audit Output
+Shared State Store
+T ransactions and Context
+Evidence and Policies
+Audit Logs
+Figure 1 Overall framework for authorization risk detection and coordinated response
+3.2 Main Notation and Data Objects
+An HTTP request is the unit of online risk decision-making. After the response returns, the
+system forms the correlated transaction T for runtime-evidence updates and auditing. T able 1
+lists the main data objects used by the framework. UserKey , EndpointKey , and ObjectId iden-
+tify the access subject, normalized endpoint, and business-resource instance, respectively . The
+set Eu,r(t) contains the runtime object-access evidence established for subject u and resource
+type r before time t.
+T able 1 Main notation and meanings
+Symbol Meaning
+T A correlated HTTP request–response transaction and its tem-
+poral, network, and business context, used for evidence up-
+dates and auditing
+UserKey Access-subject identifier derived from an account, session, or
+low-confidence temporary identity
+EndpointKey Endpoint identifier formed by the HTTP method and nor-
+malized path
+ObjectId Candidate identifier of a business-resource instance
+Eu,r(t) Basic runtime object-access evidence established for subject
+u and resource type r before time t
+5
+3.3 Data Processing and Deployment Modes
+The system first receives an HTTP/HTTPS request sent by a client to a W eb application.
+It extracts context such as UserKey , EndpointKey , ObjectId, and authentication state from
+request headers, cookies, JWT s, query parameters, form parameters, and JSON request bodies,
+and combines this context with existing object evidence and recent access sequences to form
+the risk components. Before forwarding the request, the risk-fusion component outputs an
+overall risk level, according to which the response component allows, alerts, blocks, or sends
+instructions to an external policy enforcement point. The decision for the current request
+uses only the context available at request arrival and runtime evidence established by earlier
+transactions. F or an allowed request, after the response returns, the system correlates the
+request and response as transaction T , adds the response summary and business outcome, and
+updates evidence for subsequent requests and the audit state; the current response is not used
+retrospectively to classify the same request.
+In reverse-proxy and API-gateway deployments, the system can obtain complete trans-
+actions from plaintext HTTP after TLS termination and support online blocking. In passive
+mode, it observes mirrored traﬀic, gateway logs, or audit logs and produces alerts. When
+application-layer plaintext is unavailable, only metadata-level analysis is possible, and com-
+plete extraction of object identifiers and business outcomes cannot be guaranteed.
+3.4 Prototype Implementation and Study Scope
+This study focuses on the overall framework and the coordination among its components.
+T o make the framework-level mechanism executable and reproducible, the prototype instanti-
+ates each risk component with deterministic and interpretable rules. Object-access evidence is
+maintained as a binary set confirmed jointly by a valid subject, a successful business outcome,
+preconfigured transaction semantics, and the current risk decision. Identity and authentication
+risk is calculated from consistency among account, session, token, role, and recent authenti-
+cation context. Behavioral risk is determined from object switching, request frequency , and
+sequence characteristics within a time window. Endpoint-operation risk is configured according
+to the HTTP method, path semantics, and predefined business impact level.
+The evaluation examines whether these components can operate within a unified data flow
+and decision chain, whether the principal evidence and fusion mechanisms affect the decision
+outcome, and whether the prototype can perform online decisions in the controlled testbed.
+The conclusions are therefore limited to framework-level mechanism validation under the stated
+experimental conditions.
+4 Key Mechanisms
+4.1 Request–Response Correlation and Context Extraction
+Request–response correlation restores protocol messages as interpretable business trans-
+actions. T ransaction T includes the request method, normalized path, headers, parameter and
+request-body summaries, response status, response-body summary , business-success indicator,
+client address, and timestamp. HTTP semantics and URI structure follow RFC 9110 [13] , and
+JWT claim fields follow RFC 7519 [14] .
+Proxy and gateway deployments can correlate messages deterministically using connection
+6
+context, request sequence numbers, T raceId values, or gateway-injected identifiers. Passive
+deployments can approximate correlation using the five-tuple, request features, and a time
+window. F or persistent connections, asynchronous interfaces, and batch requests, the sys-
+tem records correlation confidence and avoids using incomplete transactions to update high-
+confidence evidence.
+UserKey preferentially uses an account identifier, followed by a session or token identifier.
+If these values are unavailable, a low-confidence temporary identifier can be derived from the
+source address, User-Agent, and device characteristics. EndpointKey combines the HTTP
+method with a normalized path in which numeric strings, UUIDs, and random identifiers are
+replaced by placeholders. ObjectId is extracted from paths, query parameters, forms, or JSON
+fields; field semantics, value patterns, and response structure are used to exclude obvious page
+numbers, timestamps, and monetary values.
+4.2 Runtime Authorization-Risk Evidence
+The framework maps heterogeneous context to six basic risk components:
+(1) Object-access evidence risk xobj, indicating whether the current ObjectId has confirmed
+runtime access evidence.
+(2) Identity-consistency risk xid, indicating obvious conflicts among account, session, token,
+and role claims.
+(3) Behavioral-anomaly risk xbeh, indicating rapid object switching, sequential identifier ac-
+cess, or anomalous request sequences.
+(4) Authentication-context risk xauth, indicating whether a sensitive operation is supported
+by a recent valid authentication or privilege-change event.
+(5) Network-environment risk xnet, representing auxiliary evidence such as address drift,
+anomalous proxies, or shared egress.
+(6) Endpoint-operation risk sep, representing the potential business impact of the current
+HTTP method and endpoint operation.
+The basic object-access evidence is defined in Eq. ( 1). In the prototype, a transaction
+is treated as trusted only when the subject is valid, the response confirms business success,
+the transaction matches preconfigured confirmation semantics, and the request has not been
+assigned a medium- or high-risk decision. Such a transaction may update evidence for later
+requests but cannot alter the decision already made for itself. This definition provides an
+executable evidence interface for framework-level validation.
+Eu,r(t) ={o | o is confirmed for subject u by a trusted transaction before t} (1)
+If the current object is already present in Eu,r(t), its object-evidence risk is low. If the
+object is absent and is accompanied by anomalous object switching, a sensitive operation, or
+an identity-context conflict, the risk increases. T o avoid penalizing users on shared or mobile
+networks, network-environment risk alone never triggers denial.
+7
+4.3 Risk Fusion and High-Risk Priority Constraints
+All risk components are normalized to [0, 1]. The base risk is a fixed-weight sum with
+wi ≥ 0 and ∑6
+i=1 wi = 1. T o prevent several low-risk components from masking a small amount
+of high-severity evidence, the framework applies interpretable high-risk priority constraints.
+The total risk is calculated as
+Rbase = min
+{
+1, max
+[
+0,
+6∑
+i=1
+wixi
+]}
+,
+Rtotal = max(Rbase, max({hj | j ∈ H} ∪ { 0})) ,
+(2)
+where x = (xobj, xid, xbeh, xauth, xnet, sep); H is the set of triggered high-risk conditions,
+and hj ∈ [0, 1] is the corresponding lower risk bound. Including 0 in the inner maximum defines
+the result when no high-risk condition is triggered. A high-risk condition is triggered only by
+an interpretable combination of evidence, such as “missing object evidence and a sensitive
+operation” or “conflicting identity claims without a valid authentication event,” rather than by
+a single network feature.
+The decision process is shown in Fig. 2.
+Extract Runtime Risk Evidence
+Object-Access
+Evidence
+Identity and
+Auth Context
+Behavior and
+Network Context
+Endpoint-
+Operation
+Risk
+W eighted F usion and
+High-Risk Priority Constraints
+Risk-Level Mapping
+Low Risk
+Allow
+Medium Risk
+Alert or Observe
+High Risk
+Block or
+Coordinate
+Figure 2 Runtime risk-evidence fusion and response process
+4.4 Coordinated Response
+The response component divides requests into low-, medium-, and high-risk classes ac-
+cording to Rtotal and policy thresholds. Low-risk requests are allowed and recorded in the
+audit log. Medium-risk requests trigger alerts, session flags, or observation policies. In online
+deployment, high-risk requests are blocked, and policy instructions can be sent to a W AF, API
+gateway , zero-trust gateway , or security operations platform.
+The framework retains fail-open bypass, policy rollback, and allowlist mechanisms. If de-
+tection becomes unavailable or the context is incomplete, the system can degrade to observation
+8
+mode so that a security-component failure does not directly interrupt the application. All evi-
+dence, decisions, and response actions are written to audit records for subsequent explanation
+and policy review.
+5 Experimental Design and Results
+5.1 Experimental Environment and Data
+T o evaluate the feasibility of the overall mechanism, a W eb application testbed and a
+reverse-proxy detection prototype were constructed in a controlled local environment. Ex-
+perimental scripts generated reproducible request sequences and recorded the ground-truth
+label, framework decision, and decision latency for each request. The experiment contained
+no real user data, and its sample distribution does not represent the natural prevalence of
+authorization-risk events in production.
+The dataset contained 2,000 samples: 1,000 normal accesses, 600 object-access risk events,
+and 400 permission-and-context risk events, as shown in T able2. Object-access risk events con-
+sisted of horizontal object substitution and sequential object probing. Permission-and-context
+risk events consisted of privileged operations, conflicting identity claims, and anomalous au-
+thentication context. These aggregate categories evaluate how different evidence sources work
+together within the same framework; they are not used for separate fine-grained performance
+comparisons.
+T able 2 Experimental sample composition
+Sample category Count Percentage/%
+Normal access 1000 50.0
+Object-access risk event 600 30.0
+Permission-and-context risk event 400 20.0
+T otal 2000 100.0
+5.2 Baselines and Evaluation Metrics
+F our methods were compared:
+(1) URL rules, which classify requests using path terms such as admin, delete, role, export,
+and download.
+(2) F requency detection, which identifies anomalies using the number of requests or distinct
+ObjectId changes within a time interval.
+(3) Rules plus frequency , which takes the union of the first two strategies.
+(4) The proposed framework, which jointly uses transaction correlation, object-access evi-
+dence, identity and authentication context, behavioral anomalies, network environment,
+and endpoint-operation risk.
+The evaluation metrics are accuracy , precision, recall, F1 score, false-positive rate (FPR),
+and false-negative rate (FNR). TP denotes an authorization-risk event correctly classified as
+risky; FP denotes a normal access misclassified as risky; TN denotes a normal access correctly
+9
+classified as non-risky; and FN denotes an authorization-risk event not classified as risky . The
+metrics are calculated as
+Accuracy = T P+ T N
+T P+ F P+ T N+ F N, Precision = T P
+T P+ F P,
+Recall = T P
+T P+ F N, F 1 = 2 Precision Recall
+Precision + Recall ,
+FPR = F P
+F P+ T N, FNR = F N
+F N+ T P.
+(3)
+5.3 Framework Validation Results
+T able3 reports the validation results of the four methods on 2,000 samples. URL rules
+classified 517 authorization-risk events as risky but also misclassified 231 normal accesses,
+yielding an F1 score of 59.15%. F requency detection produced no false positives among normal
+accesses but classified only 552 authorization-risk events as risky , for a recall of 55.20%. Rules
+plus frequency improved recall to 83.70% but still misclassified 231 normal accesses. The
+proposed framework classified 998 authorization-risk events as risky and produced no false
+positives among normal accesses. Its accuracy , recall, and F1 score were 99.90%, 99.80%, and
+99.90%, respectively .
+T able 3 Comparison of overall framework validation results
+Method TP FP TN FN Accuracy/% Precision/% Recall/% F1/%
+URL rules 517 231 769 483 64.30 69.12 51.70 59.15
+F requency detection 552 0 1000 448 77.60 100.00 55.20 71.13
+Rules + frequency 837 231 769 163 80.30 78.37 83.70 80.95
+Proposed framework 998 0 1000 2 99.90 100.00 99.80 99.90
+Figure 3 provides a visual comparison of the four evaluation metrics across the methods.
+URL rules F requency Combined F ramework
+0
+20
+40
+60
+80
+100
+Metric value/%
+Accuracy Precision
+Recall F1 score
+Figure 3 Comparison of validation metrics across methods
+10
+In the controlled samples, URL keywords could not represent changes in object owner-
+ship, while frequency thresholds failed to cover low-frequency authorization-risk events. The
+proposed framework’s results arose from the joint use of multiple forms of context within the
+same transaction and risk model. Because a fixed testbed script generated the data, the met-
+rics demonstrate only the feasibility of framework-level decisions in the specified scenarios and
+should not be generalized as universal production performance.
+5.4 Framework-Level Ablation Study
+T o evaluate the contribution of the key mechanisms, three framework-level ablations were
+selected to isolate the effects of key evidence categories and the priority-constraint mechanism.
+The results are listed in T able 4. Removing runtime object-access evidence reduced recall
+from 99.80% to 68.50%, showing that object context is an important basis for authorization-
+risk identification. Removing behavioral-sequence evidence yielded an F1 score of 99.70%,
+indicating that this evidence mainly supplements sequential object switching and slow probing.
+Removing the high-risk priority constraint reduced recall to 58.60%, suggesting that linear
+weighting alone can allow low-risk components to mask high-severity evidence.
+T able 4 F ramework-level ablation results
+Ablation Accuracy/% Recall/% F1/% FNR/%
+F ull framework 99.90 99.80 99.90 0.20
+Without object-access evidence 84.25 68.50 81.31 31.50
+Without behavioral-sequence evidence 99.70 99.40 99.70 0.60
+Without high-risk priority constraints 79.30 58.60 73.90 41.40
+Here, object-access evidence refers to the basic binary set in Eq. ( 1). The ablation re-
+sult establishes the contribution of this evidence category within the current framework-level
+implementation.
+5.5 Prototype Runtime Feasibility
+T o confirm that the framework can operate in a proxy path, a single-host prototype test
+was conducted with 100 concurrent requests and 1,000 total requests. The results are shown in
+T able5. The mean decision-computation latency was 0.077 ms, the P99 latency was 0.137 ms,
+and the end-to-end throughput was 91.924 RPS. Mean computation latency includes only risk-
+evidence retrieval and decision processing, whereas throughput also includes proxy forwarding,
+testbed application processing, client scheduling, and queueing; the two measurements are not
+directly convertible.
+T able 5 Single-host prototype runtime feasibility test
+Concurrency Requests Throughput/RPS Mean decision latency/ms P99/ms Peak memory/MB
+100 1000 91.924 0.077 0.137 357.426
+This result shows only that the current single-host prototype can complete online risk
+decisions. It does not support conclusions about performance at other operating scales or
+11
+under long-duration and complex deployment conditions.
+5.6 Summary of Experimental Findings
+In the constructed scenarios, the multi-source runtime-evidence framework achieved higher
+recall and F1 scores than the selected URL-rule and frequency-based baselines. The framework-
+level ablation shows that object-access evidence and high-risk priority constraints are the prin-
+cipal mechanisms affecting recall in the current prototype. The single-host test verifies basic
+feasibility for online risk decisions. T ogether, these results support the mechanism-level feasi-
+bility of the overall framework in the specified validation environment.
+6 Discussion
+6.1 Applicability and Operating Mechanism
+This study provides unified definitions of data objects, evidence interfaces, risk con-
+straints, and response processes to explain how multi-source traﬀic-side evidence forms action-
+able authorization-risk decisions. F ramework validation and ablation show that object-access
+evidence, high-risk priority constraints, and the joint use of identity , behavior, and endpoint
+context affect the decision outcome. The overall design therefore forms a relatively complete
+detection and response loop in the specified controlled environment.
+The framework is applicable to W eb applications and API systems that require enhanced
+runtime authorization-risk auditing. In new systems, it can operate as a monitoring layer com-
+plementary to RBAC or ABAC. In legacy systems, it can provide independent auditing without
+large-scale application-code changes. In multi-gateway or multi-microservice environments, it
+can organize cross-endpoint context at a common ingress. The framework can also cooperate
+with continuous evaluation, least privilege, and policy enforcement points in a zero-trust ar-
+chitecture[15] , exporting risk results to gateways or security operations platforms for unified
+response.
+In the current prototype, Eu,r(t) is represented as a binary object-evidence set, identity and
+authentication context is evaluated through deterministic consistency rules, and endpoint risk
+is configured from request semantics and predefined business impact. The conclusions there-
+fore concern the feasibility of the unified evidence-organization, risk-fusion, and coordinated-
+response mechanism.
+6.2 Threats to Validity and Limitations
+The experiment has four principal threats to validity . First, the samples were generated
+by local testbed scripts and were balanced between positive and negative cases; this differs
+from production environments, where authorization-risk events are rare and business traﬀic
+has a long-tail distribution. Second, the baselines consist mainly of URL rules and frequency
+strategies and do not cover all static-analysis, differential-testing, and learning-based methods.
+Third, evidence-confirmation rules, risk weights, and decision thresholds depend on the seman-
+tics of the testbed interfaces and would require recalibration for other systems. F ourth, the
+performance measurements come from a single-host prototype and do not reflect long-duration
+operation or complex deployment conditions. The findings should therefore be interpreted
+as framework validation in a controlled environment rather than universal performance for
+arbitrary W eb applications.
+12
+The method has three general limitations. First, traﬀic-side analysis depends on the visi-
+bility of application-layer content and key business fields; when encrypted content is unavailable
+or identifiers are heavily obfuscated, evidence completeness may be reduced. Second, the pro-
+totype’s evidence rules, risk weights, thresholds, and endpoint configuration are tied to the
+semantics of the testbed and require recalibration when transferred to another application.
+Third, the controlled balanced samples and single-host implementation do not capture the
+class imbalance, long-term state variation, and deployment complexity of production traﬀic.
+F urther evaluation with heterogeneous W eb applications and real gateway traﬀic is needed to
+assess cross-scenario applicability and operational stability .
+7 Conclusion
+This paper addresses the diﬀiculty of identifying and responding to authorization risks
+under valid W eb sessions from traﬀic by proposing an overall non-intrusive traﬀic analysis
+framework. The framework treats each HTTP request as the unit of online risk decision-making
+and uses the correlated request–response transaction to organize and update object-access
+evidence, identity and authentication context, behavioral sequences, network environment,
+and endpoint-operation risk. W eighted fusion and high-risk priority constraints then produce
+graded response decisions.
+On a controlled testbed with synthetic balanced samples, the framework achieved higher
+risk-decision metrics than the selected URL-rule, frequency-detection, and combined baselines.
+F ramework-level ablation confirmed the roles of object-access evidence and high-risk priority
+constraints, and the single-host test showed that the prototype could complete online risk
+decisions. These results demonstrate mechanism-level feasibility in the specified validation
+environment; broader applicability requires evaluation with heterogeneous W eb applications
+and real gateway traﬀic.
+Author Contributions
+Siqi Lin: conceptualization, overall framework design, primary drafting, and final revision.
+Y uchao Luo and Borui Qiu: system design and implementation, experimental-scenario
+construction, and authorization-risk sample design.
+Yiran W ang: experimental data organization, result analysis, and figure preparation.
+Zihan Zhu: related-work review, manuscript formatting, and reference checking.
+13
+ᇏ໓ϱЧ
+֥WebႋႨ
+ࡏ*
+ਟනఊ1,2,† અდӑ3ݤ4 ຦ᙛಖ1 ౮Ѱᩭ3
+1ӱ࿐ჽđഫဝ 110168Ď
+2ඳđ༰૊ 361000Ď
+3ӱ࿐ჽđഫဝ 110168Ď
+4৘࿐ჽđഫဝ 110168Ď
+†๙ྐቔᆀğਟනఊđE-mail: lsq@moefire.net
+~ؓW eb໙ऎႵြༀეၬ၇ঠ఼aླྀၰҪหᆘ҂ཁᇷ౏଴ၛᄝ
+b
+~౨౰–ᄎྛൈഈ
+ག๤၂႘ഝູॖ
+ຓ҆
+ކ
+ᇅb
+~֥2000۲1000ࡏ
+ཁൕđ1000ᇏႵ998ಒੱa
+ބF1љູ99.90%a100.00%a99.80%ބ99.90%ުF1ᇀ81.31%đಀ
+ᇀ73.90%ඔູ100a౨౰ሹඔູ1000གथ
+ෘൈ࿼ູ0.077 msđP99ൈ࿼ູ0.137 msb
+ં~֥
+༯ऎႵॖྛྟđഉ҂ቀၛඪૼ
+௴ђൡႨྟb
+ՍğW ebԩᇂ
+ğTP393.08
+1 ႄ࿽
+1.1ࣟ
+W ebႋႨაAPIༀྙ෿b Ⴈ
+འѓ്đ๙ӈၛURLaҰ࿘
+ࠇ؍JSON־
+૫b OW ASP API Security
+T op 10ࡼBroken Object Level AuthorizationਙູAPIᆀॖି๙
+ሧჷ[1] b
+໙aSQLြༀეၬ၇ঠb
+ࠇURLޑ
+*֥W ebག്љაԩᇂ
+ğS202610153008ᆭ၂b
+14
+ႵಃᆳྛଢѓҠቔbෛሢW ebٳ؊ު
+֥
+၂҄ഈശb
+ಃaRBAC/ABACҦ੻aAPIބW AFb
+ॴ༢๤
+໙ีbၹՎđླေᄝ
+భิ༯đՖ౨౰–ག്љaബ
+ԩᇂି৯b
+1.2༅
+ᆳ
+ಃཋҠቔൈđ
+֥HTTPᄀಃྛູ
+b
+൤
+ഈ༯໓Ġ೘൞
+ݔࢲק
+aW AFb
+ᄝ๝
+ቔႨb
+1.3ང
+֥W ebང
+ೂ༯ğ
+č1Ď ิԛ౨౰–໙ᇶุa
+ྐ༏Ġ
+č2၂ᇁྟaྛູၳӈaಪᆣഈ༯໓a
+҂၇ঠֆ၂URL໙௔ੱĠ
+č3ۡ
+ק–Ġ
+č4ག஑
+ᄎྛषཧb
+2ቔ
+2.1 W eb໙
+ᄀಃ๙ӈაIDORčInsecure Direct Object ReferenceބBOLAčBroken Object
+Level AuthorizationbOW ASP W eb Security T esting GuideࡼIDOR൐
+࡟
+Ұ[2] bOW ASP T op 10໙॥ᇅാིਙູW ebགᆭ၂[3] b
+੣ಪᆣđ਷இ္ԩႿႵི௹ଽđ֌
+ؿ
+၇ঠ
+b
+15
+2.2مٚ
+֥W ebݖURLҩປ
+ੲbW AFބAPI৘
+޼AའBಸ
+༂Бb
+bBau֩[4]ބDoupé֩[5]ؓ
+އޑW ebြༀઆ
+૫ಯթᄝअཋbRESTlerݖAPIളӁᆀ–ᆀ၇ঠѩളӮႵ
+ሑ෿౨౰྽ਙ[6]ᄖREST APIط
+֥
+ປᆜ൱ಃეၬb
+2.3ҩ
+RBAC؇[7] ĠABACའaҠ
+උྟବೆ൱ಃथҦ[8]Ԥđ֌
+ປᆜಃཋ஥ᇂaඔऌ९
+bSun֩[9]ഡđAuthScopeٳ
+൱ಃಌཊ[10]ҩ൫đਆ
+ᇗေ၇ऌb
+৥ൎྛ്ູљၳӈbCova֩[11]Ⴟႋ
+đF elmetsger֩[12]ฐ෬W ebҩbഈඍ
+׮
+ս৘ҧ౨౰–ᄝੀ
+ა
+ྛൌགྷაဒᆣb
+3ࡏ
+3.1ܒࡏ
+ބ
+Ӯđೂ๭1ཟս৘aAPIbᄝཌଆ
+ྍ൙
+ႋ
+ބAPI৽ਫ਼
+ᇏb
+16
+؊޼/ٚೆҪ
+ཟս৘/APIܱ/கਫ਼ੀਈ
+޹W ebႋႨ
+ࠇAPI༢๤
+౨౰–৳
+ᇶุაಪᆣഈ༯໓འഈ༯໓ ྛູაຩ઎ഈ༯໓
+གᆣऌ
+აႪ༵ჿඏ
+ൻԛ
+ཚሑ෿թԥ
+൙ༀaഈ༯໓aᆣऌ
+ರᆽ
+๭ 1ࡏ
+3.2འ
+Ч໓ၛ၂ՑHTTP৳൙ༀT đ ႨႿᄎྛ
+bі1འbUserKeyaEndpointKeyބObjectId
+ြༀሧჷൌ২ĠEu,r(t)іൕᄝൈख़tభđᇶุuሧჷো྘
+rb
+і 1ၬ
+ၬ
+T֥HTTP౨౰–ြༀ
+࠹
+UserKeyॖྐਢൈѓ്іൕ
+EndpointKey HTTPѓ്
+ObjectId࿊ѓ്
+Eu,r(t) ൈख़tభᇶุuሧჷো྘r໙ᆣ
+ކࠢ
+3.3 ඔऌԩ৘ੀӱა҆ඇଆൔ
+ສW eb֥HTTP/HTTPSđ ൮༵Ֆ౨౰๨aCookieaJWTa Ұ
+ބJSON౨౰ุᇏิ౼UserKeyaEndpointKeyaObjectIdഈ༯
+ކ
+ڄ֥
+֥
+৳ູ൙ༀTު܂
+b
+17
+ࠇAPIଆൔ༯đ ༢๤ॖᄝTLSૼ໓HTTP౼ປᆜ൙ༀđ ѩᆦӻ
+م
+ປᆜྟb
+3.4ຶ
+൤ྟđჰ྘༢๤
+aყ஥ᇂ൙ༀ
+a਷
+٠
+ކࢲHTTPࠩ֩
+ྛ஥ᇂb
+ᇅ
+Ⴟ෮
+ᇅဒᆣb
+4࠹
+4.1 ౨౰–৳აഈ༯໓ิ౼
+౨౰–ြༀ൙ༀb൙ༀTਫ਼
+ൈ
+ྐ༏bHTTPაཨ༏ეၬ቎࿖RFC 9110 [13] đJWTҕॉRFC 7519 [14] b
+aT race IDק
+१
+ྍb
+UserKeyჷ
+ᆶaUser-Agentॖྐਢൈѓ്bEndpointKeyݖHTTPࣥ
+ඔሳԱaUUIDbObjectIdaҰ࿘ҕඔa
+ࠇJSONࣁބ
+b
+4.2གᆣऌ
+ਈğ
+č1གxobjభObjectId໙ᆣऌĠ
+č2གxidթᄝૼཁԊ๬Ġ
+č3གxbeh໙྽ਙĠ
+č4གxauthቔູᆦӪĠ
+č5གxnetᇹྐ༏Ġ
+č6གsepభHTTPమᄝြༀ႕ཙb
+Ԥіൕೂൔč1భჰ྘ᇏđᆺႵ๝ൈડቀᇶุႵིaཙႋಒ
+൙ༀҌФ൪
+ࢲק
+१b
+Eu,r(t) ={o | oᄝൈख़tభႮᇶุuॖྐ൙ༀಒಪ} (1)
+འၘթᄝႿEu,r(t)ᇏđ౏
+18
+ຩ
+b
+4.3གႪ༵ჿඏ
+ᇀ[0, 1]đಃᇗડቀwi ≥ 0౏∑6
+i=1 wi = 1b
+གႪ༵ჿඏb
+གοൔč2ෘğ
+Rbase = min
+{
+1, max
+[
+0,
+6∑
+i=1
+wixi
+]}
+,
+Rtotal = max(Rbase, max({hj | j ∈ H} ∪ { 0})) ,
+(2)
+ఃᇏđx = (xobj, xid, xbeh, xauth, xnet, sep)ĠHđhj ∈ [0, 1]і
+ೆ0ག
+ലૼԊ๬౏ಌഒ
+b
+ੀӱೂ๭2෮ൕb
+གᆣऌ
+໙ᆣऌٺ/ಪᆣഈ༯໓ ྛູ/ຩ઎ഈ༯໓ག
+གႪ༵ჿඏ
+႘ഝ
+ྛࣞۡ/ҳ؎/׮
+๭ 2აԩᇂੀӱ
+4.4ᇅ
+ऌRtotal࠹
+ག౨౰ᄝᄝཌ҆ඇଆൔ༯Ⴭၛቅ
+đѩॖཟW AFaAPIνಆᄎႏ௜෻ൻԛҦ੻ᆷ਷b
+ࢆ
+ቔनཿ
+b
+19
+5༅
+5.1აඔऌটჷ
+ࡹW ebཟս
+ק
+ག
+҃b
+܋2000໙1000ࡱ600ࡱ400
+่đೂі2འฐҩဢЧቆӮĠಃཋაഈ
+ಪᆣഈ༯໓ၳӈဢЧቆӮbഈඍऊ
+b
+і 2Ӯ
+ဢЧোљ ඔਈ/่ ᅝб/%
+໙ 1000 50.0
+ࡱ600 30.0
+ࡱ400 20.0
+࠹ކ2000 100.0
+5.2ᆷѓ
+бğ
+č1ĎURL၇ऌadminadeletearoleaexportބdownloadྛ஑
+Ġ
+č2҂๝ObjectIdၳӈĠ
+č3ᄵ+Ġ
+č4࣢ߌ
+b
+ᆷѓЇওሙಒੱčAccuracyಒੱčPrecisionੱčRecallĎ aF1ᆴa༂Бੱ
+čFPR੐БੱčFNRĎ bఃᇏTPགđFP໙Ф༂
+གđTNགđFN۲
+ᆷѓοൔč3ෘb
+Accuracy = T P+ T N
+T P+ F P+ T N+ F N, Precision = T P
+T P+ F P,
+Recall = T P
+T P+ F N, F 1 = 2 Precision Recall
+Precision + Recall ,
+FPR = F P
+F P+ T N, FNR = F N
+F N+ T P.
+(3)
+5.3ݔࢲ
+і3ᄝ2000bURLࡼمٚ517ࡱ
+ࡼ231གđF1ᆴູ59.15%٠
+ࡼࣇ552ੱູ55.20%ᄵ+ੱิ
+ᇀ83.70%đ֌ಯ༂஑231ࡼࡏ998໙
+20
+ބF1љູ99.90%a99.80%ބ99.90%b
+і 3б
+مٚTP FP TN FN ሙಒੱ /%ಒੱ /%ੱ /% F1/%
+URLᄵ 517 231 769 483 64.30 69.12 51.70 59.15
+ҩ 552 0 1000 448 77.60 100.00 55.20 71.13
+ᄵ+ ௔ੱ 837 231 769 163 80.30 78.37 83.70 80.95
+ࡏ998 0 1000 2 99.90 100.00 99.80 99.90
+๭3b
+URLᄵҩᄵ+௔ੱࡏ
+0
+20
+40
+60
+80
+100
+ᆷѓᆴ/%
+ሙಒੱಒੱ
+ੱ F1ᆴ
+๭ 3б
+ൌဒဢЧᇏđURLڄ
+ླྀ๝൐ႨbႮႿҩ൫ඔऌႮყഡ
+ॖྛྟđ҂ିຓ๷ູളӁ༢
+௴ђྟିb
+5.4ཨವൌဒ
+ᆣऌোљ
+і4ੱႮ99.80%
+ᇀ68.50%đ F1ᆴູ
+99.70%ᇀ
+58.60%ᇏФ༎൤b
+໙ᆣऌpᆷൔč1োᆣऌᄝ
+ቔႨb
+21
+і 4ݔࢲ
+ཨವቆ ሙಒੱ/%ੱ/% F1/% ੐Бੱ/%
+ࡏ99.90 99.80 99.90 0.20
+໙ᆣऌ 84.25 68.50 81.31 31.50
+ಀԢྛູ྽ਙᆣऌ 99.70 99.40 99.70 0.60
+གႪ༵ჿඏ 79.30 58.60 73.90 41.40
+5.5 ᄎྛॖྛྟ
+ඔູ100a౨౰ሹඔູ1000༯ष
+і5ෘൈ࿼ູ0.077 msđP99ൈ࿼ູ0.137 ms๽๳
+ਈູ91.924 RPSaൌ
+ෘb
+і 5ᄎྛॖྛྟҩ൫
+ඔ ౨౰ඔ ๽๳ਈ/RPS ௜नथҦൈ࿼/ms P99/msᆴଽթ/MB
+100 1000 91.924 0.077 0.137 357.426
+Ӊᇛ௹a
+༢๤ྟିb
+5.6ࢲ
+෮࿊URL֥ۚ۷
+ੱაF1ᇶ
+ᄝ෮ഡ
+ᇏऎႵॖྛྟb
+6 ษં
+6.1ᇅ
+१a
+aྛ
+ྙӮ
+b
+֥࠹W ebބAPI༢๤đॖቔ
+ູRBACࠇABAC౦ঃ༯ิ
+ഈ༯໓bॿ
+ླྀ๝[15]ࠇܱ
+ᇅb
+భჰ྘ᇏđEu,r(t)ᄵ
+ંᇶေႨႿ
+ॖྛྟb
+22
+6.2अཋ
+ဢЧ
+ؓ
+ཌᇶေႮURLః෰ս
+ః෰༢๤
+ᄖ
+ຓ๷ູ
+಩ၩW eb๙Ⴈྟିඣ௜b
+࡮
+ᆣऌ
+ః෰ႋႨൈླေᇗྍ஥ᇂ
+aӉ௹ሑ
+ܒW ebࣟ
+ဒb
+7ં
+ؓW eb໙ีđิԛ၂ᇕ
+ၛHTTP౨
+౰–ڄ
+b
+ᆷѓഈႪႿURLᄵa௔
+ҩ൫
+ᇏऎႵॖྛྟđ
+ܒW ebဒb
+ངലૼ
+Ġ
+Ġ
+ᇅĠ
+b
+23
+References / ҕॉ໓ང
+[1] OW ASP F oundation. API1:2023 broken object level authorization[EB/OL]. 2023[2026-
+07-17]. https://owasp.org/API-Security/editions/2023/en/0xa1-broken-object-level-aut
+horization/.
+[2] OW ASP F oundation. T esting for insecure direct object references (WSTG-A THZ-04)
+[EB/OL]. 2020[2026-07-17]. https://owasp.org/www- project- web- security- testing- g
+uide/v42/4-Web_Application_Security_Testing/05-Authorization_Testing/04-Testing
+_for_Insecure_Direct_Object_References.
+[3] OW ASP F oundation. A01:2025 broken access control[EB/OL]. 2025[2026-07-17]. https:
+//owasp.org/Top10/2025/A01_2025-Broken_Access_Control/.
+[4] BAU J, BURSZTEIN E, GUPT A D, et al. State of the art: automated black-box web
+application vulnerability testing[C/OL]//2010 IEEE Symposium on Security and Privacy .
+Piscataway , NJ: IEEE, 2010: 332-345. DOI: 10.1109/SP.2010.27.
+[5] DOUPÉ A, COV A M, VIGNA G. Why Johnny can’t pentest: an analysis of black-box web
+vulnerability scanners[C/OL]//Lecture Notes in Computer Science: V ol. 6201 Detection
+of Intrusions and Malware, and V ulnerability Assessment. Berlin, Heidelberg: Springer,
+2010: 111-131. DOI: 10.1007/978-3-642-14215-4_7 .
+[6] A TLIDAKIS V, GODEFROID P , POLISHCHUK M. RESTler: stateful REST API
+fuzzing[C/OL]//2019 IEEE/ACM 41st International Conference on Software Engineer-
+ing (ICSE). Piscataway , NJ: IEEE, 2019: 748-758. DOI: 10.1109/ICSE.2019.00083.
+[7] SANDHU R S, COYNE E J, FEINSTEIN H L, et al. Role-based access control models
+[J/OL]. Computer, 1996, 29(2): 38-47. DOI: 10.1109/2.485845.
+[8] HU V C, FERRAIOLO D, KUHN D R, et al. Guide to attribute based access control
+(ABAC) definition and considerations: 800-162[R/OL]. Gaithersburg, MD: National In-
+stitute of Standards and T echnology , 2014.https://doi.org/10.6028/NIST.SP.800-162.
+[9] SUN F, XU L, SU Z. Static detection of access control vulnerabilities in web applications
+[C/OL]//20th USENIX Security Symposium (USENIX Security 11). San F rancisco, CA:
+USENIX Association, 2011. https://www.usenix.org/conference/usenix-security-11/stat
+ic-detection-access-control-vulnerabilities-web-applications .
+[10] ZUO C, ZHAO Q, LIN Z. AUTHSCOPE: towards automatic discovery of vulnerable au-
+thorizations in online services[C/OL]//Proceedings of the 2017 ACM SIGSAC Conference
+on Computer and Communications Security . New Y ork, NY: ACM, 2017: 799-813. DOI:
+10.1145/3133956.3134089.
+[11] COV A M, BALZAROTTI D, FELMETSGER V, et al. Swaddler: an approach for the
+anomaly-based detection of state violations in web applications[C/OL]//Lecture Notes in
+Computer Science: V ol. 4637 Recent Advances in Intrusion Detection. Berlin, Heidel-
+berg: Springer, 2007: 63-86. DOI: 10.1007/978-3-540-74320-0_4 .
+24
+[12] FELMETSGER V, CA VEDON L, KRUEGEL C, et al. T oward automated detection of
+logic vulnerabilities in web applications[C/OL]//Proceedings of the 19th USENIX Security
+Symposium. Berkeley , CA: USENIX Association, 2010: 143-160. https://www.usenix.org
+/legacy/event/sec10/tech/full_papers/Felmetsger.pdf.
+[13] FIELDING R T, NOTTINGHAM M, RESCHKE J. HTTP semantics: RFC 9110[S/OL].
+RFC Editor, 2022. https://www.rfc-editor.org/info/rfc9110. DOI: 10.17487/RFC9110.
+[14] JONES M B, BRADLEY J, SAKIMURA N. JSON web token (JWT): RFC 7519[S/OL].
+RFC Editor, 2015. https://www.rfc-editor.org/info/rfc7519. DOI: 10.17487/RFC7519.
+[15] ROSE S, BORCHER T O, MITCHELL S, et al. Zero trust architecture: 800-207[R/OL].
+Gaithersburg, MD: National Institute of Standards and T echnology , 2020. https://doi.or
+g/10.6028/NIST.SP.800-207.
+25

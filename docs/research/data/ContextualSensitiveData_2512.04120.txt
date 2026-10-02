@@ -1,0 +1,1014 @@
+TowardsContextualSensitive Data Detection
+Liang Telkamp1,2 and Madelon Hulsebos2∗
+1UniversityofAmsterdam,2CWI
+Abstract
+Theemergenceofopendataportalsnecessitates
+moreattentiontoprotectingsensitivedatabefore
+datasetsgetpublishedandexchanged. Todosoef-
+fectively,weobservetheneedtorefineandbroaden
+our definitions of sensitive data, and argue that
+thesensitivityofdatadependsonitscontext. Fol-
+lowingthisdefinition,weintroduceacontextual
+datasensitivityframeworkbuildingontwocore
+concepts: 1)typecontextualization,whichconsid-
+ersthetypeofthedatavaluesathandwithinthe
+overallcontextofthedatasetordocumenttoassess
+theirtruesensitivity,and2)domaincontextualiza-
+tion,whichassessesthesensitivityofdatavalues
+informedbydomain-specificinformationexternal
+to the dataset, such as geographic origin of a
+dataset. Experimentsinstrumentedwithlanguage
+models confirm that: 1) type-contextualization
+significantlyreducesthenumberoffalsepositives
+fortype-basedsensitivedatadetectionandreaches
+arecallof94%comparedto63%withcommercial
+tools,and2)domain-contextualizationleveraging
+sensitivity rule retrieval effectively grounds
+sensitive data detection in relevant context in
+non-standarddatadomains. Acasestudywithhu-
+manitariandataexpertsalsoillustratesthatcontext-
+groundedexplanationsprovideusefulguidancein
+manualdataauditingprocesses. Weopen-source
+the implementation of the mechanisms and
+annotated datasets athttps://github.com/
+trl-lab/sensitive-data-detection.
+1 Introduction
+Data sharing underpins data reuse across sciences,
+enterprises, and governments through public and
+private portals (Borgman and Groth, 2025; Worth
+et al., 2024; Zhang et al., 2024; Wilkinson et al.,
+2016; Brickley et al., 2019). With the rise of open
+data sharing portals, comes the need to protect
+sensitive data from undesired and harmful use.
+Sensitivedataincludesdirectpersonalidentifiers(e.g.,
+names, emails (European Parliament and Council
+∗Correspondencetomadelon.hulsebos@cwi.nl
+oftheEuropeanUnion,2016))aswellasindirector
+contextualinformationthatbecomesapotentialrisk
+undercertainconditions(OCHA,2025). Forexample,
+facility locations or military logs may be sensitive
+dependingongeopoliticsortiming. Thisillustratesthe
+complexityofsensitivedatadetectionandtheneedfor
+nuanced,context-dependentmethods. Beyondopera-
+tionalandethicalconcernsofpublishingsensitivedata,
+Large Language Models (LLMs) increase the risks
+ofleakage: trainedonwebdata,theymaymemorize
+andreproducesensitiveinformation(Subramanietal.,
+2023;Worthetal.,2024;Carlinietal.,2021;Lukas
+et al., 2023). Studies show sensitive data is often
+underspecifiedindocumentationonopendataportals
+like HuggingFace (Yang et al., 2024; Akhtar et al.,
+2024;Worthetal.,2024),illustratingtheimportance
+ofaccuratemethodsandtoolsfor(semi-)automated
+sensitivedataprotection,particularlyonopenportals.
+Most work on sensitive data detection methods,
+however,focusesondetectingperson-leveldata,partic-
+ularlypersonalidentifiableinformation(PII)(Kužina
+etal.,2023;Subramanietal.,2023;Akhtaretal.,2024).
+Forunstructureddata,PIIdetectionreliesonnamed
+entity recognition (Subramani et al., 2023); similar
+approachesexistfortabulardata(Raman,2001;Hulse-
+bosetal.,2019),whichisthefocusinthispaper. Yet
+sensitivityextendsfarbeyondexplicitPII.Koberetal.
+(2023)proposeataxonomyofalways-,combination-,
+context-, and value-sensitive data. For instance, an
+address maybeharmlessinthecontextofapublic
+organizationalwebsitebutexposeaprivateaddressin
+anotherdocument,causingnaïvetype-baseddetection
+yield false positives. Likewise, hospital geo-
+coordinatesmay be harmless in one region but
+sensitiveinconflictzones(OCHA,2025),callingfor
+contextualizationbeyonddetectingpersonal-sensitive
+data. These limitations call for a more nuanced
+perspectiveandframeworkforassessingsensitivedata.
+Inthispaper,werevisittheconceptofsensitivedata
+detection,arguingforamorecontextualperspective.
+We particularly focus on two aspects of contextual
+arXiv:2512.04120v2  [cs.CR]  12 Mar 2026
+sensitivedatadetection. First,typecontextualization
+whichtakesamorenuancedviewbeyondthetypeof
+values(e.g. addresses)bytakingthebroadercontext
+ofthedataintoaccount. Weintroducethetechnical
+“detect-then-reflect”mechanismwhichfirstdetectsthe
+typeofthevaluesathand,thenreflectsontheiractual
+sensitivitybasedoncontextualsignalswithinthedocu-
+mentordataset. Experimentswithreal-worlddatasets
+containingpersonalidentifiableinformation(PII)show
+thatthismechanism,instrumentedbylanguagemod-
+els, yields a strong improvement in precision while
+maintaininghighrecall. Second,wepositdomaincon-
+textualizationwhichaddressessensitivitythatdepends
+on external domain-specific factors, beyond merely
+static types such as PII. We introduce the “retrieve-
+then-detect”mechanismwhichfirstretrievesrelevant
+domain-specificinformation,suchasapplicabledata
+policies,tothengroundthedatasensitivitydetection
+inusingalanguagemodel. Evaluationsillustratethe
+potentialofthismechanism,achievinghighrecalland
+improvedconsistencyfordetectingnon-personalsen-
+sitivedata. Importantly,thecontext-groundeddomain-
+specificexplanationsaredeemedhighlyusefulbyex-
+pertsinhumanitariandataassessmentinacase-study.
+2 Revisiting Sensitive Data Detection
+Thenotionof“sensitivedata”ismultifaceted,spanning
+legal, theoretical, anddomain-specificviews. Legal
+frameworksoftenequatesensitivitywithpersonaliden-
+tifiableinformation. TheGDPRdefinespersonaldata
+broadlyas“anyinformationrelatingtoanidentifiedor
+identifiablenaturalperson,”specifyingsensitivecate-
+gorieslikehealth,ethnicity,orpoliticsrequiringextra
+protection(EuropeanParliamentandCounciloftheEu-
+ropeanUnion,2016). Similarly,HIPAAdefinesiden-
+tifiersthatmakehealthinformation“ProtectedHealth
+Information(PHI)”whenlinkedtoindividuals(Cen-
+ters for Medicare & Medicaid Services, 1996). Yet,
+sensitivityisoftencontextual: seeminglyharmlessdata
+canbecomesensitivewhencombined,repurposed,or
+sharedacrosscontexts(Malkin,2022).Theoreticalper-
+spectivesdeepenthisnuance. Nissenbaum’sContex-
+tualIntegrityframessensitivityastheappropriateness
+ofinformationflowswithinsocialnorms(Nissenbaum,
+2004). Buildingonthis,researchersadvocatecontext-
+grounded definitions (Malkin, 2022).Kober et al.
+(2023) distinguish: (1) always-sensitive data (e.g.,
+personal identifiers); (2) sensitivity by linking data;
+(3)sensitivitybyuse;and(4)sensitivityfromspecific
+values. Thisechosthatnotallpersonalisequallysen-
+sitive,andnotallsensitivedataisonindividuals. To
+detectsensitivedata,ofanykind,ourframeworkbuilds
+onthisconceptualnotionofdatasensitivity(Def. 1):
+dataprotectionmethodsmustensurecoveragebeyond
+personal-andstaticsensitivitydefinitions.
+Definition 1(ContextualSensitiveData).Datawhose
+sensitivity depends on external factors and requires
+protectionduetohow,bywhom,andinwhatcontext
+itcanbemisused.
+Informed by thiscontextualdefinition of sensitive
+data,weformalizetheproblemofcontextualsensitive
+datadetectionasfollows:
+Problem Statement 1(Contextual Sensitive Data
+Detection).Givenanunorderedororderedsampleof
+values𝑉=𝑣1,𝑣2,...,𝑣 𝑁fromdocumentD,whereeach
+value𝑣𝑖 representsavalue,thesetofinternalcontext
+factors𝐶𝐼 withinD(e.g.,surroundingvalues,struc-
+ture),andexternalcontextfactors 𝐶𝐸 outsideD(e.g.,
+specifiedrules,time/location),theobjectiveofcontex-
+tualsensitivedatadetectionistoestimatetheproba-
+bility𝑃(𝑉=𝑠𝑒𝑛𝑠𝑖𝑡𝑖𝑣𝑒|𝐶 𝐸,𝐶𝐼)∈[0,1],and,basedon
+thisprobability,classifythesensitivityofVintooneof
+thepredefinedsensitivitylevels𝑠1,𝑠2,...,𝑠 𝑀, where
+each𝑠𝑖 correspondstoadistinctsensitivitylevel(e.g.,
+"sensitive",“mediumsensitive”,"non-sensitive",etc.).
+3 Contextual Sensitive Data Detection
+Protectingsensitivedatagenerallyfollowsathree-step
+procedure:➀ specifyingsensitivedata,➁ detecting
+sensitive data,➂ remedying data sensitivity. In this
+work,wefocusonthesecondstep,whichhasreceived
+little attention in research. Existing methods for
+detectingsensitivedatasufferfromtwokeylimitations
+toaddressthecontextualnatureofsensitivedata:
+1. Insufficientspecificity: sensitivedatadetection
+methods treat all values of types of interest as
+equallysensitive,whilethesubjectofthevalue
+impliesitssensitivity. Thisindistinctnessleads
+tolowprecisionhencehighfalsepositiverates.
+2. Insufficient coverage: sensitive data detection
+methods typically focus on personal-level
+data, particularly PII, and do not generalize to
+domain-specific sensitive data. The lack of
+coverageleadstolowrecallofmethods,hence
+leavingsensitivedataunprotected.
+Toaddressthesechallengesincontextualsensitive
+data detection, we posit two contextual aspects that
+matterinordertoassessthecontextualsensitivityof
+data:type contextualizationanddomain contextual-
+ization. We introduce two mechanisms to consider
+thesecontextualaspectsofsensitivedata: thedetect-
+then-reflectmechanism for type contextualization
+and theretrieve-then-detectmechanism for domain
+contextualization. In what follows, we specifically
+focus on tabular data but these mechanisms extend
+toothermodalities,suchasfree-formtextdocuments.
+3.1 T ype Contextualization
+Followingexistingstandardsandprotocols(European
+ParliamentandCounciloftheEuropeanUnion,2016;
+Centers for Medicare & Medicaid Services, 1996),
+sensitivedatadetectionmethodsoftenfocusondetect-
+ingdatatypesreflectingpersonalsensitivedata(e.g.,
+names,addresses)(Google,2018). Buttheappearance
+ofanameoraddressdoesnotimmediatelymakeadata
+valuesensitive. Forexample,anaddressmayreflect
+theaddressofapersonororganization,eachhaving
+significantlydifferentconsequences,hencedifferent
+sensitivitylevels. Wetermthistypecontextualization:
+whether a data value corresponding to a sensitivity
+typeofinterest(e.g. name)trulyissensitiverequires
+consideringthecontextwithinthedocumentordataset
+inwhichitappears. Typecontextualizationimproves
+specificityaspotentialsensitivevaluesareonlyconsid-
+eredsensitivebasedonthebroadercontextofthevalue.
+Thedetect-then-reflectmechanismExistingmeth-
+odsclassifysensitivedatabasedonsignalsindicatinga
+typeofinterest,e.g. names, addresses,or phone
+numbers. If a value matches this type, it is flagged
+assensitive. Typecontextualizationemploysamore
+nuancedassessment,forwhichweintroducethetwo-
+stagedetect-then-reflectmechanismfordetectingtype-
+informedsensitivedata. Algorithm1illustratesthis
+stagedprocedureforbinarysensitivityclassification.
+Algorithm 1TypeContextualization
+Require:Values𝑉𝑖={𝑣1,...,𝑣𝑁}fromdocument𝐷
+Require: Internal context𝐶𝐼, sensitive types𝑇sens,
+threshold𝑡
+1:𝑡 𝑖←DetectType(𝑉𝑖)
+2:if𝑡 𝑖∈𝑇sens then
+3:𝑝 sens←Estimate𝑃(𝑉𝑖=sensitive|𝑡𝑖,𝐶𝐼)
+4:𝑠 𝑖←(𝑝sens>𝑡)
+5:else
+6:𝑠 𝑖←false
+7:end if
+In the initialdetectionstep, the potential sensitivity
+ofasetofvaluesisestimatedbyfirstclassifyingthe
+values(𝑉𝑖)correspondingtosensitivetypesofinterest
+specified upfront (𝑇sens). This step prioritizes recall
+by capturing all values that may carry data of the
+sensitive type. The purpose of thereflectionstep is
+toestimatetheactualsensitivityofthevalues( 𝑝sens)
+given their detected sensitive type (𝑡𝑖) and internal
+contextofthefulldocument( 𝐶𝐼),tofinallyturninto
+a discrete sensitivity label (𝑠𝑖). This step is crucial
+formitigatingfalsepositivesfromthetypedetection
+stage by incorporating inter-value relationships and
+documentsemantics,tofilteroutvaluesofsensitive
+typesthatarenotactuallysensitive.
+Tabular Data case.Figure1illustratesthedetect-
+then-reflect mechanism for type contextualization
+onaconcreteexamplewithtabulardata. Here,table
+columnsareclassifiedtocorrespondtoanysensitive
+typessuchas address and phone numberbased
+on the column name and data values. For columns
+ofsensitivetypes,thereflectionstepassesseswhether
+the column is sensitive in context of the full table
+context,i.e.,thetablenameaswellascolumnnames
+andvaluesofsurroundingcolumns.
+type 
+detection
+type 
+reﬂection
+typed
+column
+input
+column
+sensitive types
+address
+phone number
+gender
+internal table context
+ti: phone number
+ci
+cj
+th tk
+si: sensitive
+column
+sensitivity
+Figure1:Typecontextualizationforcontextuallydetecting
+sensitive table columns using thedetect-then-reflect
+mechanismtoincreaseprecision. Thismechanismentails:
+➀ detectingpotentially sensitive columns based on their
+(semantic) type,➁ reflectingon the actual sensitivity of
+thecolumnwithintheinternalcontextoftheentiretable.
+3.2 Domain Contextualization
+Besidesamorefine-grainedcontextualnotionofthe
+sensitivityofcertainvalues,wealsoargueforamore
+coarse-grainedcontextualperspective. Followingour
+notionofcontextualsensitivedata(Def. 1),wepose
+thatdataprotectionshouldaccountforrisksbeyond
+identity exposure, for example, harming vulnerable
+populationsororganizationshenceconsiderthedata
+domain, from humanitarian aid to national security.
+Werefertothisbroaderperspectiveondatasensitivity
+asdomaincontextualization: sensitivityemergesfrom
+thedataset’snatureandpotentialmisuse,whichcan
+arisefromexternalfactors. Assuch,domaincontextu-
+alizationaimsathigherdetectioncoveragebyground-
+ingthesensitivityassessmentindomain-specificcon-
+text,beyondgenericandstaticpredefinedtypes.
+Theretrieve-then-detectmechanismWhile
+type-baseddatasensitivitycanoftenbeinferredfrom
+internaldocumentcontext,domain-specificsensitivity
+typically depends on contextual factors external to
+the data itself. For domain contextualization, we
+introducetheretrieve-then-detectmechanism(Alg. 2).
+Algorithm 2DomainContextualization
+Require:Values𝑉𝑖={𝑣1,...,𝑣𝑁}fromdocument𝐷
+Require:Externalcontext𝐶 𝐸,threshold𝑡
+1:𝐶 relevant
+𝑖 ←RetrieveContext(𝑉𝑖,𝐶𝐸)
+2:𝑝 sens←Estimate𝑃(𝑉𝑖=sensitive|𝐶relevant
+𝑖 )
+3:𝑠 𝑖←(𝑝sens>𝑡)
+Unliketype-informeddetection,basedonapredefined
+setofsensitivetypes,domain-specificsensitivedata
+hasnofixedontology. Instead,theretrieve-then-detect
+mechanismconsidersexternalcontextualinformation,
+such as rule-based heuristics specified in data
+governancedocumentsorgeopoliticalnewsitems,in
+thedetectionprocess. Inthe retrievalstage,external
+contextisselectedfromacorpusofdomain-specific
+documentsorotherexternaldatasources( 𝐶𝐸)based
+on the relevance to the potential sensitive values at
+hand (𝑉𝑖). In thedetectionstage, the sensitivity of
+thevaluesathand( 𝑠𝑖)isassessedgiventheretrieved
+relevantexternalcontext(𝐶relevant
+𝑖 ).
+Tabular Data case.Figure2illustratestheretrieve-
+then-detectmechanismfortabulardata. Foragiven
+column(ortable),theretrievalcomponentfetchesinfor-
+mation,suchasdatapolicyrulesorgeopoliticalinfor-
+mation,fromexternaldocumentsorotherdatasources
+thatarerelevantforthegiveninputtable. Thedetection
+stepthenassesseswhetheratable(column),orcom-
+binationofcolumns,containsdatathatshouldbecon-
+sideredsensitivegiventheretrievedrelevantcontext.
+retrieve 
+context
+relevant
+context
+external domain documents
+input 
+column
+ci
+xyz 
+rules
+si: sensitive
+column
+sensitivityCe
+relevant: data policy Brazil
+detect 
+domain-speciﬁc 
+sensitivity
+Figure2: Theretrieve-then-detectmechanismfordetecting
+sensitive data that requires domain contextualization.
+Thismechanismentails:➀ retrievingrelevantcontextual
+informationsuchasdatapolicyrules, ➁ detectingsensitive
+databasedonthetableandtheretrievedrelevantcontext.
+4 Experimental Setup
+Here, we outline the method implementation
+details, baselines, datasets, and metrics to eval-
+uate our proposed framework for contextually
+sensitive data detection. Code and datasets can
+be found at https://github.com/trl-lab/
+sensitive-data-detection.
+4.1 Implementation of the Mechanisms
+The core components of the mechanisms are type
+detection, reflection, and retrieval. Further details
+of the implementation of these components per
+mechanismareprovidedbelow.
+T ype-contextualizationInthedetectionstep,given
+thewell-definednatureofPIItypes,weparsetheprob-
+lemasamulticlassclassificationtaskoverataxonomy
+ofpersonalidentifiabletypes(e.g., email_address,
+generic_identifier) derived from GDPR
+(European Parliament and Council of the European
+Union,2016)andUNOCHAguidelines(UNOCHA
+Centre for Humanitarian Data, 2021) (see the code
+repositoryforacompletelist). Wedevisealanguage
+modeltoclassifythetypeofatablecolumn(orreturn
+None) (Kayali et al., 2024; Shen et al., 2025), by
+prompting it with the column name and five values.
+We consider zero-shot and fine-tuned approaches.
+Thezero-shotmethodleveragesthemodel’sinherent
+abilitytofollowinstructions,whilethefine-tunedap-
+proachenhancesperformancebytrainingthemodels
+onasyntheticdatasetof1,000labeledcolumns. Fine-
+tuningisdoneusingLow-RankAdaptation(Huetal.,
+2021)forparameterefficiency. Themodelsaretrained
+forasingleepochusingan80/20train-validationsplit.
+Inthe reflectionphase,theLLMre-evaluateseach
+candidatecolumncorrespondingtotypesofinterest
+withinthecontextoftheentiretable. Weprovidethe
+LLM with a markdown-formatted representation of
+thefulltable,includingheadersandfivesamplerows
+percolumn,alongwiththespecifictypedetectedfor
+thetargetcolumnand,ifapplicable,thetypesofother
+columnswhicharedetectedasPIItypes. TheLLM
+is then instructed to assign one of three contextual
+sensitivitylevels:non_sensitive,referringtoinfor-
+mationthatcannotidentifyaperson(e.g.,aggregate
+data, organization names);moderate_sensitive,
+referring to data that could potentially identify
+a person when combined with other attributes
+(e.g., demographics, partial information); and
+high_sensitive,referringtodatathatdefinitively
+identifiesaperson(e.g.,fullname,email,nationalID).
+Domain-contextualizationGiven the domain-
+specificnatureofthismechanism,weconductacase
+study with humanitarian data experts from the UN
+OCHAHumanitarianDataCentreusinghumanitarian
+crisisdatasetsfromtheHumanitarianDataExchange
+(HDX) (United Nations, 2014). For theretrieval
+step,weaimtoidentifyrelevantheuristicsindicating
+sensitivityrulesfromdomain-specificdatagovernance
+documents. The system retrieves relevant policy
+fragmentsfromInformationSharingProtocols(ISPs)
+based on the dataset’s geographical context (e.g.,
+country). WeuseGPT-4o-minitoextractandindex
+the specific sensitivity rules from these documents.
+If no region-specific ISP is identified, a default ISP
+templatebasedoncross-countryconsensusisused.
+Inthe detectionphase,theLLMisprovidedwitha
+curatedpromptcontainingtablecontext(headersand
+five representative rows), relevant ISP extracts con-
+tainingexplicitinstructionstoclassifyeachcolumn’s
+sensitivityaccordingtotheISPguidelineswhilejusti-
+fyingitsdecisionbydirectlycitingtherelevantpolicy
+passages. Basedonthepolicydefinitions,themodelas-
+signsoneoffoursensitivitylevels, non_sensitive,
+moderate_sensitive, high_sensitive, or
+severe_sensitive. This mechanism ensures that
+sensitivity assessments are grounded in explicit do-
+mainpolicies,therebyenhancingbothinterpretability
+andpracticalusabilityfordomainexperts.
+4.2 Model Selection
+We evaluate closed-source and open-source models
+tounderstandtrade-offsbetweentheseoptions,ifany.
+Whileoneofthegoalsofthisworkistopreventsen-
+sitivedatafromleakingintoproprietaryLLMs,these
+LLMsaretypicallyavailableunderprivacy-preserving
+protocols at some cost which can then provide a
+viablelow-maintenancesolution. Fromclosed-source
+options, we select the GPT-4o-mini (OpenAI et al.,
+2024) model for its good performance and cost
+trade-off. Wefocusonopen-sourceLLMsthatenable
+local deployment, for which we select the Gemma
+family (2 and 3) (Team, 2025; Team et al., 2024)
+andQwen3in8Band14Bsizes(Yangetal.,2025).
+Qwen314Bwasselectedgiventhestrongperformance
+ofitspredecessorQwen2.5’sexceptionalperformance
+onbenchmarkssuchasMMLUPro 1,demonstrating
+strong reasoning capabilities and robust general un-
+derstanding. Furthermore,Gemma29BandGemma3
+12Bwereincludedtostrikeabalancebetweencompu-
+tationalefficiencyandperformance,andtheirsupport
+1https://huggingface.co/spaces/TIGER-Lab/
+MMLU-Pro
+forquantizeddeployment. Wealsoincludeversions
+ofQwen38BandGemma29Bthatarefine-tunedon
+asyntheticdatasetof1Ktablecolumnshand-labeled
+with27PIItypes,indicatedwith“FT”suffix.
+4.3 Baselines
+Wecompareourmethodswithtwocommonbaselines
+forsensitivedatadetection. WeincludeGoogleCloud
+DLP(GoogleCloud,2018),arule-basedsystemthat
+combinesbuilt-ininfoTypes,predefineddetectorsfor
+commonPersonalIdentifiableInformation(PII)types,
+which are associated custom-defined dictionaries
+and regular expressions. For our experiments, we
+configure the minimum likelihood threshold to
+“Likely”. ThesecondbaselineisMicrosoftPresidio,
+anopen-sourcetoolthatleveragesregularexpressions,
+pattern-basedrules,contextwindows,andML-based
+named entity recognition to detect PII types. To
+enable consistent evaluation, each Presidio type has
+been mapped to a corresponding category in our
+unifiedtaxonomy(thismappingcanbefoundinthe
+coderepository). Bothsystemsoutputcolumn-level
+predictions and are widely adopted in enterprise
+settings. However, neither tool supports contextual
+reflection or table-wide reasoning; any match to a
+knownPIIpatternisautomaticallytreatedassensitive.
+4.4 Datasets
+To evaluate the contextual sensitive data detection
+mechanisms we use a combination of synthetic and
+real-worlddatasets,tomaintainground-truthvalidity
+forsensitivedatadetectioningenericcontextandthe
+domain-specificcontextofhumanitariandatasets.
+• Type contextualization with sensitive PII: We
+extracted66anonymizedtables,withintotal2,061
+columns,fromtheGitTablescorpus(Hulsebosetal.,
+2023) representing a variety of real-world table
+schemas. Each column was manually annotated
+with(i)itsPIItypeand(ii)itscontextualsensitivity
+level(non-sensitive,moderate,orhighlysensitive).
+• Domain contextualization with humanitarian
+data: To evaluate the retrieve-then-detect mecha-
+nismfordomain-specificsensitivedata,weconduct
+a case study with humanitarian experts from the
+UNOCHAHumanitarianDataCentre. Wecollect
+23 tabular datasets, with in total 326 columns,
+resemblingtypicalhumanitariandatasets(e.g.,for
+displacement tracking, public health monitoring)
+for different regions. With rich input from
+humanitarianexpertstoensurerealisticproperties,
+wesynthesize9tabulardatasetswithoneormore
+actual contextually sensitive data in line with
+region-specific Information Sharing Protocols
+(ISPs). Two humanitarian data experts annotated
+columns(100intotal,ofwhich70containsensitive
+data)withasensitivitylevel(low,moderate,high,
+severe). Theother14tabulardatasetsaresimilarbut
+realtabulardatasetsfromtheUN’sHumanitarian
+Data Exchange2 and have been manually curated
+as challenging datasets without actual sensitive
+data,toevaluatethefalsepositiverate.
+Evaluation granularityForevaluation,sensitivity
+levels are binarized:lowis treated as non-sensitive,
+whilemoderate,high, andsevereare grouped as
+sensitive. This aligns with operational practice in
+humanitariancontextswhereanymoderateorhigher
+sensitivity triggers safeguards, consistent with UN
+OCHA guidance that such data warrants protective
+measures(OCHA,2025). Fordomaincontextualiza-
+tion, we assess performance on table-level to align
+withtheISP’scoarse-graineddatapolicyinstructions,
+despitehavingcolumn-levelannotations. Tablesare
+labeled sensitive if one of its columns is annotated
+assensitive(moderate,highorsevere).
+4.5 Metrics
+Weevaluateaccuracyalongthreeaxes: PIIdetection,
+contextual reflection for PII, and non-PII sensitivity
+detection. To account for class imbalance, we
+report (support-)weighted averages. Performance
+is measured at column and table level. For type
+contextualizationweevaluatecolumn-levelaccuracy,
+PII detection is treated as a multiclass task over 27
+PIItypes(plusa“None”category),whilesensitivity
+reflection reduces to a binary decision between
+sensitive (moderate/high) and non-sensitive (low).
+Fordomaincontextualizationweevaluatetable-level
+accuracy: atableisclassifiedassensitiveifitcontains
+any moderate/high/severe sensitive information,
+resultinginabinarytask(sensitivevs. not). Precision,
+recall,andF1areusedasevaluationmetrics.
+Besidesaccuracymetrics,wereporttheaveragerun-
+timepercolumntoassessdeploymentconsiderations.
+5 Results
+We present a comprehensive evaluation of our
+proposed framework for contextually sensitive data
+detection in tabular datasets, through type- and
+domain-contextualization. Type Contextualization
+experiments instrumented by the detect-then-reflect
+2https://data.humdata.org/
+mechanism are focused on personal-identifiable
+information (PII) and Domain Contextualization
+instrumentedbytheretrieve-then-detectmechanism
+whichfocusesondomain-specificsensitivitythrough
+acase-studywithhumanitariandataexperts.
+5.1 T ype contextualization improves specificity.
+First, we assess thedetect-then-reflectmechanism
+for detecting sensitive data through type contextual-
+ization. Wereportonbaselinesrepresentingexisting
+state-of-the-arttoolsfordetectingsensitivedatawhich
+automatically treat all columns of interest types as
+sensitiveabovetheline. Belowtheline,wereportthe
+contextualLLM-assistedmethodthatdetectscolumns
+of the types of interest which are directly labeled
+assensitivewithoutreflection(leftcolumn),andare
+labeled as sensitive only if this is the output of the
+reflectionstep(rightcolumn).
+Table 1: Type contextualization for PII sensitive data
+detection, with baselines and thedetect-then-reflect
+mechanism. The LLMs are shown with and without the
+reflection step. We observe that reflection consistently
+improvesprecisionandF1.
+system/model w/o reflection w/ reflection
+prec. rec. F1 prec. rec. F1
+Google DLP0.53 0.63 0.58 – – –
+Presidio0.52 0.62 0.57 – – –
+GPT-4o-mini0.860.64 0.73 0.940.63 0.76
+Gemma 2 9B0.74 0.82 0.780.80 0.79 0.80
+Gemma 3 12B0.49 0.94 0.64 0.75 0.81 0.78
+Qwen3 8B0.74 0.870.80 0.75 0.870.80
+Qwen3 14B0.570.970.71 0.730.940.82
+Qwen3 8BFT->GPT-4o-mini– – – 0.90 0.860.88
+Without reflection, LLMs mark any detected
+PII-type column as sensitive, leading to high recall
+butlowerprecision;Gemma312BandQwen314B
+reacharecallof0.94and0.97butprecisionofonly
+0.49 and 0.57 respectively (Table 1). GPT-4o-mini
+achieveshigherprecision,0.86,atlowerrecallof0.64.
+Withreflectionusingfull-tablecontext,substantially
+improvesprecisionacrossmodels,e.g.,Qwen314B
+increases to 0.73 precision with 0.94 recall, trading
+a small decrease in recall for a significant gain on
+precision. AmodularpipelinecombiningQwen38B
+for type detection with GPT-4o-mini for reflection
+achieves F1 0.88, but is closely matched by Qwen3
+14Bwhichyieldshigherrecall(0.94comparedto0.86).
+Theseresultsillustratethestarkdifferencecompared
+toexistingbaselinesreportedintheupperleftquadrant,
+which suffer from insufficient recall ánd precision.
+Comparing the detect-then-reflect mechanism
+poweredbyopen-sourceLLMswithcommonlyused
+pattern-matchingtoolsDLPandPresidio,weobserve
+asignificantimprovementinbothprecisionandrecall,
+addressing the key limitations of existing tools for
+deploymentinpractice. Overall,thedetect-then-reflect
+mechanism corrects the naive assumption that all
+columnsofsensitivetypesareindeedalwayssensitive,
+boostingprecisionwhilemaintainingrecall.
+Ablation: reflection without detection.Toinves-
+tigate the value of the type-detection step, we also
+taskmodelswithidentifyingsensitivecolumnsusing
+directlythefulltablecontextwithoutfirstdetectingthe
+presenceofcolumnsofspecifictypes(Table1). The
+resultsinTable2illustratethatLLMsyieldgoodperfor-
+manceforsensitivecolumnsusingonlytablecontext
+withoutpriortypedetection,butgenerallyyieldsignif-
+icantimprovementacrossmodelswhenexplicittypes
+aredetectedfirst. Qwen314BachievesthehighestF1
+(0.82)followedbyGemma29B(F10.81). GPT-4o-
+miniexcelsinprecision(0.96)buthaslowcoverage
+witharecallof0.56. Comparingtheperformancewith
+thedetect-then-reflectpipelineinTable1,weobserve
+thatthereflection-onlyapproach,withouttypedetec-
+tion, yields particularly a lower coverage, therefore
+leavingmoresensitivedataundetected. Forexample,
+lookingcloserintotheperformanceofthebestperform-
+ingmodels,therecallofQwen314Bdropsfrom0.94to
+0.89,andGemma29Bfrom0.79to0.75. Theseresults
+indicatethatLLMscanreasonaboutsensitivityfrom
+thetablealone,butthefulldetect-then-reflectmecha-
+nismyieldspreferabletrade-offinprecisionandrecall.
+Table2: Reflection-onlyperformancewithoutpriortypede-
+tection,foridentifyingcontextuallysensitivecolumns. Eval-
+uatedacrossmodelsusingprecision,recall,andF1scores.
+model precision recall F1
+GPT-4o-mini0.960.56 0.71
+Gemma 2 9B0.88 0.75 0.81
+Qwen3 8B0.74 0.78 0.76
+Qwen3 14B0.760.89 0.82
+5.2 Domain contextualization provides coverage
+and context-grounded explainability.
+Shiftingtowardscontextualsensitivedatawhichcan-
+notbeassessedthroughafixedsetoftypes,weevaluate
+theretrieve-then-detectmechanismonacombinedset
+of synthetic and real humanitarian tables from the
+HDXplatform. Withoutexternaldomainknowledge,
+allmodelsexhibitahighlyconservativebias,achieving
+perfectrecallbutallwithprecisionlowerthan0.56(Ta-
+ble3;baseline). Integratingretrieveddomain-specific
+context,i.e.,sensitivityguidelinesobtainedfrominfor-
+mationsharingprotocols(ISP’s)forhumanitariandata
+sharing,intotheinputforreflectionbythelanguage
+model, consistently improves precision. GPT-4o-
+mini’sprecisionincreasesfrom0.47to0.69(F1=0.82),
+andQwen314B’sfrom0.56to0.64(F1=0.78),both
+maintaining perfect recall (1). Table 3 summarizes
+theresultsonthe23datasetshumanitariandatasets.
+Table 3: Table-level classification performance with
+and without context-grounding in humanitarian data
+sensitivity rules. The retrieved rules improve precision
+whilemaintaininghighrecall.
+system/modelw/o domain knowledgew/ domain knowledge
+prec. rec. F1 prec. rec. F1
+Baseline: allsensitive0.3751.0000.545– – –
+GPT-4o-mini0.4741.0000.643 0.6921.000 0.818
+Gemma 2 9B0.3751.0000.5450.4291.0000.600
+Gemma 3 12B0.5291.0000.692 0.5001.0000.667
+Qwen3 8B0.562 1.000 0.720 0.7780.7780.778
+Qwen3 14B0.562 1.000 0.7200.6431.0000.783
+Qualitative analysis surfaces that the context
+retrieval mechanism enables models to produce
+interpretable and consistent justifications, thereby
+enhancing the transparency and auditability of the
+sensitivityassessments. Themodeloutputscontaining
+sensitivity classifications and explanations were
+reviewed by two humanitarian data quality experts,
+who considered the context-grounded explanations
+accurate, and highly informative for guiding and
+standardizinghuman-assessment. Thebelowexcerpt
+shows such context-grounded LLM assessment on
+a table titled “Reported location on NFIs suppliers”
+with (1) a description of the data at hand, along
+with (2) the LLM’s sensitivity assessment, and (3)
+explanationgroundedinretrievedISPrules.
+1. The column “nfi_supplier_loc-value-
+from_Iran” indicates the origin of NFIs
+suppliers.
+2. This information, even with country-level
+disaggregation, doesn’t reveal personal or
+sensitive data. It relates to the location
+of suppliers, which is generally not consid-
+ered sensitive.
+3. It aligns with the ISP’s guideline on
+“Facility data (e.g., health, education, water
+points) at national or regional level, unless
+explicitly restricted by clusters.” Since
+this column is about locations of suppliers
+and not about individuals or specific opera-
+tions, it is categorized as non-sensitive.
+5.3 Error analysis
+Type contextualizationOn data with PII, we
+particularlyobservedmisclassificationofcolumnsof
+generictypes,aswellasexplicitpersonaltypes. For
+example,the“GENERIC_ID”typeiswelldetected,
+butclassifiedasnon-sensitivebymostLLMscausing
+verylowrecall. Fortypesmoreexplicitlyrelatingto
+personalinformation(likenames),columnsareoften
+classifiedassensitiveinreflection,whilenotalways
+annotated as such. This highlights the potential for
+morespecificcontext-andtype-specificinstructions
+duringreflection.
+Domain contextualizationIn our experiments
+with humanitarian data, we observed mainly false
+positivesforLLMs,whichgenerallyappearcautious
+with humanitarian data. On these false positives,
+analysis surfaces that the Qwen model has most
+confusionaroundborderlinecasesthatareannotated
+as non-sensitive but classified as medium-sensitive,
+whilegpt-4o-minideemsmostofthesetableshighly
+sensitive (75%). This illustrates the need for more
+specificinstructionsforborderlinecases.
+5.4 Latency of contextual sensitive data detection.
+Table4givesanoverviewofwall-clocklatencymea-
+surements of the end-to-end pipeline averaged over
+allcolumns,aswellascostindicationsandmemory
+measurements for local models. Despite the more
+elaborate mechanisms for contextualized sensitive
+datadetection,thelatencydeltabetweenthecontextual
+sensitiveLM-poweredpipelinesversusGoogleDLP
+(whichonlyconductstype-basedsensitivitydetection)
+might be acceptable given the significant accuracy
+gain that the introduced mechanisms provide. If
+efficiencyiskey,smallermodelslikeQwen38Bcan
+yield an favorable trade-off, whereas larger or more
+costly models for more sensitive scenarios can be
+feasibleforsmaller-scaleevaluations.
+Table4: Comparisonofpipelinelatencypercolumnand
+resourcecostacrossdifferentmethodsandmodels.
+tool/model total pipeline (s/col) cost or GPU memory
+GoogleDLP3 0.16 subscription
+GPT-4o-mini 1.20 $0.05pertable
+Gemma29B 2.89 7.8GB
+Gemma312B 2.94 8.0GB
+Qwen38B 0.46 8.0GB
+Qwen314B 1.62 11.4GB
+3For Google DLP, we only measure type-based sensitivity
+detectionasitisnotsuitablefordomain-specificsensitivity.
+6 Related Work
+Existing methods for detecting sensitive data con-
+centrate on detecting PII types, or otherwise static
+sensitivetypes. Tothisend,widelyadoptedindustry
+tools like Microsoft Presidio (Microsoft, 2018) and
+GoogleCloudDLP(GoogleCloud,2018)detectcor-
+respondences between values and structured types,
+suchasemailaddressesandphonenumbers,basedon
+rule-basedheuristicsandsyntacticpatternmatching.
+Recentresearchhasexpandedthetypedetectionscope
+by utilizing large neural models to learn mappings
+between high-dimensional semantic representations
+of values, e.g. table columns, and their semantic
+types (Hulsebos et al., 2019; Kužina et al., 2023).
+Languagemodelshavealsoemergedaspowerfultools
+forsensitivedatadetection,asparticularlyshownfor
+PIIdetection,outperformingbothrule-basedandtra-
+ditional machine learning methods in accuracy and
+adaptability (Shen et al., 2025; Yang et al., 2023).
+However,whilelanguagemodelsexcelatidentifying
+known PII types, they struggle with assessingcon-
+textualsensitivity,suchasdomain-specificsensitive
+types,unlessexplicitlyprovidedwiththerelevantop-
+erational context. In this work, we address this gap:
+ourcontextualsensitivedatadetectionframeworkad-
+dressesbothpersonalandnon-personalsensitivedata
+byconsideringinternalandexternalcontextfactors.
+7 Conclusion
+Withtheriseofopendataportalstodemocratizedata
+access,comestheriskofexposingsensitivedatatoma-
+liciousactorsorlanguagemodelsfueledbypublicdata.
+Protectingsensitivedataisthereforekey,butmethods
+forthisarelimited:theyaretoospecifictocaptureall
+sensitivedata,andtoogenerictoonlysuppressdata
+thatisactuallysensitive. Weargueforcontextualizing
+sensitivedatadetectionalongtwodimensions. First,
+typecontextualization,whichconsidersfine-grained
+aspects beyond static sensitivity types. Our detect-
+then-reflect mechanism shows that first detecting if
+datavaluesbelongtoasensitivetype,thenreflecting
+ontheirtruesensitivity,increasesrecalloverexisting
+toolswithupto49%. Second,weintroducedomain
+contextualizationwhichconsidersdomain-specificfac-
+torsexternaltothedatainordertoassessitssensitivity.
+Acasestudywithhumanitariandatasetshighlightsthat
+contextualizingthesensitivityassessmentinrelevant
+domain-specific rules through a retrieval stage, ex-
+tendsthetypecoverageandenablesdomain-grounded
+explanations. We believe that our work provides a
+steppingstoneinthisimportantdirection.
+Limitations and Risks
+Evaluation coverageIn our humanitarian case
+study,weshowthatdomaincontextualizationleadsto
+higherprecisionwhilepreservingcoverage,andalso
+providesusefulgroundedexplanationstodataquality
+reviewers. The limited availability of labeled data
+in this case study, might affect generalization of the
+insightsfordomain-contextualizedsensitivedatadetec-
+tion. Moreover,whiletheconceptualframeworkand
+mechanismsaremodalityagnostic(Section3),thelack
+ofdatasetswithlabeledsensitivityandthedatasetting
+ofthehumanitariancasestudyhaveresultedinevalu-
+ationsfortabulardataonly,forwhichweconstructed
+andpublishhand-labeleddatasets. Wecallformore
+diverse labeled datasets, to advance this important
+problem,andevaluatetheframeworkandmechanisms
+fordifferentmodalities,languages,anddomains.
+Modality coverageDespite the focus of our
+implementationandevaluationontabulardata. The
+proposed mechanisms easily extend to other modal-
+ities, such as free-form text data: 1) type-informed
+sensitivity in free-form text can be implemented
+efficiently by concatenating a decomposition
+component with a more lightweight learned type
+predictor (Hulsebos et al., 2019) and performing
+reflectioninbatches,2)fordomain-contextualization
+offree-formtext,ahierarchicalreflectionprocedure
+couldbeefficient. Forexample,startingwithassessing
+high-level segments of the text (document-level,
+paragraph-level,sentence-level,etc(Linetal.,2025)),
+andincrementallynarrowingdown.
+Sensitivity specification dependencyThe pre-
+sentedmechanismsfordetectingsensitivedatacanen-
+ableautomationbutalsoassisthumansindatareview-
+ingbyprovidingcontext-groundedexplanationswith
+explicitcitationstorelevantsensitivityrules. Forsuc-
+cessfuladoptioninpractice,however,themechanisms
+dependonhavingaccesstoreasonablesensitivityin-
+structionsintheformof1)fine-grainedsemantictypes
+ofdatathataredeemedsensitivefortypecontextual-
+ization,and2)reasonablyspecifiedassessmentrules
+indomain-specificdocumentsor(web)datasources.
+Data access delay and further automationA
+potential negative consequence of automated data
+sensitivitydetectionisthatcriticaldatasetsmightbe
+blocked that are time-sensitive and could be instru-
+mentalforsolvingsocietalproblems,forexample,in
+humanitarian domains. The mechanisms could be
+tailoredaroundthedesiredprecision/recalltrade-off
+toreducefalsealarms. Inthiswork,weonlypresent
+mechanismsfordetectingcontextualdatasensitivity,
+andnotforautomatedremedies. Inpractice,areport
+couldbegeneratedbasedonexistingcasestoinstruct
+the user on how to remedy the sensitive data, or
+potentiallyevenautomaticallyremedythis,whichis
+alsoanimportantdirectionforfutureresearch.
+Acknowledgements
+We are grateful for the collaboration with the
+ResponsibleDatateamoftheUnitedNationsOCHA
+Humanitarian Data Centre. Specifically, we thank
+AlexandruGartner,GodfreyTakavarasha,JosBerens,
+Javier Téran, Metasebya Sahlu, Melanie Rabier,
+NafissatouPouye,SarahTelford,SerbanTeodorescu,
+and Shahrooz Badkoubei, for their invaluable
+contributions to this project. This work has been
+supportedbyfundingfromanAiNedgrantfromNWO
+(NGF.1607.22.045)andcreditgrantsfromOpenAI.
+References
+MubasharaAkhtar,OmarBenjelloun,CostanzaConforti,
+LucaFoschini,PieterGijsbers,JoanGiner-Miguelez,Su-
+jataGoswami,NitishaJain,MichalisKaramousadakis,
+SatyapriyaKrishna,MichaelKuchnik,SylvainLesage,
+QuentinLhoest,PierreMarcenac,ManilMaskey,Peter
+Mattson, Luis Oala, Hamidah Oderinwale, Pierre
+Ruyssen, and12others.2024. Croissant: Ametadata
+format for ml-ready datasets. InAdvances in Neural
+Information Processing Systems, volume 37, pages
+82133–82148.CurranAssociates,Inc.
+Christine L Borgman and Paul Groth. 2025. From data
+creatortodatareuser: Distancematters.HarvardData
+ScienceReview.
+DanBrickley, MatthewBurgess, andNatashaNoy.2019.
+Google dataset search: Building a search engine for
+datasetsinanopenwebecosystem. InTheworldwide
+webconference,pages1365–1375.
+NicholasCarlini,FlorianTramer,EricWallace,Matthew
+Jagielski, Ariel Herbert-Voss, Katherine Lee, Adam
+Roberts, Tom Brown, Dawn Song, Ulfar Erlingsson,
+and1others.2021. Extractingtrainingdatafromlarge
+languagemodels. In30thUSENIXsecuritysymposium
+(USENIXSecurity21),pages2633–2650.
+Centers for Medicare & Medicaid Services. 1996.
+The Health Insurance Portability and Ac-
+countability Act of 1996 (HIPAA). Online at
+http://www.cms.hhs.gov/hipaa/.
+EuropeanParliamentandCounciloftheEuropeanUnion.
+2016. Regulation (EU) 2016/679 of the European
+Parliament and of the Council of 27 April 2016 on
+the protection of natural persons with regard to the
+processingofpersonaldataandonthefreemovement
+ofsuchdata,andrepealingDirective95/46/EC(General
+DataProtectionRegulation).
+Google.2018. Datalossprevention.
+GoogleCloud.2018. CloudDataLossPrevention(DLP)
+API – General Availability. Web documentation.
+Accessed: 2025-07-22.
+Edward J. Hu, Yelong Shen, Phillip Wallis, Zeyuan
+Allen-Zhu, Yuanzhi Li, Shean Wang, Lu Wang, and
+Weizhu Chen. 2021. Lora: Low-rank adaptation of
+largelanguagemodels.Preprint,arXiv:2106.09685.
+Madelon Hulsebos, Çagatay Demiralp, and Paul Groth.
+2023. Gittables: A large-scale corpus of relational
+tables.Proceedings of the ACM on Management of
+Data,1(1):1–17.
+MadelonHulsebos,KevinHu,MichielBakker,Emanuel
+Zgraggen,ArvindSatyanarayan,TimKraska,Çagatay
+Demiralp,andCésarHidalgo.2019. Sherlock: Adeep
+learning approach to semantic data type detection. In
+Proceedings of the 25th ACM SIGKDD International
+Conference on Knowledge Discovery &#38; Data
+Mining.ACM.
+Moe Kayali, Anton Lykov, Ilias Fountalis, Nikolaos
+Vasiloglou,DanOlteanu,andDanSuciu.2024. Chorus:
+Foundation models for unified data discovery and
+exploration.Proceedings of the VLDB Endowment,
+17(8):2104–2114.
+Maria Kober, Jordan Samhi, Steven Arzt, Tegawendé F
+Bissyandé, and Jacques Klein. 2023. Sensitive and
+personaldata: Whatexactlyareyoutalkingabout? In
+2023IEEE/ACM10thInternationalConferenceonMo-
+bileSoftwareEngineeringandSystems(MOBILESoft),
+pages70–74.IEEE.
+Vjeko Kužina, Ana-Marija Petric, Marko Barišić, and
+AlanJović.2023. Cassed: Context-basedapproachfor
+structuredsensitivedatadetection.ExpertSystemswith
+Applications,223:119924.
+Yiming Lin, Madelon Hulsebos, Ruiying Ma, Shreya
+Shankar, Sepanta Zeighami, Aditya G Parameswaran,
+andEugeneWu.2025. Queryingtemplatizeddocument
+collectionswithlargelanguagemodels. In2025IEEE
+41st International Conference on Data Engineering
+(ICDE),pages2422–2435.IEEE.
+Nils Lukas, Ahmed Salem, Robert Sim, Shruti Tople,
+LukasWutschitz,andSantiagoZanella-Béguelin.2023.
+Analyzingleakageofpersonallyidentifiableinformation
+in language models. In2023 IEEE Symposium on
+SecurityandPrivacy(SP),pages346–363.IEEE.
+Nathan Malkin. 2022. Contextual integrity, explained:
+A more usable privacy definition.IEEE Security &
+Privacy,21(1):58–65.
+Microsoft.2018. Microsoftpresidio.
+HelenNissenbaum.2004. Privacyascontextualintegrity.
+Wash.L.Rev.,79:119.
+UNOCHA.2025. Dataresponsibilityguidelines2025.
+OpenAI, :, Aaron Hurst, Adam Lerer, Adam P. Goucher,
+Adam Perelman, Aditya Ramesh, Aidan Clark,
+AJOstrow,AkilaWelihinda,AlanHayes,AlecRadford,
+AleksanderMądry,AlexBaker-Whitcomb,AlexBeutel,
+AlexBorzunov,AlexCarney,AlexChow,AlexKirillov,
+and 401 others. 2024. Gpt-4o system card.Preprint,
+arXiv:2410.21276.
+VijayshankarRaman.2001. Potter’swheel: Aninteractive
+data cleaning system. InVLDB, volume 1, pages
+381–390.
+Y.Shen,Z.Ji,J.Lin,andK.R.Koedginer.2025. Enhancing
+thede-identificationofpersonallyidentifiableinforma-
+tionineducationaldata.Preprint,arXiv:2501.09765.
+Nishant Subramani, Sasha Luccioni, Jesse Dodge, and
+MargaretMitchell.2023. Detectingpersonalinforma-
+tion in training corpora: an analysis. InProceedings
+ofthe3rdWorkshoponTrustworthyNaturalLanguage
+Processing(TrustNLP2023),pages208–220.
+GemmaTeam.2025. Gemma3.
+Gemma Team, Morgane Riviere, Shreya Pathak,
+PierGiuseppeSessa,CassidyHardin,SuryaBhupatiraju,
+LéonardHussenot,ThomasMesnard,BobakShahriari,
+AlexandreRamé,JohanFerret,PeterLiu,PouyaTafti,
+Abe Friesen, Michelle Casbon, Sabela Ramos, Ravin
+Kumar, Charline Le Lan, Sammy Jerome, and 179
+others. 2024. Gemma 2: Improving open language
+modelsatapracticalsize.Preprint,arXiv:2408.00118.
+UNOCHACentreforHumanitarianData.2021. Theocha
+dataresponsibilityguidelines. Blogpost.
+United Nations. 2014. The humanitarian data ex-
+change. https://data.humdata.org/. Accessed:
+2015-05-31.
+MarkDWilkinson,MichelDumontier,IJsbrandJanAal-
+bersberg,GabrielleAppleton,MylesAxton,ArieBaak,
+Niklas Blomberg, Jan-Willem Boiten, Luiz Bonino
+da Silva Santos, Philip E Bourne, and 1 others.
+2016. The fair guiding principles for scientific data
+managementandstewardship.Scientificdata,3(1):1–9.
+SophiaWorth,BenSnaith,ArunavDas,GefionThuermer,
+and Elena Simperl. 2024. Ai data transparency: an
+exploration through the lens of ai incidents.arXiv
+preprintarXiv:2409.03307.
+An Yang, Anfeng Li, Baosong Yang, Beichen Zhang,
+Binyuan Hui, Bo Zheng, Bowen Yu, Chang Gao,
+ChengenHuang,ChenxuLv,ChujieZheng,Dayiheng
+Liu,FanZhou,FeiHuang,FengHu,HaoGe,Haoran
+Wei, Huan Lin, Jialong Tang, and 41 others. 2025.
+Qwen3technicalreport.Preprint,arXiv:2505.09388.
+JianliangYang,XiyaZhang,KaiLiang,andYuenanLiu.
+2023. Exploringtheapplicationoflargelanguagemod-
+els in detecting and protecting personally identifiable
+informationinarchivaldata: Acomprehensivestudy*.
+In2023 IEEE International Conference on Big Data
+(BigData),pages2116–2123.
+Xinyu Yang, Weixin Liang, and James Zou. 2024.
+Navigatingdatasetdocumentationsinai: Alarge-scale
+analysis of dataset cards on hugging face.Preprint,
+arXiv:2401.13822.
+Jiayao Zhang, Yuran Bi, Mengye Cheng, Jinfei Liu, Kui
+Ren,QihengSun,YihangWu,YangCao,RaulCastro
+Fernandez,HaifengXu,and1others.2024. Asurvey
+ondatamarkets.arXivpreprintarXiv:2411.07267.

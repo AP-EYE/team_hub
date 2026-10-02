@@ -1,0 +1,73 @@
+[
+ {
+  "src": "S2",
+  "id": "arXiv:2505.22224",
+  "date": "2025",
+  "title": "Solver-Free Decision-Focused Learning for Linear Optimization Problems",
+  "venue": "Neural Information Processing Systems",
+  "abstract": "Mathematical optimization is a fundamental tool for decision-making in a wide range of applications. However, in many real-world scenarios, the parameters of the optimization problem are not known a priori and must be predicted from contextual features. This gives rise to predict-then-optimize problems, where a machine learning model predicts problem parameters that are then used to make decisions via optimization. A growing body of work on decision-focused learning (DFL) addresses this setting by training models specifically to produce predictions that maximize downstream decision quality, rather than accuracy. While effective, DFL is computationally expensive, because it requires solving the optimization problem with the predicted parameters at each loss evaluation. In this work, we address this computational bottleneck for linear optimization problems, a common class of problems in both DFL literature and real-world applications. We propose a solver-free training method that exploits the geometric structure of linear optimization to enable efficient training with minimal degradation in solution quality. Our method is based on the insight that a solution is optimal if and only if it achieves an objective value that is at least as good as that of its adjacent vertices on the feasible polytope. Building on this, our method compares the estimated quality of the ground-truth optimal solution with that of its precomputed adjacent vertices, and uses this as loss function. Experiments demonstrate that our method significantly reduces computational cost while maintaining high decision quality."
+ },
+ {
+  "src": "S2",
+  "id": "arXiv:2510.04951",
+  "date": "2025",
+  "title": "Feasibility-Aware Decision-Focused Learning for Predicting Parameters in the Constraints",
+  "venue": "Neural Information Processing Systems",
+  "abstract": "When some parameters of a constrained optimization problem (COP) are uncertain, this gives rise to a predict-then-optimize (PtO) problem, comprising two stages: the prediction of the unknown parameters from contextual information and the subsequent optimization using those predicted parameters. Decision-focused learning (DFL) implements the first stage by training a machine learning (ML) model to optimize the quality of the decisions made using the predicted parameters. When the predicted parameters occur in the constraints, they can lead to infeasible solutions. Therefore, it is important to simultaneously manage both feasibility and decision quality. We develop a DFL framework for predicting constraint parameters in a generic COP. While prior works typically assume that the underlying optimization problem is a linear program (LP) or integer LP (ILP), our approach makes no such assumption. We derive two novel loss functions based on maximum likelihood estimation (MLE): the first one penalizes infeasibility (by penalizing predicted parameters that lead to infeasible solutions), while the second one penalizes suboptimal decisions (by penalizing predicted parameters that make the true optimal solution infeasible). We introduce a single tunable parameter to form a weighted average of the two losses, allowing decision-makers to balance suboptimality and feasibility. We experimentally demonstrate that adjusting this parameter provides decision-makers control over this trade-off. Moreover, across several COP instances, we show that adjusting the tunable parameter allows a decision-maker to prioritize either suboptimality or feasibility, outperforming the performance of existing baselines in either objective."
+ },
+ {
+  "src": "S2",
+  "id": "DOI:10.1145/3736425.3770104",
+  "date": "2025",
+  "title": "Decision-Focused Learning for Cost-Efficient and Sustainable Water Treatment Plant Operations",
+  "venue": "International Conference on Systems for Energy-Efficient Built Environments",
+  "abstract": "This paper investigates the use of decision-focused learning for receding horizon control of a wastewater treatment plant equipped with solar panels and battery energy storage, with the goal of minimizing either its operating costs or carbon emissions. We demonstrate that the structure of the underlying optimization problem depends on the chosen objective, and benchmark state-of-the-art decision-focused learning methods accordingly. Our results show that decision-focused learning can reduce operating costs and carbon emissions by 24.92% and 28.75%, respectively, compared to the traditional predict-then-optimize approach, underscoring the value of training forecasting models using task-specific loss functions."
+ },
+ {
+  "src": "S2",
+  "id": "arXiv:2511.04909",
+  "date": "2025",
+  "title": "A Dual Perspective on Decision-Focused Learning: Scalable Training via Dual-Guided Surrogates",
+  "venue": "arXiv.org",
+  "abstract": "Many real-world decisions are made under uncertainty by solving optimization problems using predicted quantities. This predict-then-optimize paradigm has motivated decision-focused learning, which trains models with awareness of how the optimizer uses predictions, improving the performance of downstream decisions. Despite its promise, scaling is challenging: state-of-the-art methods either differentiate through a solver or rely on task-specific surrogates, both of which require frequent and expensive calls to an optimizer, often a combinatorial one. In this paper, we leverage dual variables from the downstream problem to shape learning and introduce Dual-Guided Loss (DGL), a simple, scalable objective that preserves decision alignment while reducing solver dependence. We construct DGL specifically for combinatorial selection problems with natural one-of-many constraints, such as matching, knapsack, and shortest path. Our approach (a) decouples optimization from gradient updates by solving the downstream problem only periodically; (b) between refreshes, trains on dual-adjusted targets using simple differentiable surrogate losses; and (c) as refreshes become less frequent, drives training cost toward standard supervised learning while retaining strong decision alignment. We prove that DGL has asymptotically diminishing decision regret, analyze runtime complexity, and show on two problem classes that DGL matches or exceeds state-of-the-art DFL methods while using far fewer solver calls and substantially less training time. Code is available at https://github.com/paularodr/Dual-Guided-Learning."
+ },
+ {
+  "src": "S2",
+  "id": "DOI:10.1145/2009916.2009939",
+  "date": "2011",
+  "title": "Active learning to maximize accuracy vs. effort in interactive information retrieval",
+  "venue": "Annual International ACM SIGIR Conference on Research and Development in Information Retrieval",
+  "abstract": ""
+ },
+ {
+  "src": "S2",
+  "id": "342f5bcf03843c9c5cdb2f126f91a09ecbee6686",
+  "date": "2012",
+  "title": "Ensample Learning Based on Ranking Attribute Value (ELBRAV) for imbalanced Biomedical Data Classification",
+  "venue": "",
+  "abstract": ""
+ },
+ {
+  "src": "S2",
+  "id": "DOI:10.1109/EIECC60864.2023.10456734",
+  "date": "2023",
+  "title": "Decentralized Federated Learning Privacy-Preserving Framework Based on Blockchain",
+  "venue": "2023 3rd International Conference on Electronic Information Engineering and Computer Communication (EIECC)",
+  "abstract": "Federated Learning is a promising approach for privacy-preserving distribute training, but it still faces trust issues and privacy concerns. To address such problems, we suggest a decentralized federated learning framework (PP-BFL) based on blockchain that introduces a node reputation value mechanism to establish a trusted reputation system and a training accuracy verification mechanism that leverages smart contracts to ensure model accuracy while protecting data privacy. Our framework reduces the risk of privacy violations due to collusive evil participants and encourages honest and active participation by modeling historical performance and ranking participants based on their trustworthiness. Experimentally, we demonstrate that our framework delivers higher levels of privacy protection. Our work offers an innovative solution for privacy-preserving distribute training, and future work will explore how to optimize and expand our approach to achieve even greater security and privacy guarantees."
+ },
+ {
+  "src": "S2",
+  "id": "DOI:10.1109/icra46639.2022.9811769",
+  "date": "2022",
+  "title": "A Double Branch Next-Best-View Network and Novel Robot System for Active Object Reconstruction",
+  "venue": "IEEE International Conference on Robotics and Automation",
+  "abstract": "Next best view (NBV) is a technology that finds the best view sequence for sensor to perform scanning based on partial information, which is the core part for robot active reconstruction. Traditional works are mostly based on the evaluation of candidate views through time-consuming volu-metric transformation and ray casting, which heavily limits the applications of NBV. Recent deep learning based NBV methods aim to approximately learn the evaluation function by large-scale training, and improve both the effectiveness and efficiency of NBV. However, these methods force the network to regress the exact groundtruth value of each candidate view, which is much harder than simply ranking all the candidate views. Besides, most previous NBV works assume perfect sensing and perform in simulation environments, lacking real application abilities. In this paper, we propose a novel double branch NBV network, DB-NBV, to utilize the ranking process together with the evaluation process. We further design a real NBV robot and a pipeline to conduct real active reconstruction. Experiments on both simulation and real robot show that our method achieves the best performance and can be applied to real application with high accuracy and speed."
+ },
+ {
+  "src": "cites arXiv:2512.04120",
+  "id": "DOI:10.3390/info17070663",
+  "date": "2026",
+  "title": "Detecting Context-Dependent Sensitive Data in Unstructured Text",
+  "venue": "Information"
+ }
+]

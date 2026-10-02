@@ -1,0 +1,44 @@
+[
+ {
+  "src": "cites DOI:10.1145/3719027.3744825",
+  "id": "arXiv:2609.12426",
+  "date": "2026",
+  "title": "IDORacle: Template-guided data-access mediation for object-level authorization in database-backed applications",
+  "venue": "Computers &amp; Security"
+ },
+ {
+  "src": "cites DOI:10.1145/3719027.3744825",
+  "id": "DOI:10.1109/ECNCT70535.2026.11661439",
+  "date": "2026",
+  "title": "BACScout: Evidence-Constrained Black-Box Testing of Broken Access Control in Microservice Applications",
+  "venue": "2026 8th International Conference on Electronics and Communication, Network and Computer Technology (ECNCT)"
+ },
+ {
+  "src": "cites DOI:10.1145/3719027.3744825",
+  "id": "arXiv:2606.14295",
+  "date": "2026",
+  "title": "AgentCyberRange: Benchmarking Frontier AI Systems in Realistic Cyber Ranges",
+  "venue": "arXiv.org"
+ },
+ {
+  "src": "cites DOI:10.1145/3719027.3744825",
+  "id": "DOI:10.1109/SP63933.2026.00152",
+  "date": "2026",
+  "title": "BACHunter: Detecting Broken Access Control Vulnerabilities in Intelligent Connected Vehicles",
+  "venue": "IEEE Symposium on Security and Privacy"
+ },
+ {
+  "src": "cites DOI:10.1145/3719027.3744825",
+  "id": "arXiv:2512.19997",
+  "date": "2025",
+  "title": "BacAlarm: Mining and Simulating Composite API Traffic to Prevent Broken Access Control Violations",
+  "venue": "arXiv.org"
+ },
+ {
+  "src": "cites DOI:10.1145/3719027.3744825",
+  "id": "arXiv:2412.10476",
+  "date": "2024",
+  "title": "A Survey on Web Application Testing: Over a Decade of Evolution",
+  "venue": ""
+ }
+]
