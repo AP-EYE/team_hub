@@ -1,0 +1,244 @@
+{
+ "Q1": [
+  {
+   "paperId": "d3ee9a19a45ce8a4ddbf750fd16f6ec315f1b04d",
+   "externalIds": {
+    "DBLP": "journals/corr/abs-2607-16754",
+    "ArXiv": "2607.16754",
+    "DOI": "10.48550/arXiv.2607.16754",
+    "CorpusId": 290362587
+   },
+   "title": "A Non-Intrusive Traffic Analysis Framework for Authorization Risk Detection and Coordinated Response in Web Applications",
+   "venue": "arXiv.org",
+   "year": 2026,
+   "citationCount": 0
+  },
+  {
+   "paperId": "0b6c7d731adb6941bf894d4ff3cee85b909d0444",
+   "externalIds": {
+    "DBLP": "conf/ispa/SangX0CZW20",
+    "DOI": "10.1109/ISPA-BDCloud-SocialCom-SustainCom51426.2020.00070",
+    "CorpusId": 235339324
+   },
+   "title": "Toward Automatic Mobile Application Fingerprint Extraction from Non-encrypted HTTP Traffic",
+   "venue": "2020 IEEE Intl Conf on Parallel & Distributed Processing with Applications, Big Data & Cloud Computing, Sustainable Computing & Communications, Social Computing & Networking (ISPA/BDCloud/SocialCom/SustainCom)",
+   "year": 2020,
+   "citationCount": 0
+  },
+  {
+   "paperId": "26470fcbb1175fbf4c08382f7a7103cad12d9e4c",
+   "externalIds": {
+    "DBLP": "conf/infocom/WuLCH21",
+    "DOI": "10.1109/INFOCOMWKSHPS51825.2021.9484509",
+    "CorpusId": 236187694
+   },
+   "title": "Monitoring Video Resolution of Adaptive Encrypted Video Traffic Based on HTTP/2 Features",
+   "venue": "Conference on Computer Communications Workshops",
+   "year": 2021,
+   "citationCount": 8
+  },
+  {
+   "paperId": "8e6362f2549509142a76789418f1afd459744ba3",
+   "externalIds": {
+    "DBLP": "conf/ecms/SuchackaCI26",
+    "DOI": "10.7148/2026-0694",
+    "CorpusId": 289802804
+   },
+   "title": "Using LLMs To Generate Auditable Pipeline Specifications For Risk-Tier Assignment From HTTP Server Logs",
+   "venue": "European Conference on Modelling and Simulation",
+   "year": 2026,
+   "citationCount": 0
+  },
+  {
+   "paperId": "f420f413e40e08ccf1cd510a7bd3781597875a31",
+   "externalIds": {
+    "ArXiv": "2609.05119",
+    "CorpusId": 291769567
+   },
+   "title": "Understanding the Privacy-Preserving Potential of HTTP/2 Against Webpage Fingerprinting",
+   "venue": "",
+   "year": 2026,
+   "citationCount": 0
+  },
+  {
+   "paperId": "52188455b23b01a3f61055f6c500bc4927813d61",
+   "externalIds": {
+    "DOI": "10.1109/mipro70003.2026.11591718",
+    "CorpusId": 289980177
+   },
+   "title": "Implementation Practices of HTTP Security Headers on European News Portals",
+   "venue": "International Convention on Information and Communication Technology, Electronics and Microelectronics",
+   "year": 2026,
+   "citationCount": 0
+  },
+  {
+   "paperId": "b4a5018e95fbbce4067138b451026f3170ab571c",
+   "externalIds": {
+    "DBLP": "conf/tma/ManglaHAZ18",
+    "MAG": "2898499449",
+    "DOI": "10.23919/TMA.2018.8506519",
+    "CorpusId": 53079516
+   },
+   "title": "eMIMIC: Estimating HTTP-Based Video QoE Metrics from Encrypted Network Traffic",
+   "venue": "Traffic Monitoring and Analysis",
+   "year": 2018,
+   "citationCount": 67
+  },
+  {
+   "paperId": "a3e653fc5b1a8cda2f4ee8f4b03c0a7f6f5f961a",
+   "externalIds": {
+    "MAG": "2955506470",
+    "DBLP": "journals/tnsm/ManglaHAZ19",
+    "DOI": "10.1109/TNSM.2019.2924942",
+    "CorpusId": 198357587
+   },
+   "title": "Using Session Modeling to Estimate HTTP-Based Video QoE Metrics From Encrypted Network Traffic",
+   "venue": "IEEE Transactions on Network and Service Management",
+   "year": 2019,
+   "citationCount": 33
+  },
+  {
+   "paperId": "ff30707325188bde6af4188713dbed80c3d997e6",
+   "externalIds": {
+    "DBLP": "conf/ccnc/RR24",
+    "DOI": "10.1109/CCNC51664.2024.10454710",
+    "CorpusId": 268543257
+   },
+   "title": "Beyond Tokens: Distributed, De-Centralized, Local Authorization Framework for Beyond 5GC SBI",
+   "venue": "Consumer Communications and Networking Conference",
+   "year": 2024,
+   "citationCount": 1
+  },
+  {
+   "paperId": "640b5d14675e10263f6e18f969c6f67e7833920c",
+   "externalIds": {
+    "MAG": "3204990116",
+    "DBLP": "journals/tnsm/LopezMMI22",
+    "DOI": "10.1109/tnsm.2021.3121468",
+    "CorpusId": 244631784
+   },
+   "title": "Validation of HTTP Response Time From Network Traffic as an Alternative to Web Browser Instrumentation",
+   "venue": "IEEE Transactions on Network and Service Management",
+   "year": 2022,
+   "citationCount": 3
+  }
+ ],
+ "Q2": [
+  {
+   "paperId": "5bb8362706ecc0636cfddb9113def6ba0ad20a1c",
+   "externalIds": {
+    "ArXiv": "2505.00342",
+    "DBLP": "journals/corr/abs-2505-00342",
+    "DOI": "10.1109/DSN-S65789.2025.00034",
+    "CorpusId": 278237797
+   },
+   "title": "LLMPrism: Black-box Performance Diagnosis for Production LLM Training Platforms",
+   "venue": "2025 55th Annual IEEE/IFIP International Conference on Dependable Systems and Networks - Supplemental Volume (DSN-S)",
+   "year": 2025,
+   "citationCount": 4
+  },
+  {
+   "paperId": "c72968e4e08de09a129c650bc2d3e82fed809f8e",
+   "externalIds": {
+    "DOI": "10.47709/brilliance.v5i1.5971",
+    "CorpusId": 280251786
+   },
+   "title": "Trends and Best Practices in API-Based Web Development Using Laravel and React",
+   "venue": "Brilliance Research of Artificial Intelligence",
+   "year": 2025,
+   "citationCount": 6
+  },
+  {
+   "paperId": "8c2873fc8ecc1be2d5a6bcf7cb8758fecf25cc0f",
+   "externalIds": {
+    "DOI": "10.58723/jivsc.v1i1.44",
+    "CorpusId": 284320749
+   },
+   "title": "Design and Development of An Android-Based Server Monitoring Application Using The aaPanel API with The Waterfall Method",
+   "venue": "Journal on Informatics Visualization and Social Computing",
+   "year": 2025,
+   "citationCount": 0
+  },
+  {
+   "paperId": "0bc5513bbb348ba1aa110a71fe5452ea812372e2",
+   "externalIds": {
+    "DOI": "10.22219/jtiumm.vol26.no1.105-126",
+    "CorpusId": 282633620
+   },
+   "title": "Enhancing Production Planning and Inventory Control with a Web-Based System: A Case Study in an Indonesian Packaging Manufacturer Company",
+   "venue": "Jurnal Teknik Industri",
+   "year": 2025,
+   "citationCount": 4
+  },
+  {
+   "paperId": "75209a500099b4b5141e6bc8ac7682e3ce809e40",
+   "externalIds": {
+    "DOI": "10.67401/j-csat.v4i2.40",
+    "CorpusId": 291323200
+   },
+   "title": "SISTEM PRESENSI DIGITAL BERBASIS WEB DENGAN VERIFIKASI SELFIE DAN LOKASI",
+   "venue": "Journal Computer Science and Applied Technology",
+   "year": 2026,
+   "citationCount": 0
+  },
+  {
+   "paperId": "9ba2c7b6ecd7d4c932972d8861a98d79955bbe66",
+   "externalIds": {
+    "MAG": "2740485228",
+    "CorpusId": 115260611
+   },
+   "title": "Bust Open That ETL Black Box and Apply Proven Techniques to Successfully Modernize Data Integration",
+   "venue": "",
+   "year": 2015,
+   "citationCount": 0
+  },
+  {
+   "paperId": "92bc2c6e1553b79c14dbe7aca2e8882aed2b97d6",
+   "externalIds": {
+    "MAG": "3177473059",
+    "DOI": "10.1002/hyp.14291",
+    "CorpusId": 237818394
+   },
+   "title": "Determining water requirements for Black Box (Eucalyptus largiflorens) floodplain woodlands of high conservation value using drip‐irrigation",
+   "venue": "Hydrological Processes",
+   "year": 2021,
+   "citationCount": 9
+  },
+  {
+   "paperId": "e7a3bc2e203d0b6dcdee884ba8acde2a3be3ba6e",
+   "externalIds": {
+    "DOI": "10.61091/jcmcc127b-386",
+    "CorpusId": 278109107
+   },
+   "title": "RESTful API-based software interface testing techniques and common problems analysis",
+   "venue": "Journal of Combinatorial Mathematics and Combinatorial Computing",
+   "year": 2025,
+   "citationCount": 2
+  },
+  {
+   "paperId": "eb20973065fd433607265e879102b43f253fd706",
+   "externalIds": {
+    "DBLP": "journals/corr/abs-2607-20574",
+    "ArXiv": "2607.20574",
+    "DOI": "10.48550/arXiv.2607.20574",
+    "CorpusId": 290466926
+   },
+   "title": "AuthProbe: Specification-Driven, Multi-Identity Detection of Broken Object-Level Authorization in Recruitment API",
+   "venue": "arXiv.org",
+   "year": 2026,
+   "citationCount": 0
+  },
+  {
+   "paperId": "f4e60c2cc804a045ac5fc643638e99044fcd7ef0",
+   "externalIds": {
+    "DOI": "10.59435/jocstec.v4i3.865",
+    "CorpusId": 291998765
+   },
+   "title": "Development Of A Web-Based Course Scheduling Information System For The Information Technology Study Program At Universitas PGRI Sumatera Barat",
+   "venue": "Journal of Computational Science and Technology",
+   "year": 2025,
+   "citationCount": 0
+  }
+ ],
+ "Q3": []
+}

@@ -1,0 +1,271 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "목록 조회 읽기 BOLA 판정 실험 아키텍처",
+    "output": "bola-judgement-architecture.html",
+    "quality_profile": "showcase"
+  },
+  "components": [
+    {
+      "id": "accounts",
+      "type": "external",
+      "label": "테스트 계정",
+      "sublabel": "A · B · C 공유 · 비로그인",
+      "pos": [
+        30,
+        260
+      ],
+      "size": [
+        160,
+        64
+      ]
+    },
+    {
+      "id": "apps",
+      "type": "cloud",
+      "label": "대상 앱",
+      "sublabel": "Gitea · Memos · 가짜 API",
+      "pos": [
+        265,
+        90
+      ],
+      "size": [
+        160,
+        64
+      ]
+    },
+    {
+      "id": "gateway",
+      "type": "security",
+      "label": "실험 게이트웨이",
+      "sublabel": "계정별 같은 요청",
+      "pos": [
+        265,
+        260
+      ],
+      "size": [
+        160,
+        64
+      ]
+    },
+    {
+      "id": "log",
+      "type": "database",
+      "label": "최소 로그",
+      "sublabel": "객체 ID · 표식 · 상태 코드",
+      "pos": [
+        265,
+        440
+      ],
+      "size": [
+        160,
+        64
+      ]
+    },
+    {
+      "id": "verify",
+      "type": "backend",
+      "label": "반환 객체 식별",
+      "sublabel": "객체 ID + 실험용 문구",
+      "pos": [
+        500,
+        260
+      ],
+      "size": [
+        160,
+        64
+      ]
+    },
+    {
+      "id": "config",
+      "type": "database",
+      "label": "설정 기록",
+      "sublabel": "공개 범위 · 공유 대상",
+      "pos": [
+        500,
+        440
+      ],
+      "size": [
+        160,
+        64
+      ]
+    },
+    {
+      "id": "judge",
+      "type": "backend",
+      "label": "설정 대조 판정",
+      "sublabel": "정상 · 위반 · 보류",
+      "pos": [
+        735,
+        260
+      ],
+      "size": [
+        160,
+        64
+      ],
+      "tag": "개선안 미구현"
+    },
+    {
+      "id": "baselines",
+      "type": "backend",
+      "label": "비교군",
+      "sublabel": "200 규칙 · AuthzTrace",
+      "pos": [
+        735,
+        440
+      ],
+      "size": [
+        160,
+        64
+      ]
+    },
+    {
+      "id": "truth",
+      "type": "database",
+      "label": "평가 정답",
+      "sublabel": "정책 + 실제 설정",
+      "pos": [
+        970,
+        90
+      ],
+      "size": [
+        160,
+        64
+      ]
+    },
+    {
+      "id": "eval",
+      "type": "frontend",
+      "label": "평가",
+      "sublabel": "오탐 · 미탐 · 보류 · 비용",
+      "pos": [
+        970,
+        260
+      ],
+      "size": [
+        160,
+        64
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "판정 단계 (개선안, 미구현)",
+      "wraps": [
+        "verify",
+        "judge"
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "send",
+      "from": "accounts",
+      "to": "gateway",
+      "label": "계정별 요청",
+      "variant": "emphasis"
+    },
+    {
+      "id": "query",
+      "from": "gateway",
+      "to": "apps",
+      "label": "목록 · 개별 조회",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "id": "record",
+      "from": "gateway",
+      "to": "log",
+      "label": "근거만 기록",
+      "variant": "dashed",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelAt": [
+        345,
+        382
+      ]
+    },
+    {
+      "id": "response",
+      "from": "gateway",
+      "to": "verify",
+      "label": "응답",
+      "variant": "emphasis"
+    },
+    {
+      "id": "identified",
+      "from": "verify",
+      "to": "judge",
+      "label": "반환 객체",
+      "variant": "emphasis"
+    },
+    {
+      "id": "policy",
+      "from": "config",
+      "to": "judge",
+      "label": "허용 · 금지",
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "bottom"
+    },
+    {
+      "id": "verdict",
+      "from": "judge",
+      "to": "eval",
+      "label": "판정 결과",
+      "variant": "emphasis"
+    },
+    {
+      "id": "compare",
+      "from": "baselines",
+      "to": "eval",
+      "label": "같은 요청 비교",
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "bottom"
+    },
+    {
+      "id": "answer",
+      "from": "truth",
+      "to": "eval",
+      "label": "정답",
+      "variant": "dashed",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelAt": [
+        1050,
+        207
+      ]
+    }
+  ],
+  "cards": [
+    {
+      "dot": "amber",
+      "title": "실험 조건",
+      "items": [
+        "빈 목록 / 허용 객체만",
+        "금지 객체만 / 허용·금지 혼합",
+        "공개 ID·제목과 비공개 본문 구분"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "예비 결과 (판정기 아님)",
+      "items": [
+        "단순 규칙 오탐: Gitea 8/18, Memos 3/6",
+        "AuthzTrace 가짜 API: 정탐 4, 빈 목록 오탐 4 (팀원 보고)"
+      ]
+    },
+    {
+      "dot": "slate",
+      "title": "범위 밖",
+      "items": [
+        "개인정보 점수화",
+        "권한 회수 진단"
+      ]
+    }
+  ]
+}

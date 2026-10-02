@@ -1,0 +1,57 @@
+[
+ {
+  "src": "arXiv",
+  "id": "arXiv:2308.15259v2",
+  "date": "2023-08-29",
+  "title": "Shedding Light on CVSS Scoring Inconsistencies: A User-Centric Study on Evaluating Widespread Security Vulnerabilities",
+  "abstract": "The Common Vulnerability Scoring System (CVSS) is a popular method for evaluating the severity of vulnerabilities in vulnerability management. In the evaluation process, a numeric score between 0 and 10 is calculated, 10 being the most severe (critical) value. The goal of CVSS is to provide comparable scores across different evaluators. However, previous works indicate that CVSS might not reach this goal: If a vulnerability is evaluated by several analysts, their scores often differ. This raises the following questions: Are CVSS evaluations consistent? Which factors influence CVSS assessments? We systematically investigate these questions in an online survey with 196 CVSS users. We show that specific CVSS metrics are inconsistently evaluated for widespread vulnerability types, including Top 3 vulnerabilities from the \"2022 CWE Top 25 Most Dangerous Software Weaknesses\" list. In a follow-up survey with 59 participants, we found that for the same vulnerabilities from the main study, 68% of these users gave different severity ratings. Our study reveals that most evaluators are aware of the problematic aspects of CVSS, but they still see CVSS as a useful tool for vulnerability assessment. Finally, we discuss possible reasons for inconsistent evaluations and provide recommendations on improving the consistency of scoring."
+ },
+ {
+  "src": "S2",
+  "id": "DOI:10.1016/j.dss.2022.113731",
+  "date": "2022",
+  "title": "A project prioritization approach considering uncertainty, reliability, criteria prioritization, and robustness",
+  "venue": "Decision Support Systems",
+  "abstract": ""
+ },
+ {
+  "src": "S2",
+  "id": "DOI:10.1007/s11269-016-1451-2",
+  "date": "2016",
+  "title": "Robustness, Uncertainty and Sensitivity Analyses of the TOPSIS Method for Quantitative Climate Change Vulnerability: a Case Study of Flood Damage",
+  "venue": "Water resources management",
+  "abstract": ""
+ },
+ {
+  "src": "S2",
+  "id": "DOI:10.1109/COMPSAC65507.2025.00190",
+  "date": "2025",
+  "title": "Vulnerability Weightage and Prioritization Model: Derived from Real Data and Community Insights",
+  "venue": "Annual International Computer Software and Applications Conference",
+  "abstract": "In the current cybersecurity industry, managing vulnerabilities is a critical component (i.e., to provide a robust cybersecurity defense). Traditional scoring systems like CVSS often lack real-time threat adaptability. Keeping this in mind, our research introduces an enhanced vulnerability prioritization model by integrating–(i) CVSS; (ii) EPSS; (iii) CWE; (iv) CAPEC; (v) MITRE ATT&CK mappings; and (vi) other community-driven data. Our model leverages real-time intelligence and a weighted scoring system to prioritize vulnerabilities effectively; and by doing so, it provides–(a) a dynamic and accurate assessment; (b) improves vulnerability management; and (c) strengthens the overall security posture."
+ },
+ {
+  "src": "S2",
+  "id": "DOI:10.1038/s41598-023-31597-6",
+  "date": "2023",
+  "title": "Assessing ecosystem vulnerability under severe uncertainty of global climate change",
+  "venue": "Scientific Reports",
+  "abstract": "Assessing the vulnerability and adaptive capacity of species, communities, and ecosystems is essential for successful conservation. Climate change, however, induces extreme uncertainty in various pathways of assessments, which hampers robust decision-making for conservation. Here, we developed a framework that allows us to quantify the level of acceptable uncertainty as a metric of ecosystem robustness, considering the uncertainty due to climate change. Under the framework, utilizing a key concept from info-gap decision theory, vulnerability is measured as the inverse of maximum acceptable uncertainty to fulfill the minimum required goal for conservation. We applied the framework to 42 natural forest ecosystems and assessed their acceptable uncertainties in terms of maintenance of species richness and forest functional type. Based on best-guess estimate of future temperature in various GCM models and RCP scenarios, and assuming that tree species survival is primarily determined by mean annual temperature, we performed simulations with increasing deviation from the best-guess temperature. Our simulations indicated that the acceptable uncertainty varied greatly among the forest plots, presumably reflecting the distribution of ecological traits and niches among species within the communities. Our framework provides acceptable uncertainty as an operational metric of ecosystem robustness under uncertainty, while incorporating both system properties and socioeconomic conditions. We argue that our framework can enhance social consensus building and decision-making in the face of the extreme uncertainty induced by global climate change."
+ },
+ {
+  "src": "S2",
+  "id": "DOI:10.1007/s44282-025-00277-3",
+  "date": "2025",
+  "title": "Permanent uncertainty and social vulnerability in contemporary risk society",
+  "venue": "Discover Global Society",
+  "abstract": "The transition to an era marked by enduring uncertainty calls for a fundamental reconceptualization of social policy and human development strategies. Conventional models predicated on stable social structures and predictable risk profiles are insufficient for addressing current challenges. Instead, adaptive approaches that recognize the limitations of prediction and prioritize the development of resilient social systems are crucial for supporting human capabilities in these conditions. Modern society is undergoing a significant transformation in the nature of uncertainty, evolving from temporary, manageable risks to enduring, structural realities that fundamentally reshape both social organization and individual experiences. This article examines the theoretical and empirical foundations of this shift, analyzing how uncertainty has become a defining characteristic of post-industrial society and assessing its implications for social vulnerability and human development. The analysis is a theoretical synthesis that integrates risk society theory (Beck), the capability approach (Sen), and vulnerability frameworks (Soulet), drawing on empirical evidence from climate science, social policy research, and contemporary global crises. This methodological focus helps identify and propose adaptive strategies for social systems confronting these new uncertainties."
+ },
+ {
+  "src": "S2",
+  "id": "DOI:10.1109/VNC64509.2025.11054252",
+  "date": "2025",
+  "title": "Uncertainty and Prioritization: Empirical Evaluation of a VoI-Based CPM Generation Pipeline Using Real-World Data",
+  "venue": "IEEE Vehicular Networking Conference",
+  "abstract": "Modern Intelligent Transportation Systems (ITSs) rely on accurate and timely data exchange over vehicular communication networks to ensure road safety and efficiency. However, current ETSI dynamic-based message generation rules for Collective Perception Messages (CPMs) exhibit limitations under real-world sensor inaccuracies, often resulting in excessive bandwidth usage or transmission of noisy object states. In this paper, we introduce a novel Value-of-Information (VoI)-based CPM generation pipeline that systematically prioritizes the transmission of high-quality object data. Different information theory-based VoI approaches are investigated, namely Kullback-Leibler Divergence (KLD) and Expected Covariance Divergence (ECD). Unlike previous approaches, our pipeline integrates a track association and fusion procedure that accounts for multi-source measurements, a VoI-divergence threshold to filter low-value information, and a VOI-based resource allocation mechanism that ensures scalability under congested conditions. We evaluate the approach on a real-world intersection trajectory dataset with diverse traffic participants, ranging from vehicles to Vulnerable Road Users (VRUs), and demonstrate significant improvements in object-tracking accuracy and reduced propagation of inaccurate information. Despite transmitting at bandwidth levels comparable to the baseline, our VoI-based system delivers more consistent and precise CPM updates. Notably, our findings reveal that baseline ETSI rules generate larger CPMs with increasing sensor inaccuracy, potentially harming scalability in dense networks. By contrast, our VoI-based pipeline suppresses noisy, unreliable data, leading to highly reduced dissemination of inaccurate information."
+ }
+]

@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>API 인가 취약점 진단 및 개인정보 노출 영향도 산정</title>
+<style>
+  /* 타이포: 사용자 지정(Paperlogy, 18/28/40, Medium/SemiBold/Bold).
+     색·간격·라디우스·평면성: Toss 레퍼런스 토큰. */
+  @font-face{
+    font-family:'Paperlogy';font-style:normal;font-weight:500;font-display:swap;
+    src:local('Paperlogy-5Medium'),local('Paperlogy 5Medium'),local('Paperlogy5Medium');
+  }
+  @font-face{
+    font-family:'Paperlogy';font-style:normal;font-weight:600;font-display:swap;
+    src:local('Paperlogy-6SemiBold'),local('Paperlogy 6SemiBold'),local('Paperlogy6SemiBold');
+  }
+  @font-face{
+    font-family:'Paperlogy';font-style:normal;font-weight:700;font-display:swap;
+    src:local('Paperlogy-7Bold'),local('Paperlogy 7Bold'),local('Paperlogy7Bold');
+  }
+
+  :root{
+    /* Toss 토큰 */
+    --primary:#3182f6;
+    --primary-strong:#2272eb;
+    --weak-bg:#e8f3ff;
+    --weak-fg:#1b64da;
+    --canvas:#ffffff;
+    --fg:#191f28;
+    --body:#4e5968;
+    --muted:#8b95a1;
+    --surface:#f2f4f6;
+    --border:#e5e8eb;
+    --danger:#e42939;
+
+    /* 크기 3단계 */
+    --fs-l:40px;
+    --fs-m:28px;
+    --fs-s:18px;
+
+    /* 간격 4·8·16·24·32 */
+    --sp-1:4px; --sp-2:8px; --sp-4:16px; --sp-6:24px; --sp-8:32px;
+
+    --maxw:820px;
+    --maxw-wide:1080px;
+  }
+  *{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    margin:0;
+    background:var(--canvas);
+    color:var(--fg);
+    font-family:'Paperlogy',"Pretendard","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+    font-size:var(--fs-s);
+    font-weight:500;
+    line-height:1.72;
+    letter-spacing:-0.015em;
+  }
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 var(--sp-8);}
+  .wide{max-width:var(--maxw-wide);margin:0 auto;padding:0 var(--sp-8);}
+
+  /* hero */
+  header{padding:96px 0 72px;border-bottom:1px solid var(--border);}
+  .eyebrow{
+    font-size:var(--fs-s);font-weight:600;letter-spacing:0.02em;
+    color:var(--primary);margin:0 0 var(--sp-6);
+  }
+  h1{
+    font-size:var(--fs-l);font-weight:700;line-height:1.32;
+    margin:0 0 var(--sp-4);letter-spacing:-0.03em;color:var(--fg);
+  }
+  .sub{
+    font-size:var(--fs-m);font-weight:600;line-height:1.45;
+    margin:0 0 var(--sp-6);letter-spacing:-0.025em;color:var(--body);
+  }
+  .lede{
+    font-size:var(--fs-s);font-weight:500;line-height:1.8;
+    color:var(--body);margin:0;max-width:56ch;
+  }
+
+  /* sections */
+  section{padding:64px 0;border-bottom:1px solid var(--border);}
+  section:last-of-type{border-bottom:0;padding-bottom:96px;}
+  h2{
+    font-size:var(--fs-s);font-weight:600;letter-spacing:0.02em;
+    color:var(--muted);margin:0 0 var(--sp-8);
+  }
+  h3{
+    font-size:var(--fs-m);font-weight:600;line-height:1.42;
+    margin:0 0 var(--sp-4);letter-spacing:-0.025em;color:var(--fg);
+  }
+  p{margin:0 0 var(--sp-4);color:var(--fg);}
+  p:last-child{margin-bottom:0;}
+  .dim{color:var(--body);}
+  .cap{color:var(--muted);line-height:1.68;}
+  b,strong{font-weight:600;}
+
+  /* stat */
+  .stat{display:flex;align-items:baseline;gap:var(--sp-4);margin:0 0 var(--sp-8);}
+  .stat b{
+    font-size:var(--fs-l);font-weight:700;line-height:1;
+    color:var(--danger);letter-spacing:-0.03em;
+  }
+  .stat span{font-size:var(--fs-s);font-weight:500;color:var(--body);}
+
+  /* table */
+  table{width:100%;border-collapse:collapse;margin:0 0 var(--sp-4);}
+  th{
+    text-align:left;font-weight:600;color:var(--muted);
+    padding:0 var(--sp-4) 12px 0;border-bottom:1px solid var(--border);
+  }
+  td{padding:var(--sp-4) var(--sp-4) var(--sp-4) 0;border-bottom:1px solid var(--border);vertical-align:top;}
+  tr:last-child td{border-bottom:0;}
+  td.num{font-variant-numeric:tabular-nums;white-space:nowrap;color:var(--body);}
+  td.date{white-space:nowrap;color:var(--muted);}
+  td.label{white-space:nowrap;padding-right:var(--sp-6);}
+
+  /* 사고 현황: 표 + 기사 갈무리 2열 */
+  .evidence-2col{display:grid;grid-template-columns:1.05fr 0.95fr;gap:40px;align-items:start;}
+  .clips{display:grid;gap:var(--sp-2);}
+  .clips img{
+    display:block;width:100%;height:auto;
+    border:1px solid var(--border);border-radius:6px;
+  }
+  .src{margin:var(--sp-4) 0 0;color:var(--muted);}
+  .src a{color:var(--muted);text-decoration:none;border-bottom:1px solid var(--border);}
+
+  /* callout: Toss weak 조합 */
+  .gap{
+    background:var(--weak-bg);
+    border-radius:6px;
+    padding:var(--sp-8);margin:var(--sp-8) 0 0;
+  }
+  .gap p{
+    font-size:var(--fs-m);font-weight:600;line-height:1.55;
+    letter-spacing:-0.025em;margin:0;color:var(--weak-fg);
+  }
+  .gap strong{color:var(--fg);font-weight:700;}
+
+  /* steps */
+  .steps{display:grid;gap:var(--sp-2);}
+  .step{background:var(--surface);border-radius:6px;padding:var(--sp-6) 28px;}
+  .step .n{font-weight:600;color:var(--muted);margin:0 0 var(--sp-2);}
+  .step p{font-weight:500;line-height:1.7;color:var(--body);margin:0;}
+  .step.key{background:var(--weak-bg);}
+  .step.key .n{color:var(--weak-fg);font-weight:700;}
+  .step.key p{color:var(--fg);}
+
+  /* evidence */
+  .ev{border:1px solid var(--border);border-radius:6px;padding:var(--sp-8) 34px;}
+  code{
+    font-family:"SF Mono",Consolas,"D2Coding",monospace;
+    font-size:16px;background:var(--surface);padding:2px 7px;border-radius:4px;color:var(--weak-fg);
+  }
+  /* 확장: Toss 레퍼런스에 코드 블록 토큰이 없어 foreground를 배경으로 전용 */
+  pre{
+    font-family:"SF Mono",Consolas,"D2Coding",monospace;
+    background:var(--fg);color:#d1d6db;
+    padding:var(--sp-6);border-radius:8px;overflow-x:auto;
+    font-size:16px;line-height:1.7;margin:var(--sp-4) 0 0;
+  }
+  pre .hl{color:#ff8a94;}
+  pre .ok{color:#7ec8a0;}
+
+  /* two col */
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:40px;}
+  .cols p{color:var(--body);}
+
+  @media (max-width:760px){
+    header{padding:56px 0 48px;}
+    h1{font-size:28px;}
+    .sub{font-size:var(--fs-s);}
+    .gap p{font-size:var(--fs-s);}
+    .cols{grid-template-columns:1fr;gap:var(--sp-6);}
+    .evidence-2col{grid-template-columns:1fr;gap:var(--sp-8);}
+    section{padding:48px 0;}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none !important;}}
+  @media print{
+    section{page-break-inside:avoid;padding:var(--sp-8) 0;}
+    pre,.gap,.step{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <p class="eyebrow">2026-2 CCIT 주제</p>
+    <h1>인가를 테스트하는 도구는 있습니다.<br>정답표는 아직 사람이 만듭니다.</h1>
+    <p class="sub">BOLA/BFLA 자동 탐지와 개인정보보호법 기반 노출 영향도 산정</p>
+    <p class="lede">실제 트래픽에서 API 목록을 복원하고, 남의 토큰으로 열리는 엔드포인트를 찾습니다.</br> 거기서 새는 응답 필드를 개인정보보호법 분류로 환산해 어디부터 고칠지 순서를 매깁니다.</p>
+  </div>
+</header>
+
+<section>
+  <div class="wide">
+    <h2>왜 지금인가</h2>
+    <div class="stat">
+      <b>5</b>
+      <span>6주 동안 국내에서 터진 API 개인정보 유출 사고</span>
+    </div>
+
+    <div class="evidence-2col">
+      <div>
+        <table>
+          <thead>
+            <tr><th>시점</th><th>서비스</th><th>규모</th><th>공표된 원인</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="date">08-30</td><td>29CM</td><td class="num">15만 9852건</td><td>주문조회 API</td></tr>
+            <tr><td class="date">09-08</td><td>위버스</td><td class="num">42만 2584건</td><td>결제 처리 API</td></tr>
+            <tr><td class="date">09-08</td><td>강남언니</td><td class="num">21만 9665건</td><td>상담 내역 조회 API</td></tr>
+            <tr><td class="date">09-08</td><td>화해</td><td class="num">미공개</td><td>비정상 접근 경로</td></tr>
+            <tr><td class="date">09-15</td><td>레쥬메나인</td><td class="num">미공개</td><td>서버 권한 검증 누락</td></tr>
+          </tbody>
+        </table>
+        <p class="src">
+          <a href="https://www.boannews.com/news/articleView.html?idxno=145537">145537</a>,
+          <a href="https://www.boannews.com/news/articleView.html?idxno=145683">145683</a>,
+          <a href="https://www.boannews.com/news/articleView.html?idxno=145704">145704</a>,
+          <a href="https://www.boannews.com/news/articleView.html?idxno=145832">145832</a>
+        </p>
+      </div>
+
+      <div class="clips">
+        <img src="../자료/clippings/29cm.png" alt="주문조회 API 뚫린 '29CM'... 이름·배송정보 등 15만9852건 유출">
+        <img src="../자료/clippings/weverse.png" alt="위버스, 결제 API 뚫려 42만건 정보 유출... 민감 정보는 무사">
+        <img src="../자료/clippings/gangnamunni.png" alt="성형 사진부터 피부타입까지 털렸다... 강남언니·화해 고객 정보 유출">
+        <img src="../자료/clippings/resumenine.png" alt="채용 플랫폼 레쥬메나인 개인정보 유출... 원인은 '서버 권한 검증 누락'">
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>문제</h2>
+    <p>강남언니 운영사는 조치를 이렇게 공지했습니다. "인증 절차 강화 및 권한 검증 로직 재정비." OWASP가 API1로 분류한 객체 수준 인가 실패입니다.</p>
+    <p>그런데 유출 항목을 보면 이야기가 달라집니다. 이름과 연락처만 나간 게 아닙니다. 상담 등록 사진, 시술 의사 식별값, 상담 동기까지 나갔습니다.</p>
+    <p>이 회사는 ISMS 인증을 갖고 있었습니다.</p>
+    <div class="gap">
+      <p>취약점은 API 하나였습니다. <br>피해 규모를 결정한 건 <strong>그 API가 무엇까지 내려줬는가</strong>였습니다. <br>지금 어느 도구도 이걸 세지 않습니다.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>기존 도구가 멈추는 자리</h2>
+    <p>인가를 테스트하는 도구는 이미 있습니다. 다만 전부 누가 무엇에 접근해도 되는지를 사람이 먼저 입력해야 돌아갑니다.</p>
+    <table>
+      <tbody>
+        <tr><td><b>ZAP<br>Access Control Testing</b></td><td class="dim">사용자별로 페이지마다 Allowed와 Denied를 손으로 지정해야 합니다. 그 표가 있어야 위반을 판정합니다</td></tr>
+        <tr><td><b>Autorize</b></td><td class="dim">저권한 세션 헤더를 사람이 넣어야 하고, 판정 기준이 되는 응답 매칭 필터도 직접 설계해야 합니다</td></tr>
+        <tr><td><b>Akto</b></td><td class="dim">BOLA 테스트와 민감정보 등급이 모두 있습니다. 다만 정규식으로 값의 형태를 보고, 한국 법 분류는 없습니다</td></tr>
+        <tr><td><b>Wallarm<br>open-appsec</b></td><td class="dim">운영 트래픽을 요청 단위로 보고 차단합니다. BOLA는 형식이 정상인 요청이라 공격 지표가 남지 않습니다</td></tr>
+        <tr><td><b>Schemathesis</b></td><td class="dim">명세 위반과 서버 오류를 찾습니다. 인가는 다루지 않습니다</td></tr>
+      </tbody>
+    </table>
+    <div class="gap" style="margin-top:var(--sp-8)">
+      <p>사람이 넣던 그 정답을 <strong>자동으로 만드는 것</strong>, 그리고 새는 값을 <strong>한국 법 기준으로 세는 것</strong>. 이 둘이 저희가 더하려는 부분입니다.</p>
+    </div>
+    <p style="margin-top:var(--sp-6)">도구가 늘어도 이 항목은 줄지 않았습니다. OWASP Top 10 2021에서 인가 실패는 1위이고, 기여 데이터에서 31만 8487건으로 전 항목 중 가장 많습니다.</p>
+    <p class="src">
+      <a href="https://owasp.org/Top10/2021/A01_2021-Broken_Access_Control/">OWASP Top 10 2021 A01</a>,
+      <a href="https://www.zaproxy.org/docs/desktop/addons/access-control-testing/">ZAP Access Control Testing</a>,
+      <a href="https://github.com/akto-api-security/akto/tree/master/pii-types">Akto pii-types</a>
+    </p>
+  </div>
+</section>
+
+<section>
+  <div class="wide">
+    <h2>만드는 것</h2>
+    <div class="steps">
+      <div class="step">
+        <p class="n">1단계 &nbsp;엔드포인트 복원</p>
+        <p>mitmproxy로 실제 앱 트래픽을 받아 경로 변수를 일반화합니다. OpenAPI 스펙이 없어도 동작하는데, 실사고가 난 서비스들은 어차피 스펙을 공개하지 않습니다.</p>
+      </div>
+      <div class="step">
+        <p class="n">2단계 &nbsp;인가 취약점 탐지</p>
+        <p>계정 A의 리소스를 계정 B 토큰으로 요청합니다. 응답에 실린 신원이 토큰 주인과 다르면 위반입니다. 그걸로 판정이 끝납니다. <br>신원이 안 실리는 엔드포인트에서만 두 응답을 비교합니다.</p>
+      </div>
+      <div class="step key">
+        <p class="n">3단계 &nbsp;노출 영향도 산정 (본체)</p>
+        <p>새는 필드를 민감정보, 고유식별정보, 일반 개인정보로 나눠 가중합니다. 강남언니 유출 항목이 최고 등급으로 자동 분류되는지가 <br>첫 검증 기준입니다. 순차 ID가 응답에 섞여 있으면 대량 수집 위험으로 가산합니다.</p>
+      </div>
+      <div class="step">
+        <p class="n">4단계 &nbsp;두 가지 출력</p>
+        <p>평시에는 수정 우선순위 리포트를 냅니다. 사고가 나면 같은 엔진이 유출 범위 산정서를 냅니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>이미 확인한 것</h2>
+    <div class="ev">
+      <h3>OWASP crAPI에서 재현 완료</h3>
+      <p class="dim">계정 B의 토큰으로 계정 A의 차량 위치를 조회했습니다. 서버가 막지 않았습니다.</p>
+      <pre><span class="ok">status: 200</span>
+{
+  carId: "8b5fc175-1918-4dff-aef2-22edc96b62da",
+  vehicleLocation: { latitude: "31.284788", longitude: "-92.471176" },
+  <span class="hl">fullName: "Alice Tester",</span>
+  <span class="hl">email: "alice@example.com"</span>
+}</pre>
+      <p class="cap" style="margin-top:var(--sp-4)">엔드포인트 이름은 <code>/location</code>입니다. 위치만 주면 되는데 소유자 이름과 이메일이 함께 나왔습니다. 화면에서는 보이지 않으니 개발자도 모릅니다. 강남언니에서 벌어진 일과 같은 구조입니다.</p>
+    </div>
+
+    <div class="ev" style="margin-top:var(--sp-2)">
+      <h3>선행 솔루션 6종 직접 확인</h3>
+      <p class="dim">2026년 9월 18일 기준으로 공식 문서와 저장소를 열어 확인했습니다. 위 표가 그 결과입니다.</p>
+      <p class="cap" style="margin-top:var(--sp-4)">가장 가까운 것은 Akto입니다. BOLA 테스트와 민감정보 등급이 모두 있습니다. 다만 등급 정의에 한국 유형이 없고 주민등록번호도 없습니다. 값의 형태를 정규식으로 보기 때문에 강남언니에서 나간 상담 동기나 상담 등록 사진처럼 형태가 없는 항목은 잡히지 않습니다.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wide">
+    <h2>연구를 넘어서</h2>
+    <div class="cols">
+      <div>
+        <h3>규제가 수요를 만듭니다</h3>
+        <p>민감정보나 고유식별정보가 유출되면 건수와 관계없이 72시간 안에 신고해야 합니다. 개인정보 보호법 시행령 제40조제1항제2호입니다. 신고서에 가장 먼저 적는 항목이 유출등이 된 개인정보의 항목입니다. 3단계 출력이 그대로 그 답이 됩니다.</p>
+      </div>
+      <div>
+        <h3>예산 라인이 비어 있습니다</h3>
+        <p>API 보안 제품은 보안팀 예산입니다. 유출 범위 산정은 개인정보보호책임자 예산이고, 그 자리에는 경쟁 제품이 없습니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>같이 하면 남는 것</h2>
+    <table>
+      <tbody>
+        <tr>
+          <td class="label"><b>역량</b></td>
+          <td class="dim">프록시로 API 트래픽을 다루고, 인가 로직을 직접 깨보고, 유출 항목을 법 분류로 옮기는 일까지 한 프로젝트 안에서 겪습니다. 벤치마크로 수치를 내본 경험이 함께 남습니다.</td>
+        </tr>
+        <tr>
+          <td class="label"><b>도메인</b></td>
+          <td class="dim">API 보안, 개인정보보호 컴플라이언스, 침해사고 대응이 맞물립니다. 어느 하나만 아는 지원자와 구별되는 지점입니다.</td>
+        </tr>
+        <tr>
+          <td class="label"><b>직무</b></td>
+          <td class="dim">모의해킹과 취약점 진단, 개인정보보호 컨설팅, 보안 솔루션 개발. 국내 채용에 실제로 열려 있는 직무들입니다.</td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="margin-top:var(--sp-6)">웹과 API 취약점 진단은 국내 보안 채용에서 기본 소양으로 요구됩니다. 커널이나 저수준 지식 없이 들어갈 수 있어 진입 비용은 낮은 편입니다.</p>
+  </div>
+</section>
+
+</body>
+</html>

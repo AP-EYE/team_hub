@@ -1,0 +1,1304 @@
+Addressing Labelled Data Scarcity:
+Taxonomy-Agnostic Annotation of PII Values in HTTP Traffic using LLMs
+1st Thomas Cory
+Technische Universit¨at Berlin
+Berlin, Germany
+cory@tu-berlin.de
+2nd Axel K ¨upper
+Technische Universit¨at Berlin
+Berlin, Germany
+axel.kuepper@tu-berlin.de
+Abstract—Automated privacy audits of web and mobile ap-
+plications often analyse outbound HTTP traffic to detect
+Personally Identifiable Information (PII) leakage. However,
+existing learning-based detectors typically depend on scarce,
+manually labelled traffic and are tightly coupled to fixed
+label taxonomies, limiting transferability across domains and
+evolving definitions of PII. This paper investigates whether
+Large Language Models (LLMs) can supporttaxonomy-
+agnosticannotation of explicitly transmitted PII values in
+HTTP message bodies when the taxonomy is provided at run-
+time. We introduce a multi-stage LLM-based pipeline that
+combines deterministic pre-processing with label-level classi-
+fication, targeted instance-level value annotation, and output
+validation. To enable controlled evaluation and exemplar-
+based prompting without relying on sensitive real-user cap-
+tures, we further propose an LLM-based generator for
+synthetic HTTP traffic with manually validated, taxonomy-
+derived PII annotations. We evaluate the approach across
+three taxonomies spanning different PII domains and granu-
+larity levels. Results show that the pipeline accurately detects
+PII types and extracts corresponding values for concrete
+PII taxonomies. Overall, our findings position LLMs as a
+promising foundation for flexible, taxonomy-agnostic traffic
+annotation and for creating labelled data under evolving
+privacy taxonomies.
+1. Introduction
+Privacy regulations, such as the GDPR [5] and
+CCPA [23], introduce comprehensive legal frameworks
+regulating the collection and processing of Personally
+Identifiable Information (PII). However, assessing whether
+the data and privacy practices of web and mobile appli-
+cations are compliant with these regulatory frameworks
+is challenging and often involves time-consuming manual
+input. The last decade has seen repeated attempts to reduce
+the manual overhead of such privacy audits through the
+development of automated approaches. Automated analy-
+sis of applications’ network traffic plays a key role in these
+efforts, as network traffic represents the primary vector
+for PII leakage, i.e. the transfer of PII out of the control
+sphere of the data subject [17]. Early attempts employed
+keyword-based heuristics to detect PII values in transmis-
+sions, but were inherently limited due to the variability of
+PII values. Later approaches employed machine-learning
+techniques such as Support Vector Machines (SVMs) or
+Bidirectional Encoder Representations from Transformers
+(BERT) [6] to detect PII values with greater flexibility.
+However, these approaches still have a key drawback:
+they require training on high-quality labelled data, which
+traditionally requires careful manual effort to create. Fur-
+thermore, they are locked to the label taxonomy and
+type of data they were trained on, greatly limiting their
+transferability, as even small changes to either generally
+negatively impact their performance substantially. This is
+particularly problematic for the task of PII detection, as
+the definition of an exhaustive taxonomy of PII types is
+challenging. Instead, existing taxonomies focus on specific
+domains or granularity levels and are rarely fully compat-
+ible with each other [25]. This challenge is reflected in the
+PII detection and de-identification literature more broadly:
+recent work reports little uniformity in how researchers
+and corpus creators classify PII, with taxonomies differing
+markedly in granularity and semantic scope, which in
+turn affects both detection and labelling behaviour [24].
+Furthermore, the task of manually labelling and curat-
+ing ground-truth datasets is highly labour-intensive and
+needs to be repeated for every update made to a label
+taxonomy [4], [25]. The result is a widespread scarcity of
+high-quality datasets of labelled network traffic with up-
+to-date label taxonomies and limited flexibility of existing
+PII detectors.
+Generative models, particularly Large Language Mod-
+els (LLMs), represent a paradigm shift in this regard:
+rather than requiring careful training and attunement to
+specific label taxonomies and input types, they are gener-
+alists that can be prompted to perform a variety of tasks
+without requiring retraining [28]. Prior work has demon-
+strated their applicability for a wide range of language
+processing and specifically Named Entity Recognition
+(NER) and annotation tasks [4], [26], motivating us to
+evaluate their suitability for taxonomy-agnostic annotation
+of PII values in HTTP traffic.
+In contrast to prior network-traffic PII detectors that
+are either heuristic-driven or trained and evaluated on fixed
+label sets, our work evaluates whether LLMs can mitigate
+labelled-data scarcity in network-traffic privacy auditing
+by enabling taxonomy-agnostic, value-level annotation of
+PII in HTTP messages and by supporting controlled gener-
+ation of labelled synthetic traffic. We address the following
+research questions:
+RQ1:To what extent can an LLM-based pipeline accu-
+rately identify and annotate explicitly transmitted
+arXiv:2605.06305v1  [cs.AI]  7 May 2026
+PII values in HTTP message payloads when the
+label taxonomy is provided at runtime?
+RQ2:How do key architectural choices affect label-
+level and instance-level annotation quality?
+RQ3:To what extent can synthetic HTTP messages
+with ground-truth PII annotations support eval-
+uation and exemplar-based prompting, and how
+robust is performance across taxonomies that dif-
+fer in domain focus and granularity?
+In addressing these research questions, our contribu-
+tions are threefold:
+C1:We present a multi-stage LLM-based approach
+for the highly granular identification and annota-
+tion of PII entities in HTTP message payloads,
+capable of switching label taxonomies at runtime.
+C2:We complement the presented annotation ap-
+proach with an LLM-based approach for the
+generation of synthetic HTTP traffic with pre-
+labelled PII values, reducing the need for labour-
+intensive manual annotation and curation of
+ground-truth datasets for shifting label tax-
+onomies.
+C3:We evaluate the presented annotation approach
+on three PII label taxonomies covering differ-
+ent domains and granularity levels to assess the
+performance, suitability, and flexibility of LLM-
+based PII value annotation.
+2. Related Work
+A substantial body of prior work has studied pri-
+vacy leakage by analysing outbound network traffic from
+mobile applications. Early systems relied on rule- and
+keyword-based heuristics to identify sensitive values such
+as device identifiers or locations within HTTP requests,
+often via VPN-based interception on unrooted devices [9],
+[14], [21]. While effective for well-structured payloads
+and known formats, such heuristics are brittle under
+variable value representations, application-layer encoding,
+and evolving schemas. Later systems therefore introduced
+learning-based PII detectors. ReCon [17] interposes on
+network traffic and uses machine learning to detect and
+extract PII values across platforms and apps, while Pri-
+vacyProxy [22] identifies likely PII through app-specific
+signatures and crowd aggregation, reducing raw-traffic
+exposure through hashed representations. Ren et al. [16]
+further use ReCon longitudinally, showing that PII leakage
+patterns change across app versions and that transport-
+layer protection is adopted slowly. More recently, Kohli
+et al. [8] compare tabular models over structured packet
+features with document-classification models over raw
+packet content, including transformer-based architectures
+for mobile network packets. This line of work establishes
+network traffic as a primary vantage point for privacy
+auditing, but remains largely tied to the label schemes,
+feature representations, and training data available at de-
+velopment time.
+LLMs have also been explored for structured and
+unstructured information extraction, including NER and
+privacy-related labelling. GPT-NER [26] reformulates
+NER as a generation task with explicit boundary markers
+and self-verification, achieving strong performance partic-
+ularly in low-resource regimes. In privacy settings, Cory et
+al. (2026) [4] present a modular LLM-based pipeline for
+fine-grained, word-level annotation of GDPR transparency
+requirements in privacy policies, combining passage-level
+classification, retrieval-augmented generation, and self-
+correction. Zeng et al. [29] similarly propose a staged
+LLM-driven pipeline for annotating privacy phrases in
+user–LLM interactions, showing that decomposition can
+outperform direct prompting. Shen et al. [20] further high-
+light the need for fine-grained and context-aware privacy
+reasoning, as systems that detect PII may still struggle to
+determine whether it is relevant to a given query. Meena
+et al. [12] complement these approaches with a human-in-
+the-loop framework for multilingual PII annotation, em-
+phasising guidelines and quality assurance for fine-grained
+and locale-specific labels. Together, these works moti-
+vate LLM-based privacy annotation, while highlighting
+the importance of task decomposition, schema adherence,
+contextual disambiguation, and quality control.
+Synthetic data generation has long been used to sup-
+port modelling under privacy, access, and resource con-
+straints. CTGAN [27] demonstrates high-fidelity genera-
+tion for mixed-type tabular data, medGAN [2] synthesises
+high-dimensional discrete patient records with promis-
+ing downstream utility, and PATE-GAN [7] frames syn-
+thetic data generation as a mechanism for modelling with
+differential-privacy guarantees. However, studies compar-
+ing synthetic and real data caution against treating syn-
+thetic data as a direct substitute for real-world observa-
+tions. Reiner Benaim et al. [15] compare synthetic and
+real medical datasets across five observational studies and
+show that utility depends on study design, sample size,
+and data complexity, while Schmidhuber and Kruschwitz
+[19] find that LLM-generated synthetic data can support
+toxicity detection in some settings but not uniformly
+across tasks and datasets. Synthetic data has also been
+applied directly to privacy-sensitive information: Savkin
+et al. [18] introduce SPY , an LLM-generated synthetic
+benchmark for PII detection that emulates realistic PII-
+containing scenarios without exposing real personal data,
+and L ¨obner et al. [10] use synthetic CV data for de-
+identifying privacy-sensitive information in recruitment.
+These works motivate our use of synthetic HTTP traffic
+with ground-truth PII annotations to alleviate labelled-
+data scarcity and enable controlled, taxonomy-specific
+evaluation, while also underscoring the need to validate
+synthetic results against real-world traffic.
+3. Annotation Pipeline
+We implement PII annotation in HTTP traffic as a
+multi-stage pipeline that decomposes the overall task into
+specialised sub-problems. This design follows the obser-
+vation that jointly inferringwhattypes of PII occur in a
+message andwheretheir corresponding values begin and
+end is error-prone in network traffic, where short identi-
+fiers, numeric values, and encoding artefacts are common.
+We base our pipeline architecture on the multi-stage an-
+notation approach presented by Cory et al. (2026) [4].
+Figure 1 summarises our pipeline, which consists of (i)
+deterministic pre-processing to normalise message bodies,
+Labelled
+Examples
+Classifier Annotator ReviewerDeterministic
+Pre-Processing
+POST
+/v1/tags
+{data}
+HTTP
+Message
+Annotated
+PII ValuesEvaluationLLM Component
+RAG Data Source
+Non-LLM Component
+Pipeline data flow RAG input
+Figure 1. Overview of the proposed multi-stage annotation pipeline. The pipeline normalises HTTP message bodies, performs label-level classification
+followed by targeted value annotation, and applies a review stage to refine and complete the resulting annotations.
+(ii) a two-stage annotation procedure comprising label-
+level classification and instance-level value annotation,
+and (iii) a review layer that performs targeted correction
+and completion.
+3.1. Pre-processing
+Prior to PII detection, HTTP message bodies are
+normalised to mitigate encoding-related variability and
+to present downstream stages with a consistent, human-
+readable representation. We first apply URL decoding
+(RFC 3986), usingunquote_plusto resolve percent-
+encoded sequences (e.g.,%2B) and to map plus signs to
+spaces where applicable. We then resolve HTML character
+references, including named entities (e.g.,&amp;) and
+numeric references (e.g.,&#x40;), by decoding them to
+their corresponding Unicode characters.
+In addition to these canonical transformations, HTTP
+payloads may embed values that are encoded at the ap-
+plication layer (e.g., Base64). To accommodate this, we
+apply an optional decoding pass for common encodings
+when there is strong evidence that a substring represents
+an encoded payload. Concretely, we attempt Base64 de-
+coding only for substrings that match a conservative syn-
+tactic pattern and decode to predominantly printable UTF-
+8 text; otherwise, the original representation is retained.
+To avoid information loss and to ensure traceability, we
+keep both the original body and its normalised (and, where
+applicable, decoded) representation, and we map anno-
+tated spans back to the original message when reporting
+annotations.
+3.2. Two-stage annotation
+We perform annotation in two stages: label-level clas-
+sification followed by instance-level value extraction. Let
+mdenote an HTTP message body andLthe label taxon-
+omy. The classifier predicts a set of labelsL m ⊆ Lthat
+are explicitly present inm. The extractor then focuses on
+identifying the concrete value instances for the predicted
+labels, yielding the final annotation set. We summarise
+this decomposition as:
+Annotate(m) =Extract(m,Classify(m)).(1)
+This separation is motivated by the structure of HTTP
+traffic. Many messages contain heterogeneous key-value
+pairs and nested serialisations (e.g., JSON), where the
+same surface form can correspond to multiple PII types
+depending on context. By conditioning extraction on the
+(typically small) set of predicted labels, the extraction
+stage can allocate its capacity to boundary detection and
+disambiguation rather than simultaneously exploring the
+full taxonomy.
+The classification stage operates under a strictexplicit-
+valuerequirement: a label is emitted only if at least one
+corresponding value is present in the message body. In
+particular, we avoid inferring PII from key names alone
+(e.g., a field name such asemailwith an empty value),
+and we do not attempt to guess or reconstruct values that
+are not explicitly transmitted.
+GivenmandL m, the extraction stage performs
+targeted named-entity recognition over the normalised
+body, producing a set of annotation objects of the form
+(data_type, value), wheredata_typeis a label
+inLandvalueis the extracted string. Multiple instances
+per label are permitted when distinct values occur within
+the same message (e.g., multiple names in a registra-
+tion form). Ambiguity is addressed through context-based
+disambiguation using cues available in network traffic.
+Key names provide strong priors (e.g.,age,weight,
+email), while value patterns (e.g., email address struc-
+ture, international phone prefixes) and local formatting
+(e.g., units such askgorcm, locale-specific separators)
+further constrain interpretation. Where payloads contain
+nested structures, the structural position and neighbouring
+fields provide additional semantic context that helps dis-
+tinguish short identifiers and numeric values that would
+otherwise be underspecified.
+3.3. Post-annotation Review
+Finally, we apply a review stage that implements a
+targeted quality assurance mechanism analogous to ad-
+judication in manual annotation workflows. Rather than
+annotating a message independently, the reviewer is pre-
+sented with the original message body and the initial
+annotation set and is tasked with refining the annotations.
+In practice, this stage primarily addresses three recurrent
+error modes in network-traffic annotation: missed values
+(false negatives), incorrect label assignments arising from
+ambiguity, and boundary errors where extracted spans are
+truncated or include surrounding delimiters. The reviewer
+may therefore add missing annotations, correct labels
+based on the message context and taxonomy definitions,
+and adjust value boundaries. By explicitly conditioning
+review on the prior output, this stage focuses effort on
+correction and completion, with the goal of yielding more
+consistent annotations without requiring a second full pass
+from scratch.
+4. LLM Inference Harness
+Each LLM-based component in our pipeline is
+wrapped by a shared harness that enriches the model
+input with task-relevant context via retrieval-augmented
+generation (RAG), and validates and normalises the model
+output before it is passed to subsequent stages. This
+harness, illustrated in Figure 2, addresses two recurrent
+failure modes in LLM-driven extraction pipelines: limited
+adherence to domain-specific label vocabularies and oc-
+casional violations of the expected output structure.
+4.1. Prompt preparation
+We follow a structured prompt engineering method-
+ology tailored to information extraction under domain-
+specific taxonomies. First, we explicitly ground each
+prompt in the target taxonomy and require verbatim la-
+bel copying to reduce label paraphrasing and out-of-
+vocabulary predictions. Where supported, we enforce a
+fixed JSON schema through structured output interfaces
+and reiterate exact string-matching requirements for label
+names. Second, to improve span-level extraction fidelity,
+we specify boundary rules that favour minimal spans (ex-
+cluding syntactic delimiters such as quotes and separators)
+and treat composite fields as sets of atomic values where
+values are explicitly separated in the payload. Finally, we
+provide guidance for ambiguity resolution in network traf-
+fic, where short strings and numeric values are frequently
+underspecified without context. In these cases, the prompts
+instruct the model to rely on contextual cues such as
+key names, units, and structural position, and to omit an
+annotation when the available evidence does not support
+a confident assignment under the taxonomy definitions.
+Across tasks, we employ a consistent prompt struc-
+ture that combines role priming with explicit non-goals
+and lightweight self-checks. Role priming constrains the
+expected behaviour (e.g., classifier vs. annotator), while
+explicit non-goals prevent undesirable transformations
+(e.g., normalising values or inferring missing information).
+Short positive and negative examples are used selectively
+to illustrate boundary cases and to demonstrate the precise
+output format. Representative of all system prompts used
+in our approach, the annotator’s system prompt is provided
+in Appendix B.
+To improve robustness across heterogeneous HTTP
+payload structures and promote taxonomy compliance, we
+augment each model call with a small set of retrieved ex-
+amples. We combine two complementary retrieval signals.
+The first targetsstructural similarity, retrieving examples
+with comparable serialisation formats, key-value layouts,
+or schema fragments. The second targetslabel coverage,
+ensuring that the retrieved context includes at least one
+demonstration for each label predicted to be present in
+the input (where applicable).
+For similarity-based retrieval, we maintain a curated
+database of annotated examplesE={(m i, Ai)}N
+i=1,
+RAG
+Injector
+LLM
+Client
+Deterministic
+Validator
+Vector DB
+(Examples) LLM SBERT
+Prompt
+Templates
+Label
+Taxonomy
+Structure
+Templates
+Language Model
+LLM Component
+RAG Data Source
+Non-LLM Component
+Pipeline data flow RAG input
+Reject & retry
+Figure 2. Overview of the LLM harness used within each pipeline
+component. The harness enriches inputs with retrieved, task-relevant
+exemplars and applies task-specific output validation to ensure schema
+and taxonomy compliance.
+wherem i denotes a message body andA i its ground-
+truth annotations. We index messages using sentence-
+level embeddings and retrieve the top-knearest neighbours
+under cosine similarity. In practice, this yields examples
+that share relevant structural features with the input (e.g.,
+comparable JSON nesting or field naming conventions),
+which in turn improves output formatting and boundary
+selection. For label-aware retrieval, we select a subset of
+examples that collectively cover the target label set. To
+minimise the number of required examples, we implement
+this as a greedy selection procedure overE, adding exam-
+ples that maximise coverage of labels not yet observed
+in the retrieved context. This mechanism is particularly
+valuable when the input or taxonomy contains uncommon
+PII types.
+Empirically, this combined RAG strategy serves three
+purposes. It anchors the model to the exact label vocab-
+ulary and output structure expected by the downstream
+validator, it enables lightweight domain adaptation by
+swapping or extending the database of examples without
+fine-tuning, and it mitigates cold-start effects for newly
+introduced labels by allowing support to be added through
+additional demonstrations.
+4.2. Output validation and normalisation
+To prevent error propagation, all LLM outputs are
+processed by a task-specific validation layer prior to down-
+stream consumption. The validator first checks structural
+well-formedness (e.g., JSON parseability and schema con-
+formance) and enforces taxonomy compliance by verify-
+ing that all emitted labels occur in the target taxonomy
+L. When invalid labels occur, we apply a conservative
+normalisation step that maps common surface-form vari-
+ations to valid taxonomy entries. Concretely, we embed
+the invalid label string and select the nearest neighbour
+among valid labels under cosine similarity:
+correct(l) = arg max
+l′∈L
+cos(ϕ(l), ϕ(l′)),(2)
+Scenario
+Generator
+Response
+Generator
+Scenario
+Templates
+HTTP
+Requests
+Label 1
+Label 2
+Label 3
+Label
+Taxonomy
+Request
+Generator
+HTTP
+ResponsesReal-world
+Examples
+Real-world
+Examples
+Annotation
+PipelineManual validation
+LLM Component
+RAG Data Source
+Non-LLM Component
+Pipeline data flow RAG input
+Figure 3. Overview of the synthetic HTTP message generator. Starting from a label taxonomy, the pipeline generates scenario templates, instantiates
+synthetic requests, and (optionally) synthesises corresponding responses. Each stage is followed by validation to enforce taxonomy adherence and to
+ensure that generated messages contain explicit, annotated PII values.
+whereϕ(·)denotes the embedding function used for label
+strings. This mechanism resolves frequent benign devi-
+ations such as differences in capitalisation, hyphenation,
+minor paraphrases, or lightweight elaborations (e.g., “E-
+mail” versus “Email”, or “Date of Birth” versus “Date
+of birth”). To preserve precision, the correction is applied
+only when the similarity exceeds a predefined threshold;
+otherwise, the label is rejected and the corresponding an-
+notation is discarded or flagged for re-querying, depending
+on the component. This design ensures that downstream
+stages receive outputs that are both structurally valid and
+consistent withL.
+5. Synthetic HTTP Message Generator
+In addition to our taxonomy-agnostic annotation
+pipeline, we introduce a complementary mechanism for
+producing labelled data at scale: a synthetic HTTP mes-
+sage generator that creates realistic request–response traf-
+fic containingexplicitPII values together with ground-
+truth annotations. Figure 3 summarises the pipeline. The
+generator is designed to address a central bottleneck
+in supervised PII detection for network traffic, namely
+the limited availability of high-quality labelled datasets
+and the sensitivity of real traffic to privacy and access
+constraints. By producing synthetic traffic that follows
+plausible application scenarios while avoiding the use of
+real user data, the generator supports controlled train-
+ing, ablation, and evaluation studies under labelled-data
+scarcity.
+The generator is taxonomy-driven and LLM-agnostic:
+it consumes a label taxonomy (e.g., derived from platform
+disclosures or domain-specific PII schemes) and inter-
+faces with any OpenAI-compatible API, enabling use with
+both hosted and locally deployed models. The pipeline
+proceeds in three stages: scenario generation, message
+generation, and validation. An optional third generation
+stage synthesises HTTP responses conditioned on previ-
+ously generated requests, yielding bidirectional request–
+response traces suitable for end-to-end evaluation.
+5.1. Scenario and message generation
+The first stage constructsscenario templatesthat spec-
+ify families of semantically related HTTP interactions.
+Given a taxonomyL, the LLM produces a set of scenarios
+that jointly aim to cover the taxonomy while remaining
+consistent with common application flows (e.g., account
+creation, session management, checkout, telemetry sub-
+mission). Each scenario template includes a goal descrip-
+tion, host and endpoint variants, plausible HTTP methods
+and content types, and a distribution over candidate PII
+types with typical placements (path, query, headers, body).
+The candidate distribution is used to bias subsequent
+instantiation towards scenarios that naturally elicit partic-
+ular labels, thereby improving coverage without requiring
+manual scenario design.
+In the second stage, the LLM instantiates each vali-
+dated scenario into a set of concrete HTTP requests. Each
+generated request comprises a structured representation
+of the HTTP message (method, path, headers, and body)
+together with a list of PII annotations. An annotation
+specifies the taxonomy label, the placement within the
+request (path, query, header, or body), and the verbatim
+value string. Importantly, generated values are required
+to be explicitly present in the message; the generator
+does not rely on implicit attributes or placeholders that
+are absent from the payload. This mirrors the explicit-
+value constraint adopted in the annotation pipeline and
+ensures that the synthetic dataset is suitable for training
+and evaluation of value-level PII detectors.
+Where enabled, the generator subsequently produces a
+corresponding HTTP response for each request. Response
+synthesis is conditioned on the request content and sce-
+nario context, resulting in responses that remain plausible
+(e.g., status codes, response bodies, and headers consis-
+tent with the preceding request) and that may contain
+additional annotated PII values (e.g., account identifiers
+returned upon registration). Responses are represented in
+the same structured format as requests and are validated
+under the same explicit-value requirement.
+5.2. Validation and coverage tracking
+The generator incorporates validation after each gen-
+eration stage to prevent low-quality outputs from entering
+the final dataset. For requests and responses, the validator
+checks well-formedness of the HTTP structure, verifies
+that all labels in the annotation list occur inL, and
+enforces that each annotated value appears verbatim in the
+specified message component. Outputs that violate these
+constraints are rejected and may be regenerated depending
+on the pipeline configuration.
+In addition, the pipeline tracks label coverage through-
+out generation. Concretely, it monitors which labels from
+Lappear across validated scenarios and across validated
+messages, enabling users to quantify progress towards
+comprehensive coverage and to identify underrepresented
+types. In practice, perfect coverage is not always attainable
+for arbitrary taxonomies, as some labels may be difficult
+to embed realistically into common HTTP exchanges
+without contrived scenarios. Coverage tracking therefore
+serves as a diagnostic and control signal: it allows the gen-
+eration process to be steered (e.g., by increasing the num-
+ber of scenarios or requests per scenario, or by enriching
+the scenario set) until the desired balance between realism,
+diversity, and taxonomy representation is achieved.
+6. Evaluation
+This section empirically assesses the effectiveness
+and flexibility of our LLM-based pipeline for taxonomy-
+agnostic PII value annotation in HTTP traffic. We focus
+on two questions: (i) how accurately the pipeline identifies
+which PII types occur in a message and annotates their
+corresponding values, and (ii) how performance changes
+across pipeline configurations and across taxonomies that
+differ in domain focus and granularity.
+6.1. Methodology
+We evaluate the proposed annotation pipeline using a
+staged framework that supports component-level ablation
+and reports performance at two complementary granular-
+ities. First, alabel-levelevaluation measures whether a
+pipeline configuration correctly identifies which PII types
+occur in a message. Second, aninstance-levelevaluation
+assesses whether the pipeline annotates the corresponding
+values with correct boundaries. Unless stated otherwise,
+we report precision, recall, andF 1, computed from true
+positives (TP), false positives (FP), and false negatives
+(FN) under the respective matching criterion.
+6.1.1. Label-level evaluation.For each HTTP message,
+we derive the set of unique labels present in the ground
+truth annotations,G, and the set predicted by the pipeline,
+P. We then treat label detection as a multi-label presence
+task: a label counts as a true positive if it appears in both
+sets, as a false positive if it appears only inP, and as a
+false negative if it appears only inG. This formulation in-
+tentionally abstracts away from within-message frequency
+and evaluates whether the pipeline detects the presence of
+each PII type at least once in the message body.
+6.1.2. Instance-level evaluation.Instance-level evalua-
+tion considers annotated values. We represent each anno-
+tated instance as a tuple(l, v)consisting of a labelland
+its string valuev. We report two complementary matching
+regimes.
+Underexactmatching, a predicted instance is counted
+as correct only if both the label and the value string match
+the ground truth exactly. This strict criterion directly
+captures boundary errors and normalisation artefacts, and
+is therefore informative for downstream use cases that
+require verbatim leakage identification.
+To account for minor, non-semantic deviations in an-
+notation (e.g., whitespace differences, encoding-related
+character variants, or small boundary shifts), we addi-
+tionally report afuzzymatching score. Concretely, for
+each ground-truth instance(l, v g), we consider predicted
+instances with the same label and select the candidate
+with the highest string similarity (computed using the
+SequenceMatcheralgorithm). A match is accepted
+if the similarity exceeds a thresholdτ. Following prior
+work [4], we setτ= 0.8. To prevent double-counting,
+we apply greedy one-to-one assignment: once a predicted
+instance has been matched to a ground-truth instance, it
+is removed from further consideration. FP and FN are
+derived from the remaining unmatched predictions and
+ground-truth instances, respectively.
+6.1.3. Ablation protocol.We evaluate two configurations.
+In thetwo-stageconfiguration, the classifier predicts the
+set of labels present in a message, and the annotator is con-
+strained to extract values only for these predicted labels;
+the reviewer then refines the output. In thesingle-stage
+configuration, the annotator receives only the raw message
+body and performs joint detection and annotation; the
+reviewer again refines the output. These configurations
+isolate the effect of the explicit decomposition introduced
+in Section 3.2.
+To quantify the contribution of individual pipeline
+components, we evaluate outputs at multiple points in
+the pipeline. Specifically, we measure (i) label-level per-
+formance after the classification stage, (ii) instance-level
+performance after two-stage annotation, (iii) instance-level
+performance under a single-stage configuration in which
+the annotator receives only the raw message body and
+performs joint detection and annotation, and (iv) instance-
+level performance after the review stage. This design
+allows us to determine whether errors arise from missed
+type detection, from boundary selection during annotation,
+or from insufficient correction during review.
+6.2. Experimental setup
+We evaluate on three datasets, each associated with a
+distinct PII taxonomy that differs in domain focus and
+granularity. This choice is deliberate: our objective is
+to assess whether a single pipeline can be applied to
+heterogeneous label schemes provided at runtime, without
+retraining or taxonomy-specific engineering.
+The first taxonomy,AI4Privacy, is derived from the
+AI4Privacypii-masking-200k[1] label set applied by
+Manietti and Elia [11]. Comprising 53 classes, it reflects
+a broad, natural-language-oriented PII scheme covering
+common identifiers (e.g., names, email addresses, phone
+numbers), financial attributes, government-issued identi-
+fiers, health-related attributes, biometrics, and other sen-
+sitive categories. The second taxonomy,mHealth, corre-
+sponds to the Protected Health Information (PHI) scheme
+for mHealth apps presented by Cory et al. (2024) [3]. This
+taxonomy comprises 38 classes covering health-specific
+entities (e.g., vital signs and fitness metrics) alongside
+device identifiers and location-related attributes. The third
+taxonomy,PlayStore, follows the Google Play Data Safety
+TABLE 1. LABEL-AND INSTANCE-LEVELF 1 SCORES ACROSS PIPELINE CHECKPOINTS FOR EACH TAXONOMY.
+AI4Privacy mHealth PlayStore
+Step F1label F1fuzzy F1exact F1label F1fuzzy F1exact F1label F1fuzzy F1exact
+Classifier 0.9860 – – 0.9858 – – 0.9109 – –
+Annotator (single-stage) 0.9857 0.9720 0.9377 0.9843 0.9593 0.9549 0.90910.8633 0.8061
+Annotator (two-stage) 0.9888 0.9776 0.9438 0.98800.9703 0.9658 0.91840.8625 0.8012
+Reviewer (single-stage) 0.9855 0.9674 0.9319 0.9870 0.9599 0.9548 0.9053 0.8570 0.8017
+Reviewer (two-stage) 0.9876 0.9747 0.9400 0.98810.9647 0.9597 0.9078 0.8554 0.7973
+labels [13], which provide a higher-level categorisation of
+data types disclosed by Android applications across 38
+classes (e.g., personal information, financial data, health
+and fitness, messages, media, app activity, browsing his-
+tory, and device identifiers). The full label taxonomies are
+provided in Appendix C.
+6.2.1. Data preparation.For each taxonomy, we use the
+synthetic HTTP message generator described in Section 5
+to create a labelled corpus of HTTP requests. Although
+the annotation pipeline can process both requests and
+responses, we restrict the evaluation to requests because
+the primary motivation underpinning our work is to assess
+PII leakage in outbound transmissions. To ensure reliable
+ground truth, we manually validate outputs throughout the
+generation pipeline, including scenario definitions, gener-
+ated requests, and associated annotations. In particular, we
+check structural well-formedness, taxonomy compliance,
+verbatim occurrence of annotated values, and the semantic
+plausibility of label assignments.
+To keep manual validation feasible while maintaining
+broad taxonomy coverage, we limit generation to 100
+HTTP requests per scenario. The number of scenarios
+differs across taxonomies because the taxonomies vary in
+size, granularity, and semantic scope. The resulting cor-
+pora comprise 35 scenarios for AI4Privacy, 25 scenarios
+for mHealth, and 29 scenarios for PlayStore.
+For each taxonomy, we construct a stratified 80/20
+split subject to two constraints: (i) both partitions pro-
+vide full label coverage, such that each label appears at
+least once in both partitions, and (ii) label distributions
+are approximately preserved across partitions. The larger
+partition serves as theevaluation setprocessed by the
+annotation pipeline, while the smaller partition serves as
+theexample setfor the RAG mechanism, supplying few-
+shot demonstrations to the LLM components. 1
+6.2.2. Models and infrastructure.To reduce coupling
+between generation and annotation, we employ different
+LLMs for the two pipelines. Synthetic traffic is generated
+usingunsloth/GLM-5-GGUF:Q4_K_M. All annota-
+tion stages (classification, annotation, and review) use
+unsloth/Qwen3.5-397B-A17B-GGUF:Q4_K_M, a
+Mixture-of-Experts model with 397B total parameters
+and 17B active parameters per forward pass, served via
+llama.cpp. Inference is executed on a dedicated GPU
+server equipped with four NVIDIA H200 NVL GPUs.
+1. We use this terminology to avoid confusion with conventional
+train/test splits, as no statistical model parameters are trained in our
+pipeline.
+6.3. Results
+As described in Section 6.1, we evaluate the pipeline
+at five checkpoints corresponding to classification, single-
+stage annotation, two-stage (targeted) annotation, and the
+respective reviewed variants. Table 1 summarises the
+F1 scores across all checkpoints and datasets (see Ap-
+pendix A for precision and recall). Overall, performance
+is strongest onAI4PrivacyandmHealth, where label-
+level detection is near-ceiling already at the classification
+stage and instance-level extraction remains high across
+both annotation configurations. In contrast,PlayStoreis
+consistently more challenging, indicating that this taxon-
+omy provides a weaker upstream signal and that its value
+formats and structures are harder to annotate reliably.
+At the annotation stage, the two-stage configuration
+matches or slightly outperforms single-stage annotation on
+AI4PrivacyandmHealth. The gains are most visible at the
+instance level, suggesting that conditioning extraction on
+predicted label sets primarily improves coverage of values
+rather than changing type detection. OnPlayStore, the
+picture differs: two-stage annotation improves label-level
+detection, but does not translate into a corresponding im-
+provement in instance-level extraction, where single-stage
+annotation remains marginally stronger. Taken together,
+these results indicate that the benefit of architectural de-
+composition depends on the reliability of the classifier and
+on how readily value boundaries can be identified for a
+given taxonomy.
+Finally, the review stage does not yield consistent
+improvements. Across datasets, reviewed outputs are com-
+parable to, and in several cases slightly worse than,
+the corresponding unreviewed annotation outputs. This
+suggests that under the present operating regime, where
+annotation quality is already high on two of the three
+taxonomies, blanket review using the same underlying
+model provides limited net benefit, and that its utility may
+depend on selectively targeting messages that are difficult
+or ambiguous.
+6.4. Discussion
+The results address our research questions while also
+delimiting the scope of the evidence provided by our syn-
+thetic evaluation. RegardingRQ1andRQ3, the pipeline
+demonstrates that LLM-based annotation can identify and
+annotate explicitly transmitted PII values in HTTP mes-
+sage bodies when the taxonomy is supplied at runtime.
+The synthetic, ground-truth annotated HTTP messages
+further provide a practical substrate for controlled eval-
+uation and exemplar-based prompting. Performance on
+AI4PrivacyandmHealthindicates that the pipeline is
+effective when taxonomy definitions align with typical
+surface forms and contextual cues in HTTP payloads.
+By contrast, the drop onPlayStoreshows that robustness
+is not uniform across taxonomies. We interpret this as
+evidence that annotation difficulty depends strongly on
+taxonomy design: broad, policy-facing categories are less
+directly associated with distinctive value formats than
+more concrete PII or PHI categories. Since all datasets
+maintain full label coverage in both the evaluation set
+and the RAG exemplar pool, these differences are unlikely
+to stem solely from missing demonstrations; rather, they
+point to challenges introduced by semantic granularity,
+contextual dependence, and weak correspondence between
+labels and observable payload values.
+With respect toRQ2, the ablation study shows that
+architectural decomposition matters, but its benefits de-
+pend on upstream classification quality. The two-stage
+approach yields small but consistent gains where classifi-
+cation is reliable, primarily through higher instance-level
+recall. However, thePlayStoreresults show that targeted
+annotation can inherit noisy classifier outputs and trade
+precision for recall. For broad or technically embedded
+labels, future variants may benefit from stronger boundary
+constraints, delimiter-aware post-processing, placement-
+specific normalisation, or label-specific confidence checks.
+The review stage, in contrast, provides limited net benefit:
+across datasets, it corrects some errors but introduces
+others. One likely reason is that the same model family
+is used for annotation and review, which may reproduce
+shared assumptions rather than provide an independent
+correction signal. This motivates selective or heteroge-
+neous review strategies, such as triggering review only
+for low-confidence messages, using a different reviewer
+model, or involving human adjudication for ambiguous
+cases.
+The use of synthetic HTTP traffic enables controlled
+taxonomy coverage, avoids exposing real user traffic,
+and provides ground-truth annotations at a scale that
+would be costly to obtain manually. Manual validation
+of scenarios, requests, and annotations mitigates obvious
+structural and semantic errors, but it cannot establish
+that the generated traffic follows the same distribution
+as real-world application traffic. Real traffic may contain
+malformed payloads, undocumented schemas, application-
+specific encodings, compression, mixed-language values,
+obfuscation, telemetry artefacts, or transformed identifiers
+that are underrepresented in the synthetic corpora. The
+reported scores should therefore be interpreted as evidence
+of feasibility under controlled conditions, not as final
+estimates of performance in deployed systems.
+The present evaluation is further limited to explicitly
+transmitted PII values in HTTP request bodies. While the
+generator and annotation framework can in principle be
+extended to paths, query parameters, headers, cookies,
+and response bodies, this remains to be evaluated because
+these components provide different contextual cues and
+may require different normalisation and boundary rules.
+Similarly, the approach targets text-based, recoverable
+values and does not address encrypted traffic, binary pay-
+loads, or PII that is only inferable from combinations of
+non-PII attributes.
+Finally, the absolute scores reflect a single model con-
+figuration for generation and annotation. Their magnitude
+may vary across model families, parameter scales, quan-
+tisation levels, prompt variants, and exemplar-selection
+strategies. LLM-based PII analysis also raises practical
+deployment concerns, including latency, cost, energy use,
+and the risk of exposing sensitive values to external
+providers. We therefore view the pipeline primarily as a
+flexible annotation and audit-support mechanism, rather
+than as a direct replacement for lightweight production
+detectors. We consider the most promising path for future
+research and deployment to be a hybrid one: using LLM-
+based annotation to create or refine labelled data under
+evolving taxonomies, and subsequently distilling these
+annotations into smaller discriminative models for high-
+throughput deployment.
+7. Conclusion
+In this work, we presented an LLM-based, taxonomy-
+agnostic pipeline for annotating explicitly transmitted
+PII values in HTTP message bodies. The pipeline com-
+bines deterministic normalisation, label-level classifica-
+tion, targeted value extraction, and an inference control
+layer based on RAG and output validation. To mitigate
+labelled-data scarcity, we further introduced a taxonomy-
+driven synthetic HTTP message generator that produces
+ground-truth annotated traffic for controlled evaluation
+and exemplar-based prompting. Our evaluation shows that
+the pipeline can identify PII types and extract corre-
+sponding values under runtime-specified taxonomies, with
+strong performance on concrete PII and PHI taxonomies
+and lower, but still informative, performance on broader
+policy-facing labels.
+These findings highlight that taxonomy-agnostic PII
+value annotation can support privacy auditing workflows
+that must adapt to evolving regulatory, organisational, or
+sector-specific taxonomies without retraining. The abil-
+ity to re-annotate the same traffic under alternative tax-
+onomies also provides a route towards improved compara-
+bility across empirical studies whose label schemes differ
+in domain focus and granularity. At the same time, our
+results underline that taxonomy design, payload structure,
+and boundary fidelity materially affect annotation quality.
+Future work should therefore validate the approach on
+real-world traffic captures, including obfuscated or trans-
+formed values; extend evaluation beyond request bodies
+to headers, paths, queries, cookies, and responses; and
+improve reliability and cost-efficiency through selective
+or heterogeneous review. We consider the most promising
+path for future research and deployment to be a hybrid
+one: using LLM-based annotation to create or refine la-
+belled data under evolving taxonomies, and subsequently
+distilling these annotations into smaller discriminative
+models for high-throughput deployment.
+Data Availability and use of Generative AI
+Although generative AI is the main focus of this paper,
+all content was created manually. We did, however, use
+generative AI tools to polish the text and fix mistakes.
+You can access our source code and datasets on GitHub:
+https://github.com/tomcory/http-pii-annotator.
+References
+[1] ai4privacy/pii Masking-200k. Datasets at hugging face. https:
+//huggingface.co/datasets/ai4privacy/pii-masking-200k, 2023. [Ac-
+cessed 26-02-2026].
+[2] Edward Choi, Siddharth Biswal, Bradley Malin, Jon Duke, Wal-
+ter F Stewart, and Jimeng Sun. Generating multi-label discrete
+patient records using generative adversarial networks.Machine
+learning for healthcare conference, pages 286–305, 2017.
+[3] Thomas Cory, Wolf Rieder, and Thu-My Huynh. A qualitative
+analysis framework for mhealth privacy practices. In2024 IEEE
+European Symposium on Security and Privacy Workshops (Eu-
+roS&PW), pages 24–31. IEEE, 2024.
+[4] Thomas Cory, Wolf Rieder, Julia Kr ¨amer, Philip Raschke, Patrick
+Herbke, and Axel K ¨upper. Word-level annotation of gdpr trans-
+parency compliance in privacy policies using large language mod-
+els.Proceedings on Privacy Enhancing Technologies, 1:509–528,
+2026.
+[5] European Parliament and Council of the European Union. General
+Data Protection Regulation (GDPR) – Articles 13 and 14, 2016.
+Regulation (EU) 2016/679 of the European Parliament and of the
+Council of 27 April 2016 on the protection of natural persons with
+regard to the processing of personal data and on the free movement
+of such data.
+[6] Mila Grancharova and Hercules Dalianis. Applying and sharing
+pre-trained bert-models for named entity recognition and classifi-
+cation in swedish electronic patient records. InProceedings of the
+23rd nordic conference on computational linguistics (NoDaLiDa),
+pages 231–239, 2021.
+[7] James Jordon, Jinsung Yoon, and Mihaela Van Der Schaar. Pate-
+gan: Generating synthetic data with differential privacy guarantees.
+InInternational conference on learning representations, 2018.
+[8] Rishika Kohli, Shaifu Gupta, Manoj Singh Gaur, and Soma S
+Dhavala. Learning to detect pii: Tabular vs. document classification
+models for network traffic analysis.Journal of Information Security
+and Applications, 94:104196, 2025.
+[9] Anh Le, Janus Varmarken, Simon Langhoff, Anastasia Shuba,
+Minas Gjoka, and Athina Markopoulou. Antmonitor: A system
+for monitoring from mobile devices. InProceedings of the 2015
+ACM SIGCOMM Workshop on Crowdsourcing and Crowdsharing
+of Big (Internet) Data, pages 15–20, 2015.
+[10] Sascha L ¨obner, Jetzabel Serna, Fr ´ed´eric Tronnier, Welderufael
+Tesfay, and Kai Rannenberg. Mitigating bias in recruitment:
+A practical approach to cv de-identification considering privacy
+sensitive information. InInternational Conference on Availability,
+Reliability and Security, pages 174–192. Springer, 2025.
+[11] Luca Mainetti and Andrea Elia. Detecting personally identifiable
+information through natural language processing: A step forward.
+Applied System Innovation, 8(2):55, 2025.
+[12] Bharti Meena, Joanna Skubisz, Harshit Rajgarhia, Nand Dave,
+Kiran Ganesh, Shivali Dalmia, Abhishek Mukherji, Vasudevan
+Sundarababu, and Olga Pospelova. Scalable multilingual pii an-
+notation for responsible ai in llms. In2025 IEEE International
+Conference on Data Mining Workshops (ICDMW), pages 367–375.
+IEEE, 2025.
+[13] Google Play. Provide information for google play’s data safety
+section. https://support.google.com/googleplay/android-developer/
+answer/10787469#zippy=%2Cdata-types, 2021. [Accessed 26-02-
+2026].
+[14] Abbas Razaghpanah, Narseo Vallina-Rodriguez, Srikanth Sundare-
+san, Christian Kreibich, Phillipa Gill, Mark Allman, and Vern
+Paxson. Haystack: A multi-purpose mobile vantage point in user
+space.arXiv preprint arXiv:1510.01419, 2015.
+[15] Anat Reiner Benaim, Ronit Almog, Yuri Gorelik, Irit Hochberg,
+Laila Nassar, Tanya Mashiach, Mogher Khamaisi, Yael Lurie,
+Zaher S Azzam, Johad Khoury, et al. Analyzing medical research
+results based on synthetic data and their relation to real data results:
+systematic comparison from five observational studies.JMIR
+medical informatics, 8(2):e16492, 2020.
+[16] Jingjing Ren, Martina Lindorfer, Daniel J Dubois, Ashwin Rao,
+David Choffnes, and Narseo Vallina-Rodriguez. A longitudinal
+study of pii leaks across android app versions. InNetwork and
+Distributed System Security Symposium (NDSS), volume 10, 2018.
+[17] Jingjing Ren, Ashwin Rao, Martina Lindorfer, Arnaud Legout,
+and David Choffnes. Recon: Revealing and controlling pii leaks
+in mobile network traffic. InProceedings of the 14th Annual
+International Conference on Mobile Systems, Applications, and
+Services, pages 361–374, 2016.
+[18] Maksim Savkin, Timur Ionov, and Vasily Konovalov. Spy: Enhanc-
+ing privacy with synthetic pii detection dataset. InProceedings of
+the 2025 Conference of the Nations of the Americas Chapter of
+the Association for Computational Linguistics: Human Language
+Technologies (Volume 4: Student Research Workshop), pages 236–
+246, 2025.
+[19] Maximilian Schmidhuber and Udo Kruschwitz. Llm-based syn-
+thetic datasets: Applications and limitations in toxicity detection.
+InProceedings of the Fourth Workshop on Threat, Aggression &
+Cyberbullying@ LREC-COLING-2024, pages 37–51, 2024.
+[20] Hao Shen, Zhouhong Gu, Haokai Hong, and Weili Han. Pii-bench:
+Evaluating query-aware privacy protection systems.arXiv preprint
+arXiv:2502.18545, 2025.
+[21] Yihang Song and Urs Hengartner. Privacyguard: A vpn-based
+platform to detect information leakage on android devices. In
+Proceedings of the 5th Annual ACM CCS Workshop on Security
+and Privacy in Smartphones and Mobile Devices, pages 15–26,
+2015.
+[22] Gaurav Srivastava, Kunal Bhuwalka, Swarup Kumar Sahoo, Sak-
+sham Chitkara, Kevin Ku, Matt Fredrikson, Jason Hong, and Yuvraj
+Agarwal. Privacyproxy: Leveraging crowdsourcing and in situ
+traffic analysis to detect and mitigate information leakage.arXiv
+preprint arXiv:1708.06384, 2017.
+[23] State of California. California consumer privacy act of 2018, AB
+375. California Legislative Information, 2018. Accessed: 2026-02-
+27.
+[24] Maria Irena Szawerna, Simon Dobnik, Ricardo Munoz S ´anchez,
+and Elena V olodina. The devil’s in the details: the detailedness
+of classes influences personal information detection and labeling.
+InProceedings of the Joint 25th Nordic Conference on Computa-
+tional Linguistics and 11th Baltic Conference on Human Language
+Technologies (NoDaLiDa/Baltic-HLT 2025), pages 697–708, 2025.
+[25] Maria Irena Szawerna, Simon Dobnik, Therese Lindstr ¨om Tiede-
+mann, Ricardo Mu ˜noz S ´anchez, Xuan-Son Vu, and Elena V olo-
+dina. Pseudonymization categories across domain boundaries.
+InProceedings of the 2024 Joint International Conference on
+Computational Linguistics, Language Resources and Evaluation
+(LREC-COLING 2024), pages 13303–13314, 2024.
+[26] Shuhe Wang, Xiaofei Sun, Xiaoya Li, Rongbin Ouyang, Fei Wu,
+Tianwei Zhang, Jiwei Li, Guoyin Wang, and Chen Guo. Gpt-ner:
+Named entity recognition via large language models.Findings of
+the association for computational linguistics: NAACL 2025, pages
+4257–4275, 2025.
+[27] Lei Xu, Maria Skoularidou, Alfredo Cuesta-Infante, and Kalyan
+Veeramachaneni. Modeling tabular data using conditional gan.
+Advances in neural information processing systems, 32, 2019.
+[28] Jianliang Yang, Xiya Zhang, Kai Liang, and Yuenan Liu. Ex-
+ploring the application of large language models in detecting and
+protecting personally identifiable information in archival data: a
+comprehensive study. In2023 IEEE International Conference on
+Big Data (BigData), pages 2116–2123. IEEE, 2023.
+[29] Hang Zeng, Xiangyu Liu, Yong Hu, Chaoyue Niu, Fan Wu,
+Shaojie Tang, and Guihai Chen. Automated privacy information
+annotation in large language model interactions.arXiv preprint
+arXiv:2505.20910, 2025.
+Appendix A.
+Evaluation Results
+TABLE 2. PER-STEP PRECISION(P),RECALL(R),ANDF 1 AT LABEL LEVEL AND INSTANCE LEVEL(FUZZY AND EXACT)ACROSS ALL THREE
+TAXONOMIES.
+Label-Level Fuzzy Instance Exact Instance
+Dataset/Stage P RF 1 P RF 1 P RF 1
+AI4Privacy
+Classifier 0.9779 0.9942 0.9860 – – – – – –
+Annotator (single-stage) 0.9838 0.9877 0.9857 0.9671 0.9769 0.9720 0.9329 0.9425 0.9377
+Annotator (two-stage) 0.9836 0.9942 0.9888 0.9685 0.9869 0.9776 0.9348 0.9529 0.9438
+Reviewer (single-stage) 0.9797 0.9914 0.9855 0.9583 0.9766 0.9674 0.9231 0.9409 0.9319
+Reviewer (two-stage) 0.9812 0.9942 0.9876 0.9650 0.9845 0.9747 0.9306 0.9496 0.9400
+mHealth
+Classifier 0.9781 0.9936 0.9858 – – – – – –
+Annotator (single-stage) 0.9813 0.9872 0.9843 0.9552 0.9635 0.9593 0.9511 0.9587 0.9549
+Annotator (two-stage) 0.9824 0.9938 0.9880 0.9627 0.9781 0.9703 0.9584 0.9733 0.9658
+Reviewer (single-stage) 0.9834 0.9907 0.9870 0.9572 0.9627 0.9599 0.9522 0.9574 0.9548
+Reviewer (two-stage) 0.9841 0.9922 0.9881 0.9612 0.9682 0.9647 0.9563 0.9632 0.9597
+PlayStore
+Classifier 0.8718 0.9538 0.9109 – – – – – –
+Annotator (single-stage) 0.9044 0.9138 0.9091 0.8576 0.8691 0.8633 0.8001 0.8121 0.8061
+Annotator (two-stage) 0.8899 0.9488 0.9184 0.8285 0.8995 0.8625 0.7698 0.8354 0.8012
+Reviewer (single-stage) 0.8863 0.9251 0.9053 0.8370 0.8780 0.8570 0.7822 0.8222 0.8017
+Reviewer (two-stage) 0.8755 0.9425 0.9078 0.8196 0.8945 0.8554 0.7633 0.8346 0.7973
+Appendix B.
+Annotator System Prompt
+You are a **PII value annotator** for privacy research. Your task is to identify and label **all PII values** that appear in a given **HTTP request body** (
+payload). The output will be used to evaluate PII classifiers and masking/annotation models.
+You will be given:
+- A **PII taxonomy table** (authoritative label scheme with`PII Data type`values).
+- One HTTP **body** as a raw text string. The body may be JSON, form-encoded (`key=value&...`), multipart metadata (text fields only), XML, logs, plain text, or
+nonstandard/obfuscated formats.
+**Important assumption:** The body is already fully decoded upstream. Do not apply URL decoding or other decoding. Annotate exactly what you see.
+---
+## 1) Output format
+Return **ONLY** a valid JSON object matching this schema:
+- Top-level object has exactly one key:`annotations`
+-`annotations`is an array of objects
+- Each object has exactly:
+-`data_type`(string): the PII data type of the annotated value
+-`value`(string): the exact PII span as it appears in the body
+No additional keys are allowed anywhere.
+No commentary, no markdown, no code fences - **output JSON only**.
+Example structure (illustrative only):
+```json
+{
+'annotations': [
+{ 'data_type': '<EXACT_TAXONOMY_LABEL>', 'value': '<VERBATIM_SUBSTRING_FROM_BODY>' }
+]
+}
+```
+---
+## 2) Taxonomy adherence
+- You MUST use **ONLY** `PII Data type`values that appear in the provided taxonomy table.
+- For every annotation, **copy the`data_type`string verbatim ** from the taxonomy (exact case, spacing, punctuation). Do not paraphrase.
+- Do **not** assume any particular labels exist. The taxonomy may vary between tasks.
+- Any examples in this prompt are **illustrative of disambiguation logic only**; they are *not* a guaranteed list of valid labels. If an example label is not
+present in the provided taxonomy, you MUST NOT use it.
+- If a potential PII value does not clearly match any taxonomy`PII Data type`, **do not annotate it**.
+---
+## 3) What to annotate
+Annotate **PII values** present in the body. Values may appear in:
+- JSON objects/arrays
+- Form-encoded bodies
+- XML attributes/text
+- Plain text lines
+- Nonstandard payloads with unusual separators or obfuscated keys
+Annotate the **PII value only**, not the key name or surrounding syntax.
+Examples:
+- Good:`john.doe@example.com`
+- Bad:`email=john.doe@example.com`
+- Good:`+49 30 1234567890`
+- Bad:`phone:+49 30 1234567890`
+Keep punctuation that is inherently part of the value (e.g.,`@`in email,`+`in phone, hyphens in UUID-like identifiers).
+---
+## 4) Span rules
+1. **Minimal span**: select the smallest substring that is the PII value (exclude keys, quotes, separators, and surrounding whitespace).
+2. **Multi-value lists**: if multiple PII values appear in a list (comma-separated, array, repeated fields), annotate **each value separately**.
+3. **Split across fields**: if a combined concept is split into multiple fields, annotate each field's value separately.
+- Example:`firstname=John&lastname=Doe`: annotate`John`and`Doe`separately (do NOT create a single 'John Doe' value).
+4. **Deduplicate repeated values (strong rule)**: deduplicate **globally by exact value string**.
+- If the **exact same value string** appears multiple times anywhere in the body (even under different keys), include it **only once** in`annotations`.
+- Do not attempt 'semantic deduplication' (e.g., do not merge`John`and`Doe`).
+5. **No inference**: annotate only what is explicitly present; do not guess missing pieces or reconstruct values.
+---
+## 5) Use context to resolve ambiguity
+Many values are ambiguous in isolation (especially numbers and short strings). Use **surrounding context**such as nearby keys, units, structural position, and
+typical formattingto choose the correct type **when possible**.
+- Only annotate a value if the context makes the type **reasonably unambiguous**.
+- If you cannot disambiguate confidently, **do not annotate**.
+Examples of *logic* (labels shown are placeholders; use only labels that exist in the provided taxonomy):
+- If the key is`sdk_version`or`api_level`and the value is`31`, map it to the taxonomy's API-level-like data type (if present).
+- If the key is`age`and the value is`29`, map it to the taxonomy's age-like data type (if present).
+- If the key is`weight`and the value includes units like`kg`/`lb`, map it to the taxonomy's body-weight-like type (if present).
+- If the key is`tz`and the value looks like`Europe/Berlin`, map it to the taxonomy's timezone-like type (if present).
+Counterexample:
+- A bare`31`with no key, unit, or context: do not annotate.
+---
+## 6) Disambiguation guidance
+Prefer the **most specific** matching taxonomy type when context supports it. Use value patterns + nearby keys (not guesses). If the taxonomy does not contain a
+matching specific type, do not 'approximate' with an unrelated label.
+If a value could match multiple types and context does not resolve it, **do not annotate**.
+---
+## 7) Quality checklist
+Before returning output:
+- Output is valid JSON and conforms exactly to the schema (no extra keys).
+- Every`data_type`exactly matches a taxonomy`PII Data type`(verbatim).
+- Every`value`is an exact substring from the provided body (verbatim).
+- All detectable, context-resolvable taxonomy-matching PII values are included.
+- Exact-duplicate values are included only once.
+Return only the JSON object.
+Appendix C.
+Label Taxonomies
+TABLE 3. AI4PRIVACY PII-MASKING-200K LABEL TAXONOMY[1], [11].
+PII Data type Sensitivity
+level
+Description
+Name medium Personal name string
+Email high Email address identifier
+Phone number high Telephone number (international/national format)
+Credit card number high Payment card number (PAN)
+Passport number high Passport identifier / MRZ-style string
+Social security number high National SSN-style identifier
+Date of birth medium Birth date (ISO or locale-specific format)
+Address medium Postal address (street, number, city)
+Zip code medium Postal/ZIP code
+IP address high IPv4/IPv6 network address
+Bank account number high Bank account identifier (e.g., IBAN-like)
+Routing number medium Bank routing / sort code identifier
+Driver’s license number medium Driver’s licence identifier
+License plate number medium Vehicle registration plate
+Vehicle identification number low Vehicle identification number (VIN)
+Bank account details high Structured banking details (account type, sort code, holder)
+Medical record number high Hospital/clinic record identifier (MRN-style)
+Health insurance number high Health insurance member/policy identifier
+Employee number medium Employee identifier
+Student ID medium Student identifier
+Government ID high Government-issued identifier (national ID style)
+Geolocation high Place name or coarse location token (e.g., geohash)
+Biometric data high Biometric template/embedding representation
+Mother’s maiden name medium Maiden name token
+Family member names medium Names of relatives/household members
+Place of birth medium Birthplace (city/region)
+Citizenship medium Citizenship code(s) or status
+Gender medium Gender identity value
+Sexual orientation medium Sexual orientation category
+Race/ethnicity medium Race/ethnicity category
+Nationality medium Nationality descriptor
+Religious beliefs medium Religious affiliation / belief category
+Political affiliation medium Political affiliation category
+Professional license number medium Professional licence identifier (e.g., medical/bar)
+Education history medium Education credential/history snippet
+Employment history medium Employment record snippet
+Income level low Income bracket / level indicator
+Financial status low Financial ratio/band indicator (e.g., debt-to-income)
+Social media handles low Social media username/handle
+Account numbers high Customer/account identifier(s)
+Transaction history high Transaction record snippet (amount, merchant, timestamp)
+Digital signature high Cryptographic signature token (e.g., base64)
+Purchase history medium Purchase/order record snippet
+Subscription information medium Subscription plan/status metadata
+Health information (e.g., conditions, treatments) high Health condition/treatment/medication mention
+Emergency contact information low Emergency contact name/relationship/phone
+Insurance policy number high Insurance policy identifier
+Academic records medium Academic performance record (grades/GPA)
+Tax identification number low Tax identifier string
+License key or serial number medium Product licence key / serial number
+Location data (GPS) high GPS coordinates or latitude/longitude pair
+TABLE 4. PII/PHILABEL TAXONOMY FOR MHEALTH APPS(CORY ET AL. (2024) [3]).
+PII Category PII Subcategory PII Data type Description
+Device or other IDs Hardware identifiers Device model The commercial model name of the user’s device hardware.
+Screen resolution The pixel dimensions of the device’s display, often reported as width
+×height.
+Software identifiers Carrier name The name of the mobile network operator or SIM provider.
+OS build The operating system build identifier or version string.
+API level The numeric API level of the operating system (e.g., Android SDK
+level).
+Location Approximate location Locale The locale setting reflecting language and region preferences.
+Timezone The user’s time zone specification.
+Country The country or region name associated with the user’s location.
+Country code The ISO country code representing the user’s country.
+City The name of the city or town where the user is located.
+Precise location Latitude The GPS latitude coordinate, often in decimal degrees.
+Longitude The GPS longitude coordinate, often in decimal degrees.
+Personal info User identifiers Name How a user identifies themselves, such as their first and last name
+or nickname.
+Email address A user’s email address.
+Advertising ID A unique, resettable identifier used for advertising and analytics.
+Age A user’s age in years.
+Date of birth The user’s birth date, often as day–month–year.
+Gender The gender identity reported by the user.
+Fitness info Body measurements Body height The user’s height measurement.
+Body weight The user’s current body weight.
+Body weight goal The target weight that the user aims to achieve.
+Fitness info Step count The number of steps the user has taken in a defined period.
+Eating habits Information about the user’s diet patterns or dietary preferences.
+Fitness goals Specific fitness targets set by the user.
+Fitness level The user’s assessed fitness level or self-reported status.
+Mental wellbeing Qualitative information on the user’s mental or emotional health
+status.
+Sleep habits Patterns in the user’s sleep, such as average hours or bedtime.
+Health info Female health info Menstrual cycle length The length of the user’s menstrual cycle.
+Period start date The date when the user’s menstrual period begins.
+Period length The number of days the user’s menstrual period lasts.
+Period symptoms Recorded symptoms experienced during menstruation.
+Birth control The contraceptive method used.
+Medical info Sexual activity Information regarding sexual behaviour or activity frequency.
+Body temperature Body temperature readings, typically in degrees Celsius or Fahren-
+heit.
+Heart rate Beats per minute measurement of the user’s heart rate.
+Blood pressure Systolic and diastolic pressure readings.
+Glucose levels The user’s blood glucose measurement.
+Medical conditions Recorded medical diagnoses or health conditions.
+TABLE 5. GOOGLEPLAY DATA SAFETY LABEL TAXONOMY[13].
+PII Category PII Data type Description
+Location Approximate location User or device physical location to an area greater than or equal to 3 square
+kilometres, such as the city a user is in, or location provided by Android’s
+ACCESS_COARSE_LOCATIONpermission.
+Precise location User or device physical location within an area less than 3 square kilometres,
+such as location provided by Android’sACCESS_FINE_LOCATIONpermis-
+sion.
+Personal info Name How a user refers to themselves, such as their first or last name, or nickname.
+Email address A user’s email address.
+User IDs Identifiers that relate to an identifiable person. For example, an account ID,
+account number, or account name.
+Address A user’s address, such as a mailing or home address.
+Phone number A user’s phone number.
+Race and ethnicity Information about a user’s race or ethnicity.
+Political or religious beliefs Information about a user’s political or religious beliefs.
+Sexual orientation Information about a user’s sexual orientation.
+Other info Any other personal information such as date of birth, gender identity, veteran
+status, etc.
+Financial info User payment info Information about a user’s financial accounts, such as credit card number.
+Purchase history Information about purchases or transactions a user has made.
+Credit score Information about a user’s credit score.
+Other financial info Any other financial information, such as user salary or debts.
+Health and fitness Health info Information about a user’s health, such as medical records or symptoms.
+Fitness info Information about a user’s fitness, such as exercise or other physical activity.
+Messages Emails A user’s emails, including the email subject line, sender, recipients, and the
+content of the email.
+SMS or MMS A user’s text messages, including the sender, recipients, and the content of the
+message.
+Other in-app messages Any other types of messages. For example, instant messages or chat content.
+Photos and videos Photos A user’s photos.
+Videos A user’s videos.
+Audio files V oice or sound recordings A user’s voice, such as a voicemail or a sound recording.
+Music files A user’s music files.
+Other audio files Any other user-created or user-provided audio files.
+Files and docs Files and docs A user’s files or documents, or information about their files or documents,
+such as file names.
+Calendar Calendar events Information from a user’s calendar, such as events, event notes, and attendees.
+Contacts Contacts Information about the user’s contacts, such as contact names, message his-
+tory, and social graph information like usernames, contact recency, contact
+frequency, interaction duration and call history.
+App activity App interactions Information about how a user interacts with the app. For example, the number
+of times they visit a page or sections they tap on.
+In-app search history Information about what a user has searched for in your app.
+Installed apps Information about the apps installed on a user’s device.
+Other user-generated content Any other user-generated content not listed here, or in any other section. For
+example, user bios, notes, or open-ended responses.
+Other actions Any other user activity or actions in-app not listed here, such as gameplay,
+likes, and dialogue options.
+Web browsing Web browsing history Information about the websites a user has visited.
+App info and performance Crash logs Crash log data from your app. For example, the number of times your app
+has crashed, stack traces, or other information directly related to a crash.
+Diagnostics Information about the performance of your app, such as battery life, loading
+time, latency, framerate, or any technical diagnostics.
+Other app performance data Any other app performance data not listed here.
+Device or other IDs Device or other IDs Identifiers that relate to an individual device, browser or app. For example, an
+IMEI number, MAC address, Widevine Device ID, Firebase installation ID,
+or advertising identifier.

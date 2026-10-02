@@ -1,0 +1,176 @@
+<mxfile host="app.diagrams.net">
+  <diagram id="bola-judgement" name="BOLA 판정 실험 아키텍처">
+    <mxGraphModel dx="1600" dy="1000" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1700" pageHeight="1000" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <mxCell id="title" value="목록 조회 읽기 BOLA 판정 실험 아키텍처" style="text;html=1;fontSize=22;fontStyle=1;align=left;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="40" y="20" width="700" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="lead" value="요청이 200으로 성공해도, 응답에 실제로 나온 객체가 그 계정이 봐도 되는 객체인지 설정 기록과 대조해 정상 / 위반 확정 / 판정 보류로 나눈다." style="text;html=1;fontSize=13;align=left;verticalAlign=middle;fontColor=#475569;" vertex="1" parent="1">
+          <mxGeometry x="40" y="60" width="1200" height="26" as="geometry"/>
+        </mxCell>
+
+        <!-- 1. 실험 준비 -->
+        <mxCell id="zone1" value="1. 실험 준비" style="rounded=1;arcSize=4;whiteSpace=wrap;html=1;fillColor=#F1F5F9;strokeColor=#94A3B8;verticalAlign=top;align=left;spacingLeft=10;spacingTop=6;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="40" y="110" width="260" height="560" as="geometry"/>
+        </mxCell>
+        <mxCell id="accounts" value="&lt;b&gt;테스트 계정&lt;/b&gt;&lt;br&gt;A 소유자 · B 권한 없음&lt;br&gt;C 공유받음 · 비로그인" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#64748B;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="60" y="150" width="220" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="objects" value="&lt;b&gt;테스트 객체&lt;/b&gt;&lt;br&gt;전체 공개 · 로그인 공개&lt;br&gt;비공개 · 특정 계정 공유&lt;br&gt;&lt;font color=&quot;#64748B&quot;&gt;비공개 본문에 실험용 문구&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#64748B;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="60" y="250" width="220" height="86" as="geometry"/>
+        </mxCell>
+        <mxCell id="config" value="&lt;b&gt;설정 기록&lt;/b&gt;&lt;br&gt;객체 ID · 소유자 · 공개 범위&lt;br&gt;공유 대상 · 설정 시각" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;size=10;fillColor=#EDE9FE;strokeColor=#7C3AED;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="60" y="370" width="220" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="truth" value="&lt;b&gt;평가 정답&lt;/b&gt;&lt;br&gt;앱 정책 + 실제 설정을 따로 확인&lt;br&gt;&lt;font color=&quot;#B91C1C&quot;&gt;판정기에는 주지 않음&lt;/font&gt;" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;size=10;fillColor=#FEF3C7;strokeColor=#D97706;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="60" y="560" width="220" height="90" as="geometry"/>
+        </mxCell>
+
+        <!-- 2. 대상 앱 -->
+        <mxCell id="zone2" value="2. 대상 앱" style="rounded=1;arcSize=4;whiteSpace=wrap;html=1;fillColor=#FFF7ED;strokeColor=#FB923C;verticalAlign=top;align=left;spacingLeft=10;spacingTop=6;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="340" y="110" width="260" height="250" as="geometry"/>
+        </mxCell>
+        <mxCell id="gitea" value="&lt;b&gt;Gitea 28.0.0&lt;/b&gt;&lt;br&gt;저장소·이슈, 협업자 공유" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#EA580C;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="360" y="145" width="220" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="memos" value="&lt;b&gt;Memos 0.9.0&lt;/b&gt;&lt;br&gt;PUBLIC · PROTECTED · PRIVATE" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#EA580C;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="360" y="205" width="220" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="fakeapi" value="&lt;b&gt;가짜 API&lt;/b&gt;&lt;br&gt;Memos 규칙 흉내 · 누출/차단 모드" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#EA580C;dashed=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="360" y="265" width="220" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="endpoints" value="엔드포인트: 목록 조회 · 개별 조회" style="text;html=1;fontSize=11;fontColor=#9A3412;align=center;" vertex="1" parent="1">
+          <mxGeometry x="360" y="322" width="220" height="24" as="geometry"/>
+        </mxCell>
+
+        <!-- 3. 게이트웨이 -->
+        <mxCell id="gateway" value="&lt;b&gt;3. 실험 게이트웨이&lt;/b&gt;&lt;br&gt;계정별로 같은 요청 실행" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FEE2E2;strokeColor=#DC2626;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="360" y="420" width="220" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="log" value="&lt;b&gt;최소 로그&lt;/b&gt;&lt;br&gt;응답 원문 대신&lt;br&gt;객체 ID · 표식 일치 · 상태 코드" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;size=10;fillColor=#EDE9FE;strokeColor=#7C3AED;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="360" y="560" width="220" height="90" as="geometry"/>
+        </mxCell>
+
+        <!-- 4. 판정 단계 -->
+        <mxCell id="zone4" value="4. 판정 단계 (개선안, 미구현)" style="rounded=1;arcSize=4;whiteSpace=wrap;html=1;fillColor=#ECFDF5;strokeColor=#059669;dashed=1;verticalAlign=top;align=left;spacingLeft=10;spacingTop=6;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="640" y="110" width="440" height="560" as="geometry"/>
+        </mxCell>
+        <mxCell id="check" value="&lt;b&gt;4-1 응답 확인&lt;/b&gt;&lt;br&gt;정상 응답인가,&lt;br&gt;오류로 빈 목록인가" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#059669;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="660" y="150" width="190" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="identify" value="&lt;b&gt;4-2 반환 객체 식별&lt;/b&gt;&lt;br&gt;객체 ID + 실험용 문구로 하나씩&lt;br&gt;&lt;font color=&quot;#64748B&quot;&gt;공개 ID·제목만 vs 비공개 본문&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#059669;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="870" y="150" width="190" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="compare" value="&lt;b&gt;4-3 설정과 대조&lt;/b&gt;&lt;br&gt;이 계정이 이 객체를 봐도 되는가" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D1FAE5;strokeColor=#047857;strokeWidth=2;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="740" y="300" width="240" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="ok" value="&lt;b&gt;정상&lt;/b&gt;&lt;br&gt;허용 객체만 / 빈 목록" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DCFCE7;strokeColor=#16A34A;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="660" y="450" width="130" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="viol" value="&lt;b&gt;위반 확정&lt;/b&gt;&lt;br&gt;금지 객체&lt;br&gt;보호 내용 반환" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FEE2E2;strokeColor=#DC2626;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="795" y="450" width="130" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="hold" value="&lt;b&gt;판정 보류&lt;/b&gt;&lt;br&gt;설정 모름·변경&lt;br&gt;객체 확인 불가" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F5F9;strokeColor=#64748B;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="930" y="450" width="130" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="human" value="사람 확인 (사유 기록)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#64748B;dashed=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="930" y="570" width="130" height="44" as="geometry"/>
+        </mxCell>
+
+        <!-- 5. 비교와 평가 -->
+        <mxCell id="zone5" value="5. 비교와 평가" style="rounded=1;arcSize=4;whiteSpace=wrap;html=1;fillColor=#ECFEFF;strokeColor=#0891B2;verticalAlign=top;align=left;spacingLeft=10;spacingTop=6;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="1120" y="110" width="320" height="560" as="geometry"/>
+        </mxCell>
+        <mxCell id="b1" value="① 단순 규칙: 다른 계정 요청이 200이면 위반" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0891B2;fontSize=12;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="1140" y="150" width="280" height="36" as="geometry"/>
+        </mxCell>
+        <mxCell id="b2" value="② AuthzTrace 0.6.0 원형" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0891B2;fontSize=12;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="1140" y="194" width="280" height="36" as="geometry"/>
+        </mxCell>
+        <mxCell id="b3" value="③ 설정을 고친 AuthzTrace" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0891B2;fontSize=12;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="1140" y="238" width="280" height="36" as="geometry"/>
+        </mxCell>
+        <mxCell id="b4" value="④ 반환 객체 대조 개선안 (4번 영역)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D1FAE5;strokeColor=#047857;fontSize=12;align=left;spacingLeft=8;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1140" y="282" width="280" height="36" as="geometry"/>
+        </mxCell>
+        <mxCell id="b5" value="보조: BACScan식 공개 필터 · AuthProbe식 목록 판정 (재구현)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#94A3B8;dashed=1;fontSize=11;align=left;spacingLeft=8;fontColor=#475569;" vertex="1" parent="1">
+          <mxGeometry x="1140" y="326" width="280" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="same" value="모든 비교군에 같은 계정·객체·설정·요청" style="text;html=1;fontSize=11;fontColor=#0E7490;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1140" y="370" width="280" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="eval" value="&lt;b&gt;평가&lt;/b&gt;&lt;br&gt;잘못된 경고 수 · 진짜 위반 탐지 수&lt;br&gt;놓친 위반 수 (보류한 위반 포함)&lt;br&gt;판정 보류 수 · 준비·확인 시간" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#CFFAFE;strokeColor=#0E7490;strokeWidth=2;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="1140" y="440" width="280" height="100" as="geometry"/>
+        </mxCell>
+
+        <!-- 하단 띠 -->
+        <mxCell id="conds" value="&lt;b&gt;실험 조건&lt;/b&gt;   빈 목록  |  허용 객체만  |  금지 객체만  |  허용·금지 혼합" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FEF9C3;strokeColor=#CA8A04;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="40" y="700" width="1040" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="outscope" value="범위 밖: 개인정보 점수화 · 권한 회수 진단" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#94A3B8;dashed=1;fontSize=12;fontColor=#64748B;" vertex="1" parent="1">
+          <mxGeometry x="1120" y="700" width="320" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="prelim" value="예비 (판정기 성능 아님): 단순 규칙 오탐 Gitea 8/18, Memos 3/6  ·  AuthzTrace 가짜 API 정탐 4, 빈 목록 오탐 4 (팀원 보고, 원본 미확인)" style="text;html=1;fontSize=11;fontColor=#64748B;align=left;" vertex="1" parent="1">
+          <mxGeometry x="40" y="750" width="1400" height="24" as="geometry"/>
+        </mxCell>
+
+        <!-- 연결 -->
+        <mxCell id="e1" value="계정별 요청" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#059669;strokeWidth=2;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="accounts" target="gateway">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points"><mxPoint x="320" y="185"/><mxPoint x="320" y="455"/></Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e2" value="목록 · 개별 조회" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#EA580C;strokeWidth=2;fontSize=11;labelBackgroundColor=#FFFFFF;startArrow=classic;" edge="1" parent="1" source="gateway" target="zone2">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e3" value="근거만 기록" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#7C3AED;dashed=1;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="gateway" target="log">
+          <mxGeometry x="-0.55" relative="1" as="geometry"><mxPoint as="offset"/></mxGeometry>
+        </mxCell>
+        <mxCell id="e4" value="응답" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#059669;strokeWidth=2;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="gateway" target="check">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points"><mxPoint x="620" y="455"/><mxPoint x="620" y="190"/></Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e5" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#059669;strokeWidth=2;" edge="1" parent="1" source="check" target="identify">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e6" value="반환 객체" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#059669;strokeWidth=2;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="identify" target="compare">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e7" value="허용 · 금지" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#7C3AED;dashed=1;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.65;entryDx=0;entryDy=0;" edge="1" parent="1" source="config" target="compare">
+          <mxGeometry x="0.75" relative="1" as="geometry">
+            <Array as="points"><mxPoint x="170" y="530"/><mxPoint x="630" y="530"/><mxPoint x="630" y="345"/></Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e8" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#16A34A;" edge="1" parent="1" source="compare" target="ok">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e9" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#DC2626;" edge="1" parent="1" source="compare" target="viol">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e10" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#64748B;" edge="1" parent="1" source="compare" target="hold">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e11" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#64748B;dashed=1;" edge="1" parent="1" source="hold" target="human">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e12" value="판정 결과" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#0E7490;strokeWidth=2;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="compare" target="eval">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points"><mxPoint x="1100" y="335"/><mxPoint x="1100" y="490"/></Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e13" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#0E7490;dashed=1;" edge="1" parent="1" source="same" target="eval">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e14" value="정답 (평가에만)" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#D97706;dashed=1;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="truth" target="eval">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points"><mxPoint x="170" y="685"/><mxPoint x="1280" y="685"/></Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

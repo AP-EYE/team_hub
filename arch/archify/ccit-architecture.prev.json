@@ -1,0 +1,338 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "API 인가 취약점 진단 및 개인정보 노출 영향도 산정",
+    "output": "ccit-architecture.html",
+    "quality_profile": "showcase",
+    "animation": "trace",
+    "views": [
+      {
+        "id": "collect",
+        "label": "수집 경로",
+        "focus": [
+          "client",
+          "gateway",
+          "target",
+          "log"
+        ],
+        "note": "게이트웨이가 트래픽을 통과시키며 요청과 응답을 로그에 적재한다."
+      },
+      {
+        "id": "diagnose",
+        "label": "진단 파이프라인",
+        "focus": [
+          "log",
+          "collector",
+          "normalizer",
+          "detector",
+          "scorer"
+        ],
+        "note": "복원과 정규화를 거쳐 인가 위반을 판정하고 개인정보 영향도를 산정한다."
+      },
+      {
+        "id": "forensics",
+        "label": "사후 조회",
+        "focus": [
+          "log",
+          "reporter"
+        ],
+        "note": "사고 발생 시 같은 로그에서 접근 API와 조회 범위를 역추적한다."
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "client",
+      "type": "external",
+      "label": "클라이언트",
+      "sublabel": "웹 · 앱 · Postman",
+      "pos": [
+        40,
+        300
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "gateway",
+      "type": "security",
+      "label": "API 게이트웨이",
+      "sublabel": "mitmproxy reverse proxy",
+      "pos": [
+        250,
+        300
+      ],
+      "size": [
+        170,
+        64
+      ],
+      "tag": "관찰 / 진단 모드"
+    },
+    {
+      "id": "target",
+      "type": "external",
+      "label": "진단 대상 서비스",
+      "sublabel": "crAPI · VAmPI",
+      "pos": [
+        250,
+        120
+      ],
+      "size": [
+        170,
+        64
+      ]
+    },
+    {
+      "id": "log",
+      "type": "database",
+      "label": "요청 · 응답 로그",
+      "sublabel": "PostgreSQL",
+      "pos": [
+        480,
+        300
+      ],
+      "size": [
+        160,
+        64
+      ]
+    },
+    {
+      "id": "collector",
+      "type": "backend",
+      "label": "1 Collector",
+      "sublabel": "엔드포인트 복원",
+      "pos": [
+        700,
+        300
+      ],
+      "size": [
+        160,
+        64
+      ]
+    },
+    {
+      "id": "normalizer",
+      "type": "backend",
+      "label": "2 Normalizer",
+      "sublabel": "CIM 필드 정규화",
+      "pos": [
+        920,
+        300
+      ],
+      "size": [
+        160,
+        64
+      ]
+    },
+    {
+      "id": "inventory",
+      "type": "database",
+      "label": "엔드포인트 인벤토리",
+      "sublabel": "정규화된 필드 스키마",
+      "pos": [
+        920,
+        480
+      ],
+      "size": [
+        160,
+        64
+      ]
+    },
+    {
+      "id": "detector",
+      "type": "backend",
+      "label": "3 Authz Detector",
+      "sublabel": "세션 교차 재생 · 델타 판정",
+      "pos": [
+        1140,
+        300
+      ],
+      "size": [
+        180,
+        64
+      ]
+    },
+    {
+      "id": "model",
+      "type": "external",
+      "label": "판정 보조 모델",
+      "sublabel": "검토 필요 등급만",
+      "pos": [
+        1140,
+        120
+      ],
+      "size": [
+        180,
+        64
+      ]
+    },
+    {
+      "id": "scorer",
+      "type": "backend",
+      "label": "4 Privacy Scorer",
+      "sublabel": "개인정보보호법 가중 점수",
+      "pos": [
+        1380,
+        300
+      ],
+      "size": [
+        180,
+        64
+      ]
+    },
+    {
+      "id": "reporter",
+      "type": "backend",
+      "label": "5 Reporter",
+      "sublabel": "진단 리포트 · 사후 조회",
+      "pos": [
+        1620,
+        300
+      ],
+      "size": [
+        180,
+        64
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "진단 환경 (격리)",
+      "wraps": [
+        "gateway",
+        "log",
+        "collector",
+        "normalizer",
+        "inventory",
+        "detector",
+        "scorer",
+        "reporter"
+      ]
+    },
+    {
+      "kind": "security-group",
+      "label": "값 반출 금지. 필드 이름만 외부로",
+      "wraps": [
+        "detector"
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "client-gateway",
+      "from": "client",
+      "to": "gateway",
+      "label": "HTTPS",
+      "variant": "emphasis"
+    },
+    {
+      "id": "gateway-target",
+      "from": "gateway",
+      "to": "target",
+      "label": "프록시 전달",
+      "labelDy": -34
+    },
+    {
+      "id": "gateway-log",
+      "from": "gateway",
+      "to": "log",
+      "label": "요청 · 응답 적재",
+      "labelDy": -33
+    },
+    {
+      "id": "log-collector",
+      "from": "log",
+      "to": "collector"
+    },
+    {
+      "id": "collector-normalizer",
+      "from": "collector",
+      "to": "normalizer"
+    },
+    {
+      "id": "normalizer-inventory",
+      "from": "normalizer",
+      "to": "inventory",
+      "label": "정규화 결과 저장",
+      "labelDy": 24
+    },
+    {
+      "id": "normalizer-detector",
+      "from": "normalizer",
+      "to": "detector"
+    },
+    {
+      "id": "model-detector",
+      "from": "model",
+      "to": "detector",
+      "label": "필드 이름만 전송",
+      "variant": "security",
+      "labelDy": 24
+    },
+    {
+      "id": "detector-scorer",
+      "from": "detector",
+      "to": "scorer",
+      "label": "판정 등급 · 노출 필드",
+      "variant": "emphasis",
+      "labelDy": 56
+    },
+    {
+      "id": "scorer-reporter",
+      "from": "scorer",
+      "to": "reporter"
+    },
+    {
+      "id": "log-reporter",
+      "from": "log",
+      "to": "reporter",
+      "label": "사후 조회 질의",
+      "variant": "dashed",
+      "fromSide": "bottom",
+      "toSide": "bottom",
+      "via": [
+        [
+          560,
+          660
+        ],
+        [
+          1710,
+          660
+        ]
+      ]
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "판정 기준",
+      "items": [
+        "소유자 응답과 타인 응답의 필드 구성을 비교한다",
+        "구성이 같으면 위반, 민감 필드가 빠지면 공개 설계",
+        "애매한 건은 검토 필요 등급으로 분리한다"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "로깅과 사후 조회",
+      "items": [
+        "요청과 응답을 별도 저장소에 적재한다",
+        "접근 API, 호출 횟수, 조회 범위를 역추적한다",
+        "로그에 없는 구간은 확인 불가로 표기한다"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "데이터 반출 원칙",
+      "items": [
+        "응답 본문의 값은 진단 환경 밖으로 나가지 않는다",
+        "외부 모델에는 정규화된 필드 이름만 보낸다",
+        "값이 필요한 판정은 로컬 모델로 처리한다"
+      ]
+    }
+  ]
+}
