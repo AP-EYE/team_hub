@@ -1,0 +1,32 @@
+# .agents/skills(원본, Codex)를 .claude/skills(Claude Code)로 복사해 PR 브랜치에 커밋한다.
+# .claude/skills를 직접 고친 PR도 원본 기준으로 되돌린다.
+name: sync-skills
+
+on:
+  pull_request:
+    paths:
+      - ".agents/skills/**"
+      - ".claude/skills/**"
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    # ponytail: 같은 레포 브랜치 PR만 처리. fork PR은 쓰기 권한이 없어 건너뛴다.
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+      - name: Mirror skills
+        run: |
+          mkdir -p .claude/skills
+          rsync -a --delete .agents/skills/ .claude/skills/
+          git add -A .claude/skills
+          if git diff --cached --quiet; then exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore: .claude/skills 동기화 [skip ci]"
+          git push
